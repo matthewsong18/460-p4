@@ -1,3 +1,4 @@
+package Manage_DB;
 
 /*
 * SkiResortDBSetup.java
