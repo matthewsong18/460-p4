@@ -46,7 +46,7 @@ public class SkiPass {
     private int memberId;
     private Timestamp purchaseDate;
     private int totalUses;
-    private int remUses;
+    private int remainingUses;
     private String type;
     private int price;
     
@@ -54,7 +54,7 @@ public class SkiPass {
     public int getMemberId() { return this.memberId; }
     public Timestamp getPurchaseDate() { return this.purchaseDate; }
     public int getTotalUses() { return this.totalUses; }
-    public int getRemUses() { return this.remUses; }
+    public int getRemainingUses() { return this.remainingUses; }
     public String getType() { return this.type; }
     public int getPrice() { return this.price; }
 
@@ -74,7 +74,7 @@ public class SkiPass {
                                 ? systimestamp.getTimestamp("SYSTIMESTAMP")
                                 : new Timestamp(System.currentTimeMillis());
             this.totalUses = uses;
-            this.remUses = uses;
+            this.remainingUses = uses;
             this.type = type;
             this.price = price;
 
@@ -83,7 +83,7 @@ public class SkiPass {
                     this.memberId + "," +
                     "SYSTIMESTAMP," +
                     this.totalUses + "," +
-                    this.remUses + "," +
+                    this.remainingUses + "," +
                     "\'" + this.type + "\'" + "," +
                     this.price + ")"
             );
@@ -112,7 +112,7 @@ public class SkiPass {
                 this.memberId = resultset.getInt("member_id");
                 this.purchaseDate = resultset.getTimestamp("purchase_datetime");
                 this.totalUses = resultset.getInt("total_uses");
-                this.remUses = resultset.getInt("remaining_uses");
+                this.remainingUses = resultset.getInt("remaining_uses");
                 this.type = resultset.getString("type");
                 this.price = resultset.getInt("price");
             }
