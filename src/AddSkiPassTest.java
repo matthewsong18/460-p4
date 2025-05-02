@@ -1,5 +1,7 @@
 // Test script with hard-coded values for adding and retrieving a ski pass
 
+import common.DatabaseConnection;
+
 public class AddSkiPassTest {
     public static void main(String[] args) {
         if (args.length != 2) {
