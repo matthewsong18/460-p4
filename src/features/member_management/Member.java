@@ -10,10 +10,21 @@ public class Member {
     private String dateOfBirth;
     private String emergencyContact;
 
+    // Use to create a member object to add to the database
     public Member(String name, String telephoneNumber, String email, String dateOfBirth, String emergencyContact) {
         id = null;
         this.name = name;
         this.telephoneNumber = telephoneNumber;
+        this.email = email;
+        this.dateOfBirth = dateOfBirth;
+        this.emergencyContact = emergencyContact;
+    }
+
+    // Used by the database access object to create a member with an id
+    public Member(long id, String name, String telephone, String email, String dateOfBirth, String emergencyContact) {
+        this.id = id;
+        this.name = name;
+        this.telephoneNumber = telephone;
         this.email = email;
         this.dateOfBirth = dateOfBirth;
         this.emergencyContact = emergencyContact;
