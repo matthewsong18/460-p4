@@ -1,1 +1,4 @@
 equipment_id,equipment_type,dimension,archived_status
+1,Ski,170,0
+2,Snowboard,160,0
+3,Boots,M,1

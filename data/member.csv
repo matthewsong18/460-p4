@@ -1,14 +1,4 @@
 member_id,member_name,telephone,email,date_of_birth,emergency_contact
-1,John Doe,1234567890,johndoe@arizona.edu,1990-01-01,1234567899
-2,Jane Smith,0987654321,janesmith@arizona.edu,1992-02-02,9876543210
-3,Bob Johnson,5555555555,bob@arizona.edu,1988-03-03,5555555555
-4,Alice Brown,4444444444,alice@arizona.edu,1995-04-04,4444444444
-5,Charlie Davis,3333333333,charlie@arizona.edu,1991-05-05,3333333333
-6,Diana Evans,2222222222,dianaevans@arizona.edu,1993-06-06,2222222222
-7,Edward Wilson,1111111111,edward@arizona.edu,1994-07-07,1111111111
-8,Frank Harris,6666666666,frank@arizona.edu,1996-08-08,6666666666
-9,Grace Lee,7777777777,grace@arizona.edu,1997-09-09,7777777777
-10,Henry Walker,8888888888,henry@arizona.edu,1998-10-10,8888888888
-11,Ivy Hall,9999999999,ivy@arizona.edy,1999-11-11,9999999999
-12,Jack Young,1010101010,jack@arizona.edu,2000-12-12,1010101010
-13,Diya Stephin,1111111111,diyatinu@arizona.edu,2003-06-14,1111111111
+1,Alice Smith,123-4567,alice@example.com,1990-01-01,9998887777
+2,Bob Jones,987-6543,bob@example.com,1985-05-15,8887776666
+3,Charlie Doe,555-1212,charlie@example.com,2000-07-23,7776665555

@@ -1,1 +1,3 @@
 employee_id,employee_name,employee_age,employee_gender,employee_position,property_id,salary,start_date
+1,John Snow,30,M,Manager,1,50000,2021-06-01
+2,Jane Doe,28,F,Instructor,4,40000,2022-07-01

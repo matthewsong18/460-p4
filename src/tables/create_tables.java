@@ -1,3 +1,4 @@
+package tables;
 /*+----------------------------------------------------------------------
  ||
  ||  Class create_tables
@@ -24,6 +25,7 @@ import java.sql.Connection;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.Scanner;
+import common.*;
 
 public class create_tables {
 
