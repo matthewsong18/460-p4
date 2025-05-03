@@ -1,0 +1,3 @@
+lift_id,lift_name,open_time,difficulty_level,close_time,location
+1,Alpha Lift,08:00,2,17:00,Base Area
+2,Beta Lift,09:00,2,16:30,North Hill

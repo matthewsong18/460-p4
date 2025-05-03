@@ -1,0 +1,4 @@
+member_id,member_name,telephone,email,date_of_birth,emergency_contact
+1,Alice Smith,123-4567,alice@example.com,1990-01-01,9998887777
+2,Bob Jones,987-6543,bob@example.com,1985-05-15,8887776666
+3,Charlie Doe,555-1212,charlie@example.com,2000-07-23,7776665555
