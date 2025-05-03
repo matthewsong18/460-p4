@@ -1,16 +1,6 @@
 property_id,property_type,property_monthly_income,location
-1,Lodge,1500,
-2,Lodge,2000,
-3,Lodge,2000,
-4,Gift Shop,2500,
-5,Gift Shop,2500,
-6,Gift Shop,2500,
-7,Gift Shop,2500,
-8,Rental Center,2000,
-9,Visitor Center,1800,
-10,Ski School,1200,
-11,Parking Lot,2200,
-12,Parking Lot,2200,
-13,Parking Lot,2200,
-14,Parking Lot,2200,
-15,Parking Lot,2200,    
+1,Lodge,5000.0,North Hill
+2,Gift Shop,2500.0,Base Area
+3,Rental Center,3000.0,Rental Zone
+4,Ski School,4000.0,Education Alley
+5,Visitor Center,3500.0,Welcome Plaza
