@@ -58,7 +58,7 @@ public class delete_tables {
             for (String tbl : tables) {
                 try {
                     stmt.executeUpdate("DROP TABLE " + tbl + " CASCADE CONSTRAINTS");
-                    System.out.println("  ✔ Dropped " + tbl);
+                    System.out.println("Dropped " + tbl);
                 } catch (SQLException ex) {
                     System.out.println("  • " + tbl + "  (skipped: " + ex.getMessage() + ")");
                 }
