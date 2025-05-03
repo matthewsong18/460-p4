@@ -90,7 +90,7 @@ public class create_tables {
             stmt.executeUpdate("CREATE TABLE Property (" +
                     "property_id NUMBER PRIMARY KEY, " +
                     "property_type VARCHAR2(30) NOT NULL, " +
-                    "property_monthly_income NUMBER, " +
+                    "property_monthly_income NUMBER(20,2), " +
                     "location VARCHAR2(100))");
 
             stmt.executeUpdate("CREATE TABLE ParkingLot (" +
@@ -107,7 +107,7 @@ public class create_tables {
 
             stmt.executeUpdate("CREATE TABLE SkiPass (" +
                     "pass_id NUMBER PRIMARY KEY, member_id NUMBER NOT NULL, purchase_date DATE, " +
-                    "total_uses NUMBER, remaining_uses NUMBER, pass_type VARCHAR2(30), price NUMBER(10,2), " +
+                    "total_uses NUMBER, remaining_uses NUMBER, pass_type VARCHAR2(30), price NUMBER(10,2), archived_status VARCHAR(30), "+
                     "FOREIGN KEY(member_id) REFERENCES Member(member_id) ON DELETE CASCADE)");
 
             /* ———————— Equipment & Rental ———————— */
