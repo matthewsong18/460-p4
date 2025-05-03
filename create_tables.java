@@ -216,69 +216,75 @@ public class create_tables {
 
             /* Triggers */
             // Trigger 1: On Trail changes
-            stmt.executeUpdate(
-                    "CREATE OR REPLACE TRIGGER trg_update_lift_difficulty_from_trail " +
-                            "AFTER INSERT OR UPDATE OF difficulty OR DELETE ON Trail " +
-                            "FOR EACH ROW " +
-                            "BEGIN " +
-                            "  FOR r IN (SELECT lt.lift_id FROM LiftTrail lt WHERE lt.trail_id = NVL(:NEW.trail_id, :OLD.trail_id)) LOOP "
-                            +
-                            "    UPDATE Lift " +
-                            "    SET difficulty_level = (SELECT ROUND(AVG(t.difficulty), 0) " +
-                            "                            FROM LiftTrail lt JOIN Trail t ON lt.trail_id = t.trail_id " +
-                            "                            WHERE lt.lift_id = r.lift_id) " +
-                            "    WHERE lift_id = r.lift_id; " +
-                            "  END LOOP; " +
-                            "END;");
-
+            try {
+                stmt.executeUpdate(
+                        "CREATE OR REPLACE TRIGGER trg_lift_diff_trail " +
+                                "AFTER INSERT OR UPDATE OF difficulty OR DELETE ON Trail " +
+                                "FOR EACH ROW " +
+                                "BEGIN " +
+                                "  FOR r IN (SELECT lt.lift_id FROM LiftTrail lt WHERE lt.trail_id = NVL(:NEW.trail_id, :OLD.trail_id)) LOOP "
+                                +
+                                "    UPDATE Lift " +
+                                "    SET difficulty_level = (SELECT ROUND(AVG(t.difficulty), 0) " +
+                                "                            FROM LiftTrail lt JOIN Trail t ON lt.trail_id = t.trail_id "
+                                +
+                                "                            WHERE lt.lift_id = r.lift_id) " +
+                                "    WHERE lift_id = r.lift_id; " +
+                                "  END LOOP; " +
+                                "END;");
+            } catch (SQLException e) {
+                System.out.println("Error creating trigger trg_update_lift_difficulty_from_trail: " + e.getMessage());
+            }
             // Trigger 2: On LiftTrail changes
-            stmt.executeUpdate(
-                    "CREATE OR REPLACE TRIGGER trg_update_lift_difficulty_from_lifttrail " +
-                            "AFTER INSERT OR DELETE ON LiftTrail " +
-                            "FOR EACH ROW " +
-                            "DECLARE " +
-                            "  v_lift_id NUMBER; " +
-                            "BEGIN " +
-                            "  v_lift_id := NVL(:NEW.lift_id, :OLD.lift_id); " +
-                            "  UPDATE Lift " +
-                            "  SET difficulty_level = (SELECT ROUND(AVG(t.difficulty), 0) " +
-                            "                          FROM LiftTrail lt JOIN Trail t ON lt.trail_id = t.trail_id " +
-                            "                          WHERE lt.lift_id = v_lift_id) " +
-                            "  WHERE lift_id = v_lift_id; " +
-                            "END;");
+            try {
+                stmt.executeUpdate(
+                        "CREATE OR REPLACE TRIGGER trg_lift_diff_lifttrail " +
+                                "AFTER INSERT OR DELETE ON LiftTrail " +
+                                "FOR EACH ROW " +
+                                "DECLARE " +
+                                "  v_lift_id NUMBER; " +
+                                "BEGIN " +
+                                "  v_lift_id := NVL(:NEW.lift_id, :OLD.lift_id); " +
+                                "  UPDATE Lift " +
+                                "  SET difficulty_level = (SELECT ROUND(AVG(t.difficulty), 0) " +
+                                "                          FROM LiftTrail lt JOIN Trail t ON lt.trail_id = t.trail_id "
+                                +
+                                "                          WHERE lt.lift_id = v_lift_id) " +
+                                "  WHERE lift_id = v_lift_id; " +
+                                "END;");
+            } catch (SQLException e) {
+                System.out
+                        .println("Error creating trigger trg__lift_diff_lifttrail: " + e.getMessage());
+            }
             // Trigger 3: On SkiPass changes
-            stmt.executeUpdate("CREATE OR REPLACE TRIGGER trg_decrement_uses_after_rental\r\n" + //
-                    "AFTER INSERT ON Rental\r\n" + //
-                    "FOR EACH ROW\r\n" + //
-                    "BEGIN\r\n" + //
-                    "    UPDATE SkiPass\r\n" + //
-                    "    SET remaining_uses = remaining_uses - 1\r\n" + //
-                    "    WHERE pass_id = :NEW.pass_id;\r\n" + //
-                    "END;");
+            try {
+                stmt.executeUpdate("CREATE OR REPLACE TRIGGER trg_dec_uses_rental\r\n" + //
+                        "AFTER INSERT ON Rental\r\n" + //
+                        "FOR EACH ROW\r\n" + //
+                        "BEGIN\r\n" + //
+                        "    UPDATE SkiPass\r\n" + //
+                        "    SET remaining_uses = remaining_uses - 1\r\n" + //
+                        "    WHERE pass_id = :NEW.pass_id;\r\n" + //
+                        "END;");
+            } catch (SQLException e) {
+                System.out.println("Error creating trigger trg_dec_uses_rental: " + e.getMessage());
+            }
+            // Trigger 4: Archive SkiPass when it becomes empty
+            try {
 
-            // Trigger 4: SkiPass archived status
-            stmt.executeUpdate("CREATE OR REPLACE TRIGGER trg_archive_skipass_when_empty\r\n" + //
-                    "AFTER UPDATE ON SkiPass\r\n" + //
-                    "FOR EACH ROW\r\n" + //
-                    "WHEN (NEW.remaining_uses = 0)\r\n" + //
-                    "BEGIN\r\n" + //
-                    "    UPDATE SkiPass\r\n" + //
-                    "    SET archived_status = 'archived'\r\n" + //
-                    "    WHERE pass_id = :NEW.pass_id;\r\n" + //
-                    "END;");
-            // Trigger 4: SkiPass exp
-            stmt.executeUpdate("CREATE OR REPLACE TRIGGER trg_archive_skipass_when_empty\r\n" + //
-                    "AFTER UPDATE ON SkiPass\r\n" + //
-                    "FOR EACH ROW\r\n" + //
-                    "WHEN (NEW.remaining_uses = 0 AND OLD.remaining_uses != 0)\r\n" + //
-                    "BEGIN\r\n" + //
-                    "    UPDATE SkiPass\r\n" + //
-                    "    SET archived_status = 'archived'\r\n" + //
-                    "    WHERE pass_id = :NEW.pass_id;\r\n" + //
-                    "END;\r\n" + //
-                    "/\r\n" + //
-                    "");
-
+                stmt.executeUpdate(
+                        "CREATE OR REPLACE TRIGGER trg_archive_skipass " +
+                                "AFTER UPDATE ON SkiPass " +
+                                "FOR EACH ROW " +
+                                "WHEN (NEW.remaining_uses = 0 AND OLD.remaining_uses != 0) " +
+                                "BEGIN " +
+                                "  UPDATE SkiPass " +
+                                "  SET archived_status = 'archived' " +
+                                "  WHERE pass_id = :NEW.pass_id; " +
+                                "END;");
+            } catch (SQLException e) {
+                System.out.println("Error creating trigger trg_archive_skipass: " + e.getMessage());
+            }
         } catch (SQLException e) {
             System.err.println("Database error: " + e.getMessage());
         }
