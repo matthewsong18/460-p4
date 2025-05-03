@@ -13,6 +13,7 @@ package tables;
 import java.nio.file.*;
 import java.sql.*;
 import java.util.*;
+import common.DatabaseConnection;
 
 /** Simple, no‑dependency CSV seeder (commas inside values not supported). */
 public class populate_tables {
