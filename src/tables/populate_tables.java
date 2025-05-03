@@ -1,3 +1,4 @@
+package tables;
 /*
  * FixedCsvSeederNoLib – loads a fixed set of CSVs (no external libs)
  *

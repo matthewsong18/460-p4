@@ -1,3 +1,4 @@
+package tables;
 
 /*------------------------------------------------------------------
 * delete_tables.java – Ski Resort DB teardown
