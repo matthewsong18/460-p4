@@ -30,14 +30,14 @@ public class MemberService {
     }
 
     public void updateMember(Member member) {
-        if (member == null || member.getId() == null) {
+        if (member == null || member.id() == null) {
             throw new IllegalArgumentException("Member id cannot be null");
         }
 
         boolean status = memberDatabaseAccess.updateMember(member);
 
         if (!status) {
-            throw new RuntimeException("Failed to update member with id " + member.getId());
+            throw new RuntimeException("Failed to update member with id " + member.id());
         }
     }
 }
