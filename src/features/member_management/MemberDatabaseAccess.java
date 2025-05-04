@@ -32,9 +32,7 @@ class MemberDatabaseAccess {
             // Get the generated ID
             try (ResultSet generatedKeys = preparedStatement.getGeneratedKeys()) {
                 if (generatedKeys.next()) {
-                    long newId = generatedKeys.getLong(1);
-                    member.setId(newId);
-                    return newId;
+                    return generatedKeys.getLong(1);
                 } else {
                     System.err.println("Creating member failed, no ID obtained.");
                     return null;

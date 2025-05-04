@@ -9,7 +9,7 @@ public class MemberService {
         memberDatabaseAccess = new MemberDatabaseAccess(databaseConnection.getConnection());
     }
 
-    public Member registerMember(String name, String telephoneNumber, String email, String dateOfBirth,
+    public long registerMember(String name, String telephoneNumber, String email, String dateOfBirth,
                                  String emergencyContact) {
         Member newMember = new Member(name, telephoneNumber, email, dateOfBirth, emergencyContact);
 
@@ -20,9 +20,7 @@ public class MemberService {
             throw new RuntimeException("Failed to add new member to the database.");
         }
 
-        newMember.setId(newId);
-
-        return newMember;
+        return newId;
     }
 
     private void checkEmailDuplicate(String email) {
