@@ -25,7 +25,7 @@ import java.sql.Connection;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.Scanner;
-import common.*;
+import common.DatabaseConnection;
 
 public class create_tables {
 
@@ -37,7 +37,7 @@ public class create_tables {
      |            child‑to‑parent order to satisfy foreign‑key constraints.
      |
      |  Pre‑condition:  Caller holds an active {@code Statement} object.
-     |  Post‑condition:  Any listed tables that exist are gone.
+     |  Post‑condition:  Any listed tables that exist are gone.wwwwwwwwwwwwwwd
      *-----------------------------------------------------------------*/
     private static void dropTables(Statement stmt) throws SQLException {
         String[] tables = {
@@ -239,29 +239,43 @@ public class create_tables {
             }
             // Trigger 2: On LiftTrail changes
             try {
-                stmt.executeUpdate(
-                        "CREATE OR REPLACE TRIGGER trg_lift_diff_lifttrail " +
-                                "AFTER INSERT OR DELETE ON LiftTrail " +
-                                "FOR EACH ROW " +
-                                "DECLARE " +
-                                "  v_lift_id NUMBER; " +
-                                "BEGIN " +
-                                "  v_lift_id := NVL(:NEW.lift_id, :OLD.lift_id); " +
-                                "  UPDATE Lift " +
-                                "  SET difficulty_level = (SELECT ROUND(AVG(t.difficulty), 0) " +
-                                "                          FROM LiftTrail lt JOIN Trail t ON lt.trail_id = t.trail_id "
-                                +
-                                "                          WHERE lt.lift_id = v_lift_id) " +
-                                "  WHERE lift_id = v_lift_id; " +
-                                "END;");
+                stmt.executeUpdate("CREATE OR REPLACE TRIGGER trg_lift_diff_lifttrail\r\n" + //
+                                        "FOR INSERT OR DELETE ON LiftTrail\r\n" + //
+                                        "COMPOUND TRIGGER\r\n" + //
+                                        "\r\n" + //
+                                        "  -- Collect all affected lift_ids\r\n" + //
+                                        "  TYPE LiftIdList IS TABLE OF LiftTrail.lift_id%TYPE INDEX BY PLS_INTEGER;\r\n" + //
+                                        "  g_lift_ids LiftIdList;\r\n" + //
+                                        "  g_index INTEGER := 0;\r\n" + //
+                                        "\r\n" + //
+                                        "AFTER EACH ROW IS\r\n" + //
+                                        "BEGIN\r\n" + //
+                                        "  g_index := g_index + 1;\r\n" + //
+                                        "  g_lift_ids(g_index) := COALESCE(:NEW.lift_id, :OLD.lift_id);\r\n" + //
+                                        "END AFTER EACH ROW;\r\n" + //
+                                        "\r\n" + //
+                                        "AFTER STATEMENT IS\r\n" + //
+                                        "BEGIN\r\n" + //
+                                        "  FOR i IN 1 .. g_index LOOP\r\n" + //
+                                        "    UPDATE Lift\r\n" + //
+                                        "    SET difficulty_level = (\r\n" + //
+                                        "      SELECT ROUND(AVG(t.difficulty), 0)\r\n" + //
+                                        "      FROM LiftTrail lt JOIN Trail t ON lt.trail_id = t.trail_id\r\n" + //
+                                        "      WHERE lt.lift_id = g_lift_ids(i)\r\n" + //
+                                        "    )\r\n" + //
+                                        "    WHERE lift_id = g_lift_ids(i);\r\n" + //
+                                        "  END LOOP;\r\n" + //
+                                        "END AFTER STATEMENT;\r\n" + //
+                                        "\r\n" + //
+                                        "END;\r\n");
             } catch (SQLException e) {
                 System.out
                         .println("Error creating trigger trg__lift_diff_lifttrail: " + e.getMessage());
             }
-            // Trigger 3: On SkiPass changes
+            // Trigger 3: On SkiPass changes when lift is used
             try {
-                stmt.executeUpdate("CREATE OR REPLACE TRIGGER trg_dec_uses_rental\r\n" + //
-                        "AFTER INSERT ON Rental\r\n" + //
+                stmt.executeUpdate("CREATE OR REPLACE TRIGGER trg_dec_uses_EntryLog\r\n" + //
+                        "AFTER INSERT ON EntryLog\r\n" + //
                         "FOR EACH ROW\r\n" + //
                         "BEGIN\r\n" + //
                         "    UPDATE SkiPass\r\n" + //
