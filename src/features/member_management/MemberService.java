@@ -2,8 +2,6 @@ package features.member_management;
 
 import common.DatabaseConnection;
 
-import java.util.Optional;
-
 public class MemberService {
     private final MemberDatabaseAccess memberDatabaseAccess;
 
@@ -55,6 +53,19 @@ public class MemberService {
 
         if (emergencyContact == null || emergencyContact.isBlank()) {
             throw new IllegalArgumentException("Emergency Contact cannot be blank");
+        }
+    }
+
+    public void updateMember(Member member) {
+        // TODO add validation to Member constructor
+        if (member == null || member.getId() == null) {
+            throw new IllegalArgumentException("Member id cannot be null");
+        }
+
+        boolean status = memberDatabaseAccess.updateMember(member);
+
+        if (!status) {
+            throw new RuntimeException("Failed to update member with id " + member.getId());
         }
     }
 }
