@@ -37,7 +37,7 @@ public class create_tables {
      |            child‑to‑parent order to satisfy foreign‑key constraints.
      |
      |  Pre‑condition:  Caller holds an active {@code Statement} object.
-     |  Post‑condition:  Any listed tables that exist are gone.wwwwwwwwwwwwwwd
+     |  Post‑condition:  Any listed tables that exist are gone.
      *-----------------------------------------------------------------*/
     private static void dropTables(Statement stmt) throws SQLException {
         String[] tables = {
