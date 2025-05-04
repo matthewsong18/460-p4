@@ -104,7 +104,89 @@ public class Prog4 {
         return;
     }
     
+    private static void executionMenu(String actionState, String context){
+        // TO DO: add logic for ski pass, equipment, rentals, lessons
+        // action logic
+        switch (actionState) {
+            case "1":
+                // add
+                if (context.equals("member")) {
+                    System.out.print("Name: ");
+                    String name = userin.nextLine();
+                    System.out.print("Telephone #: ");
+                    String telephoneNumber = userin.nextLine();
+                    System.out.print("Email: ");
+                    String email = userin.nextLine();
+                    System.out.print("Date of Birth: ");
+                    String dateOfBirth = userin.nextLine();
+                    System.out.print("Emergency Telephone #: ");
+                    String emergency = userin.nextLine();
 
+                    // add member
+                    System.out.println("Added new member: [id here].");
+                } else if (context.equals("ski")){
+                    System.out.print("Member ID: ");
+                    String id = userin.nextLine();
+                    System.out.print("Pass type: ");
+                    String type = userin.nextLine();
+
+                    // add pass
+                    System.out.println("Added new ski pass: [id here]");
+                } 
+                break;
+            case "2":
+                // delete
+                if (context.equals("member")) {
+                    System.out.print("Member ID: ");
+
+                    // delete member
+                    System.out.println("Deleted member [id here].");
+                } else if (context.equals("ski")) {
+
+                }
+                break;
+            case "3":
+                // update
+                if (context.equals("member")) {
+                    // update member
+                    System.out.print("Member ID: ");
+
+                    System.out.println("What would you like to update?");
+                    System.out.println("1 | Email");
+                    System.out.println("2 | Telephone #");
+                    System.out.println("3 | Emergency Telephone #");
+                    
+                    String field = userin.nextLine();
+                    if (field.equals("1")) {
+                        // update email
+                        System.out.print("New email: ");
+                        String value = userin.nextLine();
+
+                        //execute
+                        System.out.println("Update on member [id here] succesful.");
+                    } else if (field.equals("2")){
+                        // update phone number
+                        System.out.print("New telephone #: ");
+                        String value = userin.nextLine();
+
+                        //execute
+                        System.out.println("Update on member [id here] succesful.");
+                    } else if (field.equals("3")) {
+                        // update emergency phone number
+                        System.out.print("New emergency telephone #: ");
+                        String value = userin.nextLine();
+
+                        //execute
+                        System.out.println("Update on member [id here] succesful.");
+                    } else {
+                        System.out.println("ERROR: Invalid option selected. Please try again.");
+                    }
+                }
+                break;
+            default:
+                break;
+        }
+    }
     public static void main(String[] args){
         // initialize database connection
         if (args.length != 2) {
@@ -115,6 +197,7 @@ public class Prog4 {
 
         userin = new Scanner(System.in);
         String input = "";
+        
         
 
         // initial print
@@ -129,6 +212,7 @@ public class Prog4 {
 
         while (userin.hasNextLine() && !(input = userin.nextLine().toLowerCase()).equals("exit")) {
             String actionState = "";
+            String context = "";
             
             // main logic
             try{
@@ -147,29 +231,28 @@ public class Prog4 {
                     case "1":
                         // member
                         actionState = actionMenu("member");
-                        
+                        context = "member";
                         break;
                     case "2":
                         // ski pass
                         actionState = actionMenu("ski pass");
-                        
+                        context = "ski";
                         break;
                     case "3":
                         // equipment
                         actionState = actionMenu("equipment record");
-                        
+                        context = "equipment";
                         break;
                     case "4":
                         // rental
                         actionState = actionMenu("rental record");
-                        
+                        context = "rental";
     
                         break;
                     case "5":  
                         // lesson
                         actionState = actionMenu("lesson purchase record");
-                        
-    
+                        context = "lesson";
                         break;
                     case "query":
                         // queries
@@ -190,28 +273,11 @@ public class Prog4 {
                         break;
                 }
 
-                // action logic
-                switch (actionState) {
-                    case "1":
-                        // add
-
-                        break;
-                    case "2":
-                        // delete
-                        break;
-                    case "3":
-                        // update
-
-                        break;
-                    default:
-                        break;
-                }
+               executionMenu(actionState, context);
             } catch (InputMismatchException e) {
-                System.err.println("ERROR: Invalid argument provided. Try again.");
+                System.out.println("ERROR: Invalid argument provided. Try again.");
             }
-            
-
-            
+                        
             input = "";
         }
 
