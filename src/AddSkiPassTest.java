@@ -88,6 +88,8 @@ public class AddSkiPassTest {
                     "WHERE pass_id = " + pass.getPassId()
             );
 
+            System.out.println(pass);
+
             assert pass.addUses(10);
 
             assert !pass.addUses(90);

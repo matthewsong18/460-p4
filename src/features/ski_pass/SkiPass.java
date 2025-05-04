@@ -150,37 +150,9 @@ public class SkiPass {
             System.exit(-1);
         }
 
-        try {
-            Statement stmt = dbconn.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
+        this.passId = passId;
 
-            ResultSet resultset = stmt.executeQuery(
-                    "SELECT * FROM SkiPass\n" +
-                    "WHERE pass_id = " + passId);
-
-            if (resultset.first()) {
-                this.passId = passId;
-                this.memberId = resultset.getInt("member_id");
-                this.purchaseDate = resultset.getTimestamp("purchase_date");
-                this.totalUses = resultset.getInt("total_uses");
-                this.remainingUses = resultset.getInt("remaining_uses");
-                this.type = resultset.getString("pass_type");
-                this.price = resultset.getInt("price");
-                this.archived = resultset.getString("archived_status").equals("archived");
-            }
-            else {
-                throw new RuntimeException("Error: No matching pass.");
-            }
-
-            stmt.close();
-        }
-        catch (SQLException e) {
-            System.err.println("*** SQLException:  "
-                + "Could not fetch pass.");
-            System.err.println("\tMessage:   " + e.getMessage());
-            System.err.println("\tSQLState:  " + e.getSQLState());
-            System.err.println("\tErrorCode: " + e.getErrorCode());
-            System.exit(-1);
-        }
+        this.updateFromDatabase();
     }
     
     // Getters
@@ -374,7 +346,7 @@ public class SkiPass {
      |  Pre-condition:  Database connection (dbconn) is initialized and 
      |      the pass exists in the database.
      |
-     |  Post-condition: The field values forremaining_uses, and 
+     |  Post-condition: The updated field values for remaining_uses, and 
      |      archived_status for the matching pass in the database 
      |      corresponds to the current object instance.
      |
@@ -415,17 +387,15 @@ public class SkiPass {
     /*---------------------------------------------------------------------
      |  Method updateFromDatabase()
      |
-     |  Purpose:  Updates the values in the current instance using values 
-     |      retrieved from the matching pass in the SkiPass database. Only 
-     |      remaining_uses and archived_status are subject to change.
+     |  Purpose:  Updates all values in the current instance using values 
+     |      retrieved from the matching pass in the SkiPass database.
      |      Throws an error if the pass doesn't exist.
      |
      |  Pre-condition:  Database connection (dbconn) is initialized and 
      |      the pass exists in the database.
      |
-     |  Post-condition: The field values for remaining_uses and
-     |      archived_status for the matching pass in the database 
-     |      corresponds to the current object instance.
+     |  Post-condition: All field values for the matching pass in the DB 
+     |      correspond to the current object instance.
      |
      |  Parameters: None.
      |
@@ -438,12 +408,17 @@ public class SkiPass {
             Statement stmt = dbconn.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
 
             ResultSet resultset = stmt.executeQuery(
-                    "SELECT remaining_uses, archived_status\n" + 
+                    "SELECT *\n" + 
                     "FROM SkiPass\n" +
                     "WHERE pass_id = " + passId);
 
             if (resultset.first()) {
+                this.memberId = resultset.getInt("member_id");
+                this.purchaseDate = resultset.getTimestamp("purchase_date");
+                this.totalUses = resultset.getInt("total_uses");
                 this.remainingUses = resultset.getInt("remaining_uses");
+                this.type = resultset.getString("pass_type");
+                this.price = resultset.getInt("price");
                 this.archived = resultset.getString("archived_status").equals("archived");
 
                 System.out.println("Successfully retrieved values from database.");
@@ -472,6 +447,7 @@ public class SkiPass {
     }
 
     public String toString() {
+        this.updateFromDatabase();
         return "SkiPass{" +
                 "passId=" + passId +
                 ", memberId=" + memberId +
