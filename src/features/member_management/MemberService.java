@@ -11,11 +11,9 @@ public class MemberService {
 
     public Member registerMember(String name, String telephoneNumber, String email, String dateOfBirth,
                                  String emergencyContact) {
-        validateMemberInputs(name, telephoneNumber, email, dateOfBirth, emergencyContact);
+        Member newMember = new Member(name, telephoneNumber, email, dateOfBirth, emergencyContact);
 
         checkEmailDuplicate(email);
-
-        Member newMember = new Member(name, telephoneNumber, email, dateOfBirth, emergencyContact);
 
         Long newId = memberDatabaseAccess.createMember(newMember);
         if (newId == null) {
@@ -33,31 +31,7 @@ public class MemberService {
         };
     }
 
-    private void validateMemberInputs(String name, String telephoneNumber, String email, String dateOfBirth,
-                                      String emergencyContact) {
-        if (name == null || name.isBlank()) {
-            throw new IllegalArgumentException("Name cannot be blank");
-        }
-
-        if (telephoneNumber == null || telephoneNumber.isBlank()) {
-            throw new IllegalArgumentException("Telephone number cannot be blank");
-        }
-
-        if (email == null || email.isBlank()) {
-            throw new IllegalArgumentException("Email cannot be blank");
-        }
-
-        if (dateOfBirth == null || dateOfBirth.isBlank()) {
-            throw new IllegalArgumentException("Date of Birth cannot be blank");
-        }
-
-        if (emergencyContact == null || emergencyContact.isBlank()) {
-            throw new IllegalArgumentException("Emergency Contact cannot be blank");
-        }
-    }
-
     public void updateMember(Member member) {
-        // TODO add validation to Member constructor
         if (member == null || member.getId() == null) {
             throw new IllegalArgumentException("Member id cannot be null");
         }
