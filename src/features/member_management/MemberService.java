@@ -28,7 +28,7 @@ public class MemberService {
     }
 
     private void checkEmailDuplicate(String email) {
-        if (memberDatabaseAccess.findMemberByEmail(email).isEmpty()) {
+        if (memberDatabaseAccess.findMemberByEmail(email).isPresent()) {
             throw new RuntimeException("Member with email " + email + " already exists.");
         };
     }
