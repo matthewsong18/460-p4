@@ -16,11 +16,11 @@ class MemberDatabaseAccess {
         String sql = "INSERT INTO members (name, telephone, email, date_of_birth, emergency_contact) VALUES (?, ?, ?, ?, ?)";
         try (PreparedStatement preparedStatement = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
 
-            preparedStatement.setString(1, member.getName());
-            preparedStatement.setString(2, member.getTelephoneNumber());
-            preparedStatement.setString(3, member.getEmail());
-            preparedStatement.setString(4, member.getDateOfBirth());
-            preparedStatement.setString(5, member.getEmergencyContact());
+            preparedStatement.setString(1, member.name());
+            preparedStatement.setString(2, member.telephoneNumber());
+            preparedStatement.setString(3, member.email());
+            preparedStatement.setString(4, member.dateOfBirth());
+            preparedStatement.setString(5, member.emergencyContact());
 
             int affectedRows = preparedStatement.executeUpdate();
 
@@ -32,9 +32,7 @@ class MemberDatabaseAccess {
             // Get the generated ID
             try (ResultSet generatedKeys = preparedStatement.getGeneratedKeys()) {
                 if (generatedKeys.next()) {
-                    long newId = generatedKeys.getLong(1);
-                    member.setId(newId);
-                    return newId;
+                    return generatedKeys.getLong(1);
                 } else {
                     System.err.println("Creating member failed, no ID obtained.");
                     return null;
@@ -114,7 +112,7 @@ class MemberDatabaseAccess {
 
 
     public boolean updateMember(Member member) {
-        if (member.getId() == null) {
+        if (member.id() == null) {
             System.err.println("Cannot update member without an ID.");
             return false;
         }
@@ -122,12 +120,12 @@ class MemberDatabaseAccess {
 
         try (PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
 
-            preparedStatement.setString(1, member.getName());
-            preparedStatement.setString(2, member.getTelephoneNumber());
-            preparedStatement.setString(3, member.getEmail());
-            preparedStatement.setString(4, member.getDateOfBirth());
-            preparedStatement.setString(5, member.getEmergencyContact());
-            preparedStatement.setLong(6, member.getId()); // WHERE
+            preparedStatement.setString(1, member.name());
+            preparedStatement.setString(2, member.telephoneNumber());
+            preparedStatement.setString(3, member.email());
+            preparedStatement.setString(4, member.dateOfBirth());
+            preparedStatement.setString(5, member.emergencyContact());
+            preparedStatement.setLong(6, member.id()); // WHERE
 
             int affectedRows = preparedStatement.executeUpdate();
             return affectedRows > 0;
