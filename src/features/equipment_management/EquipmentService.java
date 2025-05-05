@@ -2,6 +2,8 @@ package features.equipment_management;
 
 import common.DatabaseConnection;
 
+import java.util.Optional;
+
 public class EquipmentService {
     private final EquipmentDatabaseAccess equipmentDatabaseAccess;
 
@@ -18,5 +20,17 @@ public class EquipmentService {
         }
 
         return newId;
+    }
+
+    public Optional<Equipment> findEquipment(Long equipment_id) {
+        return equipmentDatabaseAccess.findEquipmentById(equipment_id);
+    }
+
+    public void updateEquipment(Equipment equipment) {
+        if (equipment == null || equipment.equipment_id() == null) {
+            throw new IllegalArgumentException("Equipment id cannot be null");
+        }
+
+        equipmentDatabaseAccess.updateEquipment(equipment);
     }
 }

@@ -44,7 +44,7 @@ class MemberDatabaseAccess {
         }
     }
 
-    public Optional<Member> findMemberById(long id) {
+    public Optional<Member> findMemberById(Long id) {
         String sql = "SELECT id, name, telephone, email, date_of_birth, emergency_contact FROM members WHERE id = ?";
 
         try (PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
