@@ -19,4 +19,12 @@ public class EquipmentService {
 
         return newId;
     }
+
+    public void updateEquipment(Equipment equipment) {
+        if (equipment == null || equipment.equipment_id() == null) {
+            throw new IllegalArgumentException("Equipment id cannot be null");
+        }
+
+        equipmentDatabaseAccess.updateEquipment(equipment);
+    }
 }

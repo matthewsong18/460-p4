@@ -36,4 +36,22 @@ public class EquipmentDatabaseAccess {
             throw new RuntimeException(e);
         }
     }
+
+    public void updateEquipment(Equipment equipment) {
+        String sql = "UPDATE equipment SET type = ?, dimension = ?, archived_status = ? WHERE id = ?";
+
+        try (PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
+            preparedStatement.setString(1, equipment.type());
+            preparedStatement.setString(2, equipment.dimension());
+            preparedStatement.setInt(3, equipment.archived_status());
+            preparedStatement.setLong(4, equipment.equipment_id()); // WHERE
+
+            int affectedRows = preparedStatement.executeUpdate();
+            if (affectedRows == 0) {
+                throw new SQLException("Updating equipment failed; No rows affected.");
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
 }
