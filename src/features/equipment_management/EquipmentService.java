@@ -10,7 +10,7 @@ public class EquipmentService {
     }
 
     public Long createEquipment(String type, String dimension, String archived_status) {
-        Equipment equipment = new Equipment(type, dimension, archived_status);
+        Equipment equipment = new Equipment(type, dimension);
 
         Long newId = equipmentDatabaseAccess.createEquipment(equipment);
         if (newId == null) {

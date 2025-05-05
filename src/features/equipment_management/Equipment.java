@@ -2,11 +2,11 @@ package features.equipment_management;
 
 import common.InputValidation;
 
-public record Equipment(Long equipment_id, String type, String dimension, String archived_status) {
+public record Equipment(Long equipment_id, String type, String dimension, int archived_status) {
 
     // Service Constructor
-    public Equipment(String type, String dimension, String archived_status) {
-        this(null, type, dimension, archived_status);
+    public Equipment(String type, String dimension) {
+        this(null, type, dimension, 0);
     }
 
     // Canonical Constructor
@@ -17,20 +17,20 @@ public record Equipment(Long equipment_id, String type, String dimension, String
     }
 
     private static void checkType(String type) {
-        if (InputValidation.checkBlank(type)) {
+        if (InputValidation.checkStringBlank(type)) {
             throw new IllegalArgumentException("Type cannot be blank");
         }
     }
 
     private static void checkDimension(String dimension) {
-        if (InputValidation.checkBlank(dimension)) {
+        if (InputValidation.checkStringBlank(dimension)) {
             throw new IllegalArgumentException("Dimension cannot be blank");
         }
     }
 
-    private static void checkArchivedStatus(String archivedStatus) {
-        if (InputValidation.checkBlank(archivedStatus)) {
-            throw new IllegalArgumentException("ArchivedStatus cannot be blank");
+    private static void checkArchivedStatus(int archived_status) {
+        if (archived_status != 0 && archived_status != 1) {
+            throw new IllegalArgumentException("Archived status must be either 0 or 1");
         }
     }
 }

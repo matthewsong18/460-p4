@@ -17,7 +17,7 @@ public class EquipmentDatabaseAccess {
         try (PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
             preparedStatement.setString(1, equipment.type());
             preparedStatement.setString(2, equipment.dimension());
-            preparedStatement.setString(3, equipment.archived_status());
+            preparedStatement.setInt(3, equipment.archived_status());
 
             int affectedRows = preparedStatement.executeUpdate();
             if (affectedRows == 0) {
@@ -33,8 +33,7 @@ public class EquipmentDatabaseAccess {
                 }
             }
         } catch (SQLException e) {
-            e.printStackTrace();
-            return null;
+            throw new RuntimeException(e);
         }
     }
 }
