@@ -39,7 +39,7 @@ public class AddSkiPassTest {
 
             System.out.println("Testing retrieving a pass...");
 
-            SkiPass pass2 = new SkiPass(pass.getPassId());
+            SkiPass pass2 = SkiPass.getSkiPassById(pass.getPassId());
 
             System.out.println(pass2);
 
@@ -56,13 +56,7 @@ public class AddSkiPassTest {
 
 
             System.out.println("Testing retrieving nonexistant pass...");
-            try {
-                pass2 = new SkiPass(0);
-                assert false;   // Should not reach here
-            }
-            catch (RuntimeException e) {
-                // Continue execution
-            }
+            assert SkiPass.getSkiPassById(0) == null;
 
 
             System.out.println("Testing retrieving expiration status...");

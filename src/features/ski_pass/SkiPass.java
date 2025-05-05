@@ -143,16 +143,22 @@ public class SkiPass {
         }
     }
 
+    private SkiPass() {
+
+    }
+
     // Get an existing pass using the pass ID.
-    public SkiPass(int passId) {
-        if (this.dbconn == null) {
+    public static SkiPass getSkiPassById(int passId) {
+        if (dbconn == null) {
             System.out.println("Error: Database connection not initialized.");
-            System.exit(-1);
+            return null;
         }
 
-        this.passId = passId;
+        SkiPass newSkiPass = new SkiPass();
 
-        this.updateFromDatabase();
+        newSkiPass.passId = passId;
+
+        return newSkiPass.updateFromDatabase() ? newSkiPass : null;
     }
     
     // Getters
