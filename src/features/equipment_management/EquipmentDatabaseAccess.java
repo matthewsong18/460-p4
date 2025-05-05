@@ -1,9 +1,12 @@
 package features.equipment_management;
 
+import features.member_management.Member;
+
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.Optional;
 
 public class EquipmentDatabaseAccess {
     private final Connection connection;
@@ -36,6 +39,36 @@ public class EquipmentDatabaseAccess {
             throw new RuntimeException(e);
         }
     }
+
+    public Optional<Equipment> findEquipmentById(Long id) {
+        String sql = "SELECT type, dimension, archived_status FROM equipment WHERE id = ?";
+
+        try (PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
+            preparedStatement.setLong(1, id);
+
+            try (ResultSet resultSet = preparedStatement.executeQuery()) {
+                if (resultSet.next()) {
+                    Equipment equipment = mapRowToEquipment(resultSet);
+                    return Optional.of(equipment);
+                }
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+
+        return Optional.empty();
+    }
+
+    // Helper method to map a ResultSet row to an Equipment object
+    private Equipment mapRowToEquipment(ResultSet resultSet) throws SQLException {
+        long id = resultSet.getLong("id");
+        String type = resultSet.getString("type");
+        String dimension = resultSet.getString("dimension");
+        int archived_status = resultSet.getInt("archived_status");
+
+        return new Equipment(id, type, dimension, archived_status);
+    }
+
 
     public void updateEquipment(Equipment equipment) {
         String sql = "UPDATE equipment SET type = ?, dimension = ?, archived_status = ? WHERE id = ?";
