@@ -16,7 +16,7 @@ public class EquipmentService {
 
         Long newId = equipmentDatabaseAccess.createEquipment(equipment);
         if (newId == null) {
-            throw new RuntimeException("Failed to create equipment");
+            throw new RuntimeException("Failed to return the equipment id");
         }
 
         return newId;

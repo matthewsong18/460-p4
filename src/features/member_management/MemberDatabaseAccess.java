@@ -25,8 +25,7 @@ class MemberDatabaseAccess {
             int affectedRows = preparedStatement.executeUpdate();
 
             if (affectedRows == 0) {
-                System.err.println("Creating member failed, no rows affected.");
-                return null;
+                throw new SQLException("Creating member failed, no rows affected.");
             }
 
             // Get the generated ID
@@ -34,13 +33,11 @@ class MemberDatabaseAccess {
                 if (generatedKeys.next()) {
                     return generatedKeys.getLong(1);
                 } else {
-                    System.err.println("Creating member failed, no ID obtained.");
-                    return null;
+                    throw new SQLException("Creating member failed, no ID obtained.");
                 }
             }
         } catch (SQLException e) {
-            System.err.println("Error adding member: " + e.getMessage());
-            return null;
+            throw new RuntimeException(e);
         }
     }
 
@@ -84,7 +81,7 @@ class MemberDatabaseAccess {
 
     // Helper method to map a ResultSet row to a Member object
     private Member mapRowToMember(ResultSet resultSet) throws SQLException {
-        long id = resultSet.getLong("id");
+        Long id = resultSet.getLong("id");
         String name = resultSet.getString("name");
         String telephone = resultSet.getString("telephone");
         String email = resultSet.getString("email");
@@ -105,7 +102,7 @@ class MemberDatabaseAccess {
                 members.add(mapRowToMember(rs));
             }
         } catch (SQLException e) {
-            System.err.println("Error finding all members: " + e.getMessage());
+            throw new RuntimeException(e);
         }
         return members;
     }
@@ -113,8 +110,7 @@ class MemberDatabaseAccess {
 
     public boolean updateMember(Member member) {
         if (member.id() == null) {
-            System.err.println("Cannot update member without an ID.");
-            return false;
+            throw new RuntimeException("Cannot update member without an ID.");
         }
         String sql = "UPDATE members SET name = ?, telephone = ?, email = ?, date_of_birth = ?, emergency_contact = ?, WHERE id = ?";
 
@@ -131,8 +127,7 @@ class MemberDatabaseAccess {
             return affectedRows > 0;
 
         } catch (SQLException e) {
-            System.err.println("Error updating member: " + e.getMessage());
-            return false;
+            throw new RuntimeException(e);
         }
     }
 
@@ -147,8 +142,7 @@ class MemberDatabaseAccess {
             return affectedRows > 0;
 
         } catch (SQLException e) {
-            System.err.println("Error deleting member: " + e.getMessage());
-            return false;
+            throw new RuntimeException(e);
         }
     }
 
