@@ -12,14 +12,14 @@ class LessonDatabaseAccess {
         this.connection = connection;
     }
 
-    public Long createLesson(Long instructor_id, Timestamp lesson_time) {
+    public Long createLesson(Lesson lesson) {
         String sql = "INSERT into Lesson VALUES (?, ?, ?)";
         try {
             PreparedStatement preparedStatement = connection.prepareStatement(sql);
 
             preparedStatement.setLong(1, getNextId());
-            preparedStatement.setLong(2, instructor_id);
-            preparedStatement.setTimestamp(3, lesson_time);
+            preparedStatement.setLong(2, lesson.instructor_id());
+            preparedStatement.setTimestamp(3, lesson.lesson_time());
 
             int affectedRows = preparedStatement.executeUpdate();
             if (affectedRows == 0) {
@@ -82,7 +82,7 @@ class LessonDatabaseAccess {
         return new Lesson(lesson_id, instructor_id, lesson_time);
     }
 
-    private boolean updateLesson(Lesson lesson) {
+    public boolean updateLesson(Lesson lesson) {
         if (lesson == null || lesson.lesson_id() == null) {
             throw new IllegalArgumentException("Lesson cannot be null");
         }
@@ -103,7 +103,7 @@ class LessonDatabaseAccess {
         }
     }
 
-    private boolean deleteLesson(Lesson lesson) {
+    public boolean deleteLesson(Lesson lesson) {
         if (lesson == null || lesson.lesson_id() == null) {
             throw new IllegalArgumentException("Lesson cannot be null");
         }
