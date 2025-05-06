@@ -1,4 +1,5 @@
 pass_id,member_id,purchase_date,total_uses,remaining_uses,pass_type,price,archived_status
-1,1,2024-12-01,10,2,Regular,100.0,active
-2,2,2025-01-10,5,0,Seasonal,200.0,archived
-3,3,2025-01-15,8,4,Premium,300.0,active
+1,1,2024-12-01,10,2,1-day,100.0,1
+2,2,2025-01-10,5,0,2-day,200.0,0
+3,3,2025-01-15,8,4,4-day,300.0,1
+4,4,2025-01-15,8,4,season,900.0,1
