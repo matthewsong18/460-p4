@@ -27,26 +27,26 @@ public class LessonService {
     }
 
     public void updateLesson(Lesson lesson) {
-        if (lesson == null || lesson.id() == null) {
+        if (lesson == null || lesson.lesson_id() == null) {
             throw new IllegalArgumentException("Lesson cannot be null");
         }
 
         boolean status = lessonDatabaseAccess.updateLesson(lesson);
 
         if (!status) {
-            throw new RuntimeException("Failed to update lesson with id " + lesson.id());
+            throw new RuntimeException("Failed to update lesson with id " + lesson.lesson_id());
         }
     }
 
     public void deleteLesson(Lesson lesson) {
-        if (lesson == null || lesson.id() == null) {
+        if (lesson == null || lesson.lesson_id() == null) {
             throw new IllegalArgumentException("Lesson cannot be null");
         }
 
         boolean status = lessonDatabaseAccess.deleteLesson(lesson);
 
         if (!status) {
-            throw new RuntimeException("Failed to delete lesson with id " + lesson.id());
+            throw new RuntimeException("Failed to delete lesson with id " + lesson.lesson_id());
         }
     }
 }
