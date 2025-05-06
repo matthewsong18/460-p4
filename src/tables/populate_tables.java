@@ -1,8 +1,9 @@
+package tables;
 /*
  * FixedCsvSeederNoLib – loads a fixed set of CSVs (no external libs)
  *
  * Compile:
- *   export CP=/usr/lib/oracle/19.8/client64/lib/ojdbc8.jar:.
+ *    export CLASSPATH=/usr/lib/oracle/19.8/client64/lib/ojdbc8.jar:$CLASSPATH
  *   javac -cp "$CP" DatabaseConnection.java FixedCsvSeederNoLib.java
  *
  * Run:
@@ -12,6 +13,7 @@
 import java.nio.file.*;
 import java.sql.*;
 import java.util.*;
+import common.DatabaseConnection;
 
 /** Simple, no‑dependency CSV seeder (commas inside values not supported). */
 public class populate_tables {
