@@ -16,18 +16,7 @@ public record Lesson(
     }
 
     private void validateInputs(Long instructor_id, Timestamp lesson_time) {
-        checkInstructorId(instructor_id);
         checkLessonTime(lesson_time);
-    }
-
-    private void checkLessonId(Long lesson_id) {
-        if (lesson_id == null || lesson_id <= 0)
-            throw new IllegalArgumentException("Lesson ID cannot be null");
-    }
-
-    private void checkInstructorId(Long instructor_id) {
-        if (instructor_id == null || instructor_id <= 0)
-            throw new IllegalArgumentException("Instructor ID cannot be null");
     }
 
     private void checkLessonTime(Timestamp lesson_time) {

@@ -3,15 +3,20 @@ package features.lesson_management;
 import common.DatabaseConnection;
 import java.util.Optional;
 import java.sql.Timestamp;
+import features.employee_management.*;
 
 public class LessonService {
     private LessonDatabaseAccess lessonDatabaseAccess;
+    private DatabaseConnection connection;
 
     public LessonService(DatabaseConnection connection) {
         lessonDatabaseAccess = new LessonDatabaseAccess(connection.getConnection());
+        this.connection = connection;
     }
 
     public Long createLesson(Long instructor_id, Timestamp lesson_time) {
+        checkInstructorId(instructor_id);
+
         Lesson lesson = new Lesson(instructor_id, lesson_time);
 
         Long newId = lessonDatabaseAccess.createLesson(lesson);
@@ -20,6 +25,14 @@ public class LessonService {
         }
 
         return newId;
+    }
+
+    private void checkInstructorId(Long instructor_id) {
+        EmployeeService employeeService = new EmployeeService(connection);
+        Optional<Employee> employeeOptional = employeeService.getEmployeeById(instructor_id);
+        if (employeeOptional.isEmpty() || !employeeOptional.get().position().equals("Instructor")) {
+            throw new RuntimeException("Instructor with id " + instructor_id + " does not exist.");
+        }
     }
 
     public Optional<Lesson> findLessonById(Long id) {
