@@ -61,8 +61,8 @@ public class QueryService {
 
         String query = String.format("""
                         select *
-                        from LessonOrder
-                        join Lesson using (lesson_id)
+                        from stephintomson.LessonOrder
+                        join stephintomson.Lesson using (lesson_id)
                         where member_id = '%s'
                        """, memberid);
         
@@ -81,7 +81,7 @@ public class QueryService {
 
         String query = String.format("""
                        select rental_id, equipment_id, datetime_to, datetime_from, returned
-                       from Rental
+                       from stephintomson.Rental
                        where pass_id = '%s'
                 """, passid);
         
@@ -100,8 +100,8 @@ public class QueryService {
 
         String query = String.format("""
                        select datetime, lift_name, difficulty_level
-                       from EntryLog
-                       join Lift using (lift_id)
+                       from stephintomson.EntryLog
+                       join stephintomson.Lift using (lift_id)
                        where pass_id = '%s'
                 """, passid);
         
@@ -118,7 +118,7 @@ public class QueryService {
 
         String query = String.format("""
                         select *
-                        from Trail
+                        from stephintomson.Trail
                         where difficulty = 2       
                     """);
 
@@ -137,8 +137,8 @@ public class QueryService {
 
         String query = String.format("""
                         select lift_name, open_time, close_time, difficulty_level, location
-                        from LiftTrail
-                        join Lift using (lift_id)
+                        from stephintomson.LiftTrail
+                        join stephintomson.Lift using (lift_id)
                         where trail_id = '%s'  
                     """, trailid);
 
@@ -157,8 +157,8 @@ public class QueryService {
 
         String query = String.format("""
                         select sum(salary) as "Wage Expense"
-                        from Employee
-                        join Property using (property_id)
+                        from stephintomson.Employee
+                        join stephintomson.Property using (property_id)
                         where property_id = '%s'
                 """, propertyid);
 
