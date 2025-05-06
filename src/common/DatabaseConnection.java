@@ -9,6 +9,7 @@ import java.sql.SQLException;
  ||  Class DatabaseConnection 
  ||
  ||        Author:  Matthew W. Song (Copies from Class Example)
+ ||                 Elias Zheng (close method)
  ||
  ||     Purpose:  Handles the establishment of a JDBC connection to the 
  ||               Oracle database using provided credentials. It loads
@@ -29,6 +30,7 @@ import java.sql.SQLException;
  ||  Class Methods:  None // loadOracleDriver and getDatabaseConnection are private static helpers
  ||
  ||  Inst. Methods:  getConnection() -> Connection
+ ||                  close() - > void
  ||                  // Private static methods below
  ||                  // loadOracleDriver() -> void
  ||                  // getDatabaseConnection(String, String, String) -> Connection
@@ -73,7 +75,6 @@ public class DatabaseConnection {
         // Oracle database
 
         dbConnection = getDatabaseConnection(oracleURL, username, password);
-
     }
 
     /*---------------------------------------------------------------------
@@ -159,10 +160,31 @@ public class DatabaseConnection {
     |
     |  Parameters: None
     |
-    |  Returns:  The java.sql.Connection object managed by this instance.
+    |  Returns:  The java.sql.Connection object managed by this instance.        
     *-------------------------------------------------------------------*/
     public Connection getConnection() {
         return dbConnection;
     }
 
+    /*---------------------------------------------------------------------
+    |  Method close()
+    |
+    |  Purpose:  Closes database connection
+    |
+    |  Pre-condition:  The constructor successfully established a connection
+    |                  (dbConnection is not null).
+    |
+    |  Post-condition: None.
+    |
+    |  Parameters: None
+    |
+    *-------------------------------------------------------------------*/
+    public void close(){
+        try {
+            dbConnection.close();
+        } catch(SQLException e){
+            System.err.println("FATAL SQL EXCEPTION: DB connection refused to closed. Terminating program.");
+            System.exit(-1);
+        }
+    }
 }
