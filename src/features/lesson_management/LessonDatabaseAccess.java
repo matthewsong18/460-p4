@@ -82,7 +82,7 @@ class LessonDatabaseAccess {
         return new Lesson(lesson_id, instructor_id, lesson_time);
     }
 
-    public boolean updateLesson(Lesson lesson) {
+    public void updateLesson(Lesson lesson) {
         if (lesson == null || lesson.lesson_id() == null) {
             throw new IllegalArgumentException("Lesson cannot be null");
         }
@@ -95,15 +95,16 @@ class LessonDatabaseAccess {
             preparedStatement.setLong(3, lesson.lesson_id());
 
             int affectedRows = preparedStatement.executeUpdate();
-            return affectedRows > 0;
+            if (affectedRows == 0) {
+                throw new SQLException("Updating lesson failed; No rows affected.");
+            }
 
         } catch (SQLException e) {
-            System.err.println("Error updating lesson: " + e.getMessage());
-            return false;
+            throw new RuntimeException(e);
         }
     }
 
-    public boolean deleteLesson(Lesson lesson) {
+    public void deleteLesson(Lesson lesson) {
         if (lesson == null || lesson.lesson_id() == null) {
             throw new IllegalArgumentException("Lesson cannot be null");
         }
@@ -114,11 +115,12 @@ class LessonDatabaseAccess {
             preparedStatement.setLong(1, lesson.lesson_id());
 
             int affectedRows = preparedStatement.executeUpdate();
-            return affectedRows > 0;
+            if (affectedRows == 0) {
+                throw new SQLException("Updating lesson failed; No rows affected.");
+            }
 
         } catch (SQLException e) {
-            System.err.println("Error deleting lesson: " + e.getMessage());
-            return false;
+            throw new RuntimeException(e);
         }
     }
 }

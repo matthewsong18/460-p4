@@ -44,10 +44,10 @@ public class LessonService {
             throw new IllegalArgumentException("Lesson cannot be null");
         }
 
-        boolean status = lessonDatabaseAccess.updateLesson(lesson);
-
-        if (!status) {
-            throw new RuntimeException("Failed to update lesson with id " + lesson.lesson_id());
+        try {
+            lessonDatabaseAccess.updateLesson(lesson);
+        } catch (RuntimeException e) {
+            throw new RuntimeException("Failed to update lesson with id " + lesson.lesson_id(), e);
         }
     }
 
@@ -56,10 +56,10 @@ public class LessonService {
             throw new IllegalArgumentException("Lesson cannot be null");
         }
 
-        boolean status = lessonDatabaseAccess.deleteLesson(lesson);
-
-        if (!status) {
-            throw new RuntimeException("Failed to delete lesson with id " + lesson.lesson_id());
+        try {
+            lessonDatabaseAccess.deleteLesson(lesson);
+        } catch (RuntimeException e) {
+            throw new RuntimeException("Failed to delete lesson with id " + lesson.lesson_id(), e);
         }
     }
 }
