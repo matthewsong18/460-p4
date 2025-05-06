@@ -156,10 +156,11 @@ public class QueryService {
          */
 
         String query = String.format("""
-                        select sum(salary) as "Wage Expense"
+                        select property_id, sum(salary) as "Wage Expense"
                         from stephintomson.Employee
                         join stephintomson.Property using (property_id)
                         where property_id = '%s'
+                        group by property_id
                 """, propertyid);
 
         return executeQuery(query);
