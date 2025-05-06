@@ -10,10 +10,15 @@
 
 import java.io.*;
 import java.util.*;
+import common.*;
+import features.member_management.Member;
+import features.member_management.MemberService;
 
 public class Prog4 {
-    //private static DatabaseConnection conn;
+    private static DatabaseConnection conn;
     private static Scanner userin;
+    private static MemberService memberHandler;
+    
   
     private static String actionMenu(String context){
         /*
@@ -107,98 +112,121 @@ public class Prog4 {
     private static void executionMenu(String actionState, String context){
         // TO DO: add logic for ski pass, equipment, rentals, lessons
         // action logic
-        switch (actionState) {
-            case "1":
-                // add
-                if (context.equals("member")) {
-                    System.out.print("Name: ");
-                    String name = userin.nextLine();
-                    System.out.print("Telephone #: ");
-                    String telephoneNumber = userin.nextLine();
-                    System.out.print("Email: ");
-                    String email = userin.nextLine();
-                    System.out.print("Date of Birth: ");
-                    String dateOfBirth = userin.nextLine();
-                    System.out.print("Emergency Telephone #: ");
-                    String emergency = userin.nextLine();
-
-                    // add member
-                    System.out.println("Added new member: [id here].");
-                } else if (context.equals("ski")){
-                    System.out.print("Member ID: ");
-                    String id = userin.nextLine();
-                    System.out.print("Pass type: ");
-                    String type = userin.nextLine();
-
-                    // add pass
-                    System.out.println("Added new ski pass: [id here]");
-                } 
-                break;
-            case "2":
-                // delete
-                if (context.equals("member")) {
-                    System.out.print("Member ID: ");
-
-                    // delete member
-                    System.out.println("Deleted member [id here].");
-                } else if (context.equals("ski")) {
-
-                }
-                break;
-            case "3":
-                // update
-                if (context.equals("member")) {
-                    // update member
-                    System.out.print("Member ID: ");
-
-                    System.out.println("What would you like to update?");
-                    System.out.println("1 | Email");
-                    System.out.println("2 | Telephone #");
-                    System.out.println("3 | Emergency Telephone #");
-                    
-                    String field = userin.nextLine();
-                    if (field.equals("1")) {
-                        // update email
-                        System.out.print("New email: ");
-                        String value = userin.nextLine();
-
-                        //execute
-                        System.out.println("Update on member [id here] succesful.");
-                    } else if (field.equals("2")){
-                        // update phone number
-                        System.out.print("New telephone #: ");
-                        String value = userin.nextLine();
-
-                        //execute
-                        System.out.println("Update on member [id here] succesful.");
-                    } else if (field.equals("3")) {
-                        // update emergency phone number
-                        System.out.print("New emergency telephone #: ");
-                        String value = userin.nextLine();
-
-                        //execute
-                        System.out.println("Update on member [id here] succesful.");
-                    } else {
-                        System.out.println("ERROR: Invalid option selected. Please try again.");
+        try{
+            switch (actionState) {
+                case "1":
+                    // add
+                    if (context.equals("member")) {
+                        // MEMBER LOGIC //
+                        System.out.print("Name: ");
+                        String name = userin.nextLine();
+                        System.out.print("Telephone #: ");
+                        String telephoneNumber = userin.nextLine();
+                        System.out.print("Email: ");
+                        String email = userin.nextLine();
+                        System.out.print("Date of Birth: ");
+                        String dateOfBirth = userin.nextLine();
+                        System.out.print("Emergency Telephone #: ");
+                        String emergency = userin.nextLine();
+    
+                        // add member
+                        long id = memberHandler.registerMember(name, telephoneNumber, email, dateOfBirth, emergency);
+                        System.out.println("Added new member: " + id);
+                    } else if (context.equals("ski")){
+                        // SKI PASS LOGIC //
+                        System.out.print("Member ID: ");
+                        String id = userin.nextLine();
+                        System.out.print("Pass type: ");
+                        String type = userin.nextLine();
+    
+                        // add pass
+                        System.out.println("Added new ski pass: [id here]");
+                    } 
+                    break;
+                case "2":
+                    // delete
+                    if (context.equals("member")) {
+                        // MEMBER LOGIC //
+                        System.out.print("Member ID: ");
+    
+                        // delete member
+                        memberHandler.deleteMemberById(null);
+                        System.out.println("Deleted member [id here].");
+                    } else if (context.equals("ski")) {
+    
                     }
-                }
-                break;
-            default:
-                break;
+                    break;
+                case "3":
+                    // update
+                    if (context.equals("member")) {
+                        // MEMBER LOGIC //
+                        System.out.print("Member ID: ");
+                        long id = userin.nextLong();
+    
+                        System.out.println("What would you like to update?");
+                        System.out.println("1 | Email");
+                        System.out.println("2 | Telephone #");
+                        System.out.println("3 | Emergency Telephone #");
+                        
+                        // grab the member in question
+                        Optional<Member> values = memberHandler.findMemberById((long)id);
+                        if (!values.isPresent()) {
+                            System.out.println("WARNING: Member with id " + id + " does not exist. Try again.");
+                            return;
+                        }
+
+                        String field = userin.nextLine();
+                        Member toUpdate;
+
+                        if (field.equals("1")) {
+                            // update email
+                            System.out.print("New email: ");
+                            String value = userin.nextLine();
+
+                            toUpdate = new Member(id, values.get().name(), values.get().telephoneNumber(), value, values.get().dateOfBirth(), values.get().emergencyContact());
+                        } else if (field.equals("2")){
+                            // update phone number
+                            System.out.print("New telephone #: ");
+                            String value = userin.nextLine();
+                            toUpdate = new Member(id, values.get().name(), value, values.get().email(), values.get().dateOfBirth(), values.get().emergencyContact());
+                        } else if (field.equals("3")) {
+                            // update emergency phone number
+                            System.out.print("New emergency telephone #: ");
+                            String value = userin.nextLine();
+                            toUpdate = new Member(id, values.get().name(), values.get().telephoneNumber(), values.get().email(), values.get().dateOfBirth(), value);
+                        } else {
+                            System.out.println("ERROR: Invalid option selected. Please try again.");
+                            return;
+                        }
+
+                        // execute modification
+                        memberHandler.updateMember(toUpdate);
+                        System.out.println("Update on member " + id + " succesful.");
+                    }
+                    break;
+                default:
+                    break;
+            }
+        } catch (Exception e){
+            System.out.println("ERROR: Invalid argument provided. Double check your input and try again.");
+            return;
         }
     }
+
     public static void main(String[] args){
         // initialize database connection
         if (args.length != 2) {
             System.err.println("USAGE: Prog4.java <username> <password>");
             System.exit(1);
         } 
-        //conn = new DatabaseConnection(args[0], args[1]);
+        
+        conn = new DatabaseConnection(args[0], args[1]);
+
+        // initialize DB services
+        memberHandler = new MemberService(conn);
 
         userin = new Scanner(System.in);
         String input = "";
-        
-        
 
         // initial print
         System.out.println("//- SKI RESORT DATABASE -\\\\");
@@ -282,7 +310,6 @@ public class Prog4 {
         }
 
         userin.close();
-        // TO DO: close database connection when finished
 
         System.exit(0);
     }
