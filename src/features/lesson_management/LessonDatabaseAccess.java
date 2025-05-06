@@ -119,6 +119,9 @@ class LessonDatabaseAccess {
                 throw new SQLException("Updating lesson failed; No rows affected.");
             }
 
+            if (lesson.lesson_id() == currentId)    // Update the next ID from database if the current max was deleted
+                updateCurrentId();
+
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
