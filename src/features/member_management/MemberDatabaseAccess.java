@@ -136,12 +136,12 @@ class MemberDatabaseAccess {
         }
     }
 
-    public boolean deleteMember(long id) {
+    public boolean deleteMember(Member member) {
         String sql = "DELETE FROM members WHERE id = ?";
 
         try (PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
 
-            preparedStatement.setLong(1, id);
+            preparedStatement.setLong(1, member.id());
 
             int affectedRows = preparedStatement.executeUpdate();
             return affectedRows > 0;
