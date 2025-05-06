@@ -2,16 +2,16 @@ package features.lesson_management;
 
 import java.sql.Timestamp;
 
-public record LessonSchedule(
+public record Lesson(
         Long lesson_id,
         Long instructor_id,
         Timestamp lesson_time
 ) {
-    public LessonSchedule(Long instructor_id, Timestamp lesson_time) {
+    public Lesson(Long instructor_id, Timestamp lesson_time) {
         this(null, instructor_id, lesson_time);
     }
 
-    public LessonSchedule {
+    public Lesson {
         validateInputs(instructor_id, lesson_time);
     }
 
