@@ -8,8 +8,8 @@ import java.sql.Timestamp;
 import java.util.Optional;
 
 public class EmployeeService {
-    DatabaseConnection databaseConnection;
-    EmployeeDatabaseAccess employeeDatabaseAccess;
+    private DatabaseConnection databaseConnection;
+    private EmployeeDatabaseAccess employeeDatabaseAccess;
 
     public EmployeeService(DatabaseConnection databaseConnection) {
         this.databaseConnection = databaseConnection;
