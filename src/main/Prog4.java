@@ -12,6 +12,7 @@ package main;
 import java.io.*;
 import java.sql.*;
 import java.util.*;
+import java.lang.*;
 import common.*;
 import features.member_management.*;
 import features.equipment_management.*;
@@ -27,8 +28,23 @@ public class Prog4 {
     
     private static void printResults(ResultSet results){
         try{
+            ResultSetMetaData meta = results.getMetaData();
+            // print attribute names
+            StringBuilder builder = new StringBuilder("|");
+            for (int i = 0; i < meta.getColumnCount(); i++){
+                builder.append(String.format("| %-25s |", meta.getColumnName(i)));
+            }
+            builder.append("|");
+            System.out.println(builder.toString());
+
+            // print all tuples
             while (results.next()) {
-                results.getString("")
+                builder = new StringBuilder("|");
+                for (int i = 0; i < meta.getColumnCount(); i++){
+                    builder.append(String.format("| %-25s |", results.getString(i)));
+                }
+                builder.append("|");
+                System.out.println(builder.toString());
             }
         } catch (SQLException e){
             throw new RuntimeException("ERROR: Something weird happened on the database.");
@@ -92,21 +108,34 @@ public class Prog4 {
                     case "1":
                         System.out.print("\nEnter Member ID: ");
                         arg1 = userin.nextLine();
+
                         // execute
-                        ResultSet results = QueryService.queryLessonHistory(arg1);
+                        System.out.println("LESSON HISTORY FOR MEMBER WITH ID " + arg1);
+                        ResultSet results1 = QueryService.queryLessonHistory(arg1);
+                        printResults(results1);
                         break;
                     case "2":
                         System.out.print("\nEnter Ski Pass ID: ");
                         arg1 = userin.nextLine();
+
                         // execute
+                        System.out.println("LIFT AND RENTAL RECORDS ASSOCIATED WITH SKI PASS OF ID " + arg1);
+                        ResultSet results2 = QueryService.queryPassRentals(arg1);
+                        printResults(results2);
+                        results2 = QueryService.queryPassLogs(arg1);
+                        printResults(results2);
                         break;
                     case "3":
                         // execute
+                        ResultSet results3 = QueryService.queryIntTrails();
+                        
                         break;
                     case "4":
                         System.out.print("\nEnter Property ID: ");
                         arg1 = userin.nextLine();
                         //execute
+                        ResultSet results4 = QueryService.queryWageExpense(arg1);
+                        printResults(results4);
                         break;
                     case "back":
                         return;
@@ -119,6 +148,9 @@ public class Prog4 {
             } catch (InputMismatchException e){
                 System.out.println("ERROR: Invalid argument provided. Please try again.");
                 input = "";
+            } catch (RuntimeException e){
+                System.err.println("ERROR: Something went wrong. Please try again.");
+                System.out.println("DB: " + e.getMessage());
             }
         }
 
