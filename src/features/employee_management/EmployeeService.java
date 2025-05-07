@@ -8,16 +8,16 @@ import java.sql.Timestamp;
 import java.util.Optional;
 
 public class EmployeeService {
-    DatabaseConnection databaseConnection;
-    EmployeeDatabaseAccess employeeDatabaseAccess;
+    private DatabaseConnection databaseConnection;
+    private EmployeeDatabaseAccess employeeDatabaseAccess;
 
     public EmployeeService(DatabaseConnection databaseConnection) {
         this.databaseConnection = databaseConnection;
         this.employeeDatabaseAccess = new EmployeeDatabaseAccess(databaseConnection);
     }
 
-    public Long addEmployee(String name, String age, String gender, String position, int salary, Timestamp start_date, Long property_id) {
-        Employee employee = new Employee(name, age, gender, position, salary, start_date, property_id);
+    public Long addEmployee(String name, String age, String gender, String position, int salary, Long property_id) {
+        Employee employee = new Employee(name, age, gender, position, salary, property_id);
 
         // Check property
         checkProperty(property_id);

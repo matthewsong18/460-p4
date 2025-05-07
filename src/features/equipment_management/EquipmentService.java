@@ -10,7 +10,7 @@ public class EquipmentService {
     private final RentalService rentalService;
 
     public EquipmentService(DatabaseConnection databaseConnection) {
-        equipmentDatabaseAccess = new EquipmentDatabaseAccess(databaseConnection.getConnection());
+        equipmentDatabaseAccess = new EquipmentDatabaseAccess(databaseConnection);
         rentalService = new RentalService(databaseConnection);
     }
 
