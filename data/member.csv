@@ -1,5 +1,5 @@
 member_id,member_name,telephone,email,date_of_birth,emergency_contact
-1,Alice Smith,123-4567,alice@example.com,1990-01-01,9998887777
-2,Bob Jones,987-6543,bob@example.com,1985-05-15,8887776666
-3,Charlie Doe,555-1212,charlie@example.com,2000-07-23,7776665555
-4,Diana Prince,444-3333,diana@arizona.edu,1992-11-30,6665554444
+1,Alice Smith,1230456789,alice@example.com,01-JAN-1992,9998887777
+2,Bob Jones,1234506789,bob@example.com,15-MAY-2004,8887776666
+3,Charlie Doe,1234056789,charlie@example.com,23-JUL-2000,7776665555
+4,Diana Prince,0123456789,diana@arizona.edu,30-NOV-1992,6665554444
