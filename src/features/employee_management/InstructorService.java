@@ -19,10 +19,13 @@ public class InstructorService {
         if (id == null || id <= 0) {
             throw new IllegalArgumentException("Instructor id cannot be null");
         }
+
         try {
             return instructorDatabaseAccess.findInstructorById(id);
         } catch (RuntimeException e) {
             throw new RuntimeException("Failed to find instructor with id = " + id, e);
         }
+
+        return instructorDatabaseAccess.findInstructorById(id);
     }
 }
