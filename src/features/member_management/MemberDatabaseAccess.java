@@ -17,7 +17,7 @@ class MemberDatabaseAccess extends DatabaseAccess {
     }
 
     public Long createMember(Member member) {
-        String sql = "INSERT INTO stephintomson.Member (member_id, name, telephone, email, date_of_birth, emergency_contact) VALUES (?, ?, ?, ?, ?, ?)";
+        String sql = "INSERT INTO Member VALUES (?, ?, ?, ?, ?, ?)";
         try (PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
             Long newMemberId = getNextId("Member", "member_id");
 
@@ -111,7 +111,7 @@ class MemberDatabaseAccess extends DatabaseAccess {
         if (member.id() == null) {
             throw new RuntimeException("Cannot update member without an ID.");
         }
-        String sql = "UPDATE stephintomson.Member SET name = ?, telephone = ?, email = ?, date_of_birth = ?, emergency_contact = ?, WHERE member_id = ?";
+        String sql = "UPDATE stephintomson.Member SET name = ?, telephone = ?, email = ?, date_of_birth = ?, emergency_contact = ? WHERE member_id = ?";
 
         try (PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
 
