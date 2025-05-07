@@ -19,7 +19,7 @@ import common.DatabaseConnection;
 public class populate_tables {
 
     /* Where the CSVs live */
-    private static final Path CSV_DIR = Paths.get("data");
+    private static final Path CSV_DIR = Paths.get("../data");
 
     /* FK‑safe load order: { TABLE , fileName } */
     private static final String[][] TABLES = {

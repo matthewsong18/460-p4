@@ -3,6 +3,7 @@ package features.ski_pass;
 /*=============================================================================
  |   Assignment:  Program #4
  |       Author:  Ethan Huang (ethanhuang@arizona.edu)
+                  Refactored into Record by Matthew Song
  |
  |       Course:  CSc 460 (Database Design), Spring 2025
  |   Instructor:  L. McCann
