@@ -89,15 +89,7 @@ public class RentalDatabaseAccess extends DatabaseAccess {
     }
 
     public void deleteRental(Rental rental) {
-<<<<<<< HEAD
-        if (rental.return_status() == 1) {
-            throw new RuntimeException("Cannot delete a rental where the equipment has been used.");
-        }
-
-        String sql = "DELETE FROM rentals WHERE id = ?";
-=======
         String sql = "DELETE FROM Rental WHERE id = ?";
->>>>>>> origin
 
         try (PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
             preparedStatement.setLong(1, rental.rental_id());

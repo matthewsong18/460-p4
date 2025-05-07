@@ -17,14 +17,9 @@ class MemberDatabaseAccess extends DatabaseAccess {
     }
 
     public Long createMember(Member member) {
-<<<<<<< HEAD
-        String sql = "INSERT INTO stephintomson.member (member_name, telephone, email, date_of_birth, emergency_contact) VALUES (?, ?, ?, ?, ?)";
-        try (PreparedStatement preparedStatement = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
-=======
         String sql = "INSERT INTO Member (member_id, name, telephone, email, date_of_birth, emergency_contact) VALUES (?, ?, ?, ?, ?, ?)";
         try (PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
             Long newMemberId = getNextId("Member", "member_id");
->>>>>>> origin
 
             preparedStatement.setLong(1, newMemberId);
             preparedStatement.setString(2, member.name());
@@ -46,11 +41,7 @@ class MemberDatabaseAccess extends DatabaseAccess {
     }
 
     public Optional<Member> findMemberById(Long id) {
-<<<<<<< HEAD
-        String sql = "SELECT id, member_name, telephone, email, date_of_birth, emergency_contact FROM stephintomson.member WHERE id = ?";
-=======
         String sql = "SELECT id, name, telephone, email, date_of_birth, emergency_contact FROM Member WHERE id = ?";
->>>>>>> origin
 
         try (PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
             preparedStatement.setLong(1, id);
@@ -68,28 +59,6 @@ class MemberDatabaseAccess extends DatabaseAccess {
         return Optional.empty();
     }
 
-<<<<<<< HEAD
-    public Optional<Member> findMemberByEmail(String email) {
-        String sql = "SELECT * FROM stephintomson.member WHERE email = ?";
-
-        try(PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
-            preparedStatement.setString(1, email);
-
-            try (ResultSet resultSet = preparedStatement.executeQuery()) {
-                if (resultSet.next()) {
-                    Member member = mapRowToMember(resultSet);
-                    return Optional.of(member);
-                }
-            }
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        }
-
-        return Optional.empty();
-    }
-
-=======
->>>>>>> origin
     // Helper method to map a ResultSet row to a Member object
     private Member mapRowToMember(ResultSet resultSet) throws SQLException {
         Long id = resultSet.getLong("id");
@@ -123,11 +92,7 @@ class MemberDatabaseAccess extends DatabaseAccess {
 
     public List<Member> getAllMembers() {
         List<Member> members = new ArrayList<>();
-<<<<<<< HEAD
-        String sql = "SELECT id, member_name, telephone, email, date_of_birth, emergency_contact FROM stephintomson.member ORDER BY member_name";
-=======
         String sql = "SELECT id, name, telephone, email, date_of_birth, emergency_contact FROM Member ORDER BY name";
->>>>>>> origin
 
         try (PreparedStatement preparedStatement = connection.prepareStatement(
                 sql); ResultSet rs = preparedStatement.executeQuery()) {
@@ -146,11 +111,7 @@ class MemberDatabaseAccess extends DatabaseAccess {
         if (member.id() == null) {
             throw new RuntimeException("Cannot update member without an ID.");
         }
-<<<<<<< HEAD
-        String sql = "UPDATE stephintomson.member SET member_name = ?, telephone = ?, email = ?, date_of_birth = ?, emergency_contact = ?, WHERE id = ?";
-=======
         String sql = "UPDATE Member SET name = ?, telephone = ?, email = ?, date_of_birth = ?, emergency_contact = ?, WHERE id = ?";
->>>>>>> origin
 
         try (PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
 
@@ -169,13 +130,8 @@ class MemberDatabaseAccess extends DatabaseAccess {
         }
     }
 
-<<<<<<< HEAD
-    public boolean deleteMember(Member member) {
-        String sql = "DELETE FROM stephintomson.member WHERE id = ?";
-=======
     public void deleteMember(Member member) {
         String sql = "DELETE FROM Member WHERE id = ?";
->>>>>>> origin
 
         try (PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
 
