@@ -18,7 +18,7 @@ public class LessonOrderDatabaseAccess extends DatabaseAccess {
     }
 
     public Long createLessonOrder(LessonOrder lessonOrder) {
-        String sql = "INSERT into stephintomson.LessonOrder VALUES (?, ?, ?, ?, ?)";
+        String sql = "INSERT into LessonOrder VALUES (?, ?, ?, ?, ?)";
 
         try (PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
             long id = getNextId("LessonOrder", "order_id");

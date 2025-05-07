@@ -15,7 +15,7 @@ public class PropertyDatabaseAccess extends DatabaseAccess {
     }
 
     public Long createProperty(Property property) {
-        String sql = "INSERT INTO stephintomson.Property (property_id, property_type, property_monthly_income) VALUES (?, ?, ?)";
+        String sql = "INSERT INTO Property VALUES (?, ?, ?)";
 
         try (PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
             Long newPropertyId = getNextId("Property", "property_id");
