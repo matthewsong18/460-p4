@@ -9,15 +9,21 @@
  */
 
 import java.io.*;
+import java.sql.Timestamp;
 import java.util.*;
 import common.*;
-import features.member_management.Member;
-import features.member_management.MemberService;
+import features.member_management.*;
+import features.equipment_management.*;
+import features.rental_management.*;
+import features.queries.*;
 
 public class Prog4 {
     private static DatabaseConnection conn;
     private static Scanner userin;
+    private static QueryService queryHandler;
     private static MemberService memberHandler;
+    private static EquipmentService equipmentHandler;
+    private static RentalService rentalHandler;
     
   
     private static String actionMenu(String context){
@@ -141,19 +147,77 @@ public class Prog4 {
     
                         // add pass
                         System.out.println("Added new ski pass: [id here]");
-                    } 
+                    } else if (context.equals("equipment")){
+                        // EQUIPMENT LOGIC //
+                        System.out.print("Equipment type: ");
+                        String type = userin.nextLine();
+                        System.out.print("Equipment size: ");
+                        String size = userin.nextLine();
+
+                        // add equipment
+                        long id = equipmentHandler.createEquipment(type, size, "0");
+                        System.out.println("Added new equipment record: " + id);
+                    } else if (context.equals("rental")) {
+                        // RENTAL LOGIC //
+                        System.out.print("Equipment ID: ");
+                        long equpid = userin.nextLong();
+                        System.out.print("Ski Pass ID: ");
+                        long skiid = userin.nextLong();
+                        
+                        long id = rentalHandler.registerRental(skiid, equpid, new Timestamp(System.currentTimeMillis()), 0);
+                        System.out.println("Added new equipment rental: " + id);
+                    } else if (context.equals("lesson")){
+
+                    }
                     break;
                 case "2":
                     // delete
                     if (context.equals("member")) {
                         // MEMBER LOGIC //
                         System.out.print("Member ID: ");
-    
+                        long id = userin.nextLong();
+
+                        Optional<Member> values = memberHandler.findMemberById(id);
+                        if (!values.isPresent()) {
+                            System.out.println("WARNING: Member with id " + id + " does not exist. Try again.");
+                            return;
+                        }
+
                         // delete member
-                        memberHandler.deleteMemberById(null);
+                        memberHandler.deleteMemberById(values.get());
                         System.out.println("Deleted member [id here].");
                     } else if (context.equals("ski")) {
-    
+                        // SKI PASS LOGIC //
+                    } else if (context.equals("equipment")) {
+                        // EQUIPMENT LOGIC //
+                        System.out.print("Equipment ID: ");
+                        long id = userin.nextLong();
+                        
+                        Optional<Equipment> values = equipmentHandler.findEquipment(id);
+                        if (!values.isPresent()) {
+                            System.out.println("WARNING: Equipment with id " + id + " does not exist. Try again.");
+                            return;
+                        }
+
+                        Equipment toArchive = values.get();
+
+                        // 'delete the equipment' (works as an update to the archived status)
+                        equipmentHandler.updateEquipment(new Equipment(toArchive.equipment_id(), toArchive.type(), toArchive.dimension(), 1));
+                        System.out.println("Archived equipment " + id);
+                    } else if (context.equals("rental")){
+                        // RENTAL LOGIC //
+                        System.out.print("Rental ID: ");
+                        long id = userin.nextLong();
+
+                        Optional<Rental> values = rentalHandler.findRental(id);
+                        if (!values.isPresent()) {
+                            System.out.println("WARNING: Rental with id " + id + " does not exist. Try again.");
+                            return;
+                        }
+
+                        rentalHandler.deleteRental(values.get());
+                    } else if (context.equals("lesson")){
+                        // LESSON LOGIC //
                     }
                     break;
                 case "3":
@@ -202,13 +266,71 @@ public class Prog4 {
                         // execute modification
                         memberHandler.updateMember(toUpdate);
                         System.out.println("Update on member " + id + " succesful.");
+                    } else if (context.equals("ski")) {
+                        // SKI PASS LOGIC //
+
+                    } else if (context.equals("equipment")) {
+                        // EQUIPMENT LOGIC //
+                        System.out.print("Equipment ID: ");
+                        long id = userin.nextLong();
+
+                        System.out.println("What would you like to update?");
+                        System.out.println("1 | Type");
+                        System.out.println("2 | Size");
+                        System.out.println("3 | Archival Status");
+
+                        // grab the equipment information
+                        Optional<Equipment> values = equipmentHandler.findEquipment(id);
+                        if (!values.isPresent()) {
+                            System.out.println("WARNING: Equipment with id " + id + " does not exist. Try again.");
+                            return;
+                        }
+
+                        String field = userin.nextLine();
+                        Equipment toUpdate;
+
+                        if (field.equals("1")) {
+                            // update email
+                            System.out.print("New type: ");
+                            String value = userin.nextLine();
+
+                            toUpdate = new Equipment(values.get().equipment_id(), value, values.get().dimension(), values.get().archived_status());
+                        } else if (field.equals("2")){
+                            // update phone number
+                            System.out.print("New size: ");
+                            String value = userin.nextLine();
+
+                            toUpdate = new Equipment(values.get().equipment_id(), values.get().type(), value, values.get().archived_status());
+                        } else if (field.equals("3")) {
+                            // update emergency phone number
+                            System.out.print("New status ");
+                            int value = userin.nextInt();
+                            
+                            if (value != 1 && value != 0) {
+                                System.out.println("ERROR: Archival status must be 1 or 0. Try again.");
+                                return;
+                            }
+
+                            toUpdate = new Equipment(values.get().equipment_id(), values.get().type(), values.get().dimension(), value);
+                        } else {
+                            System.out.println("ERROR: Invalid option selected. Please try again.");
+                            return;
+                        }
+                    
+                        equipmentHandler.updateEquipment(toUpdate);
+                        System.out.println("Update on equipment " + id + " succesful.");
+                    } else if (context.equals("rental")){
+                        // RENTAL LOGIC //
+                    } else if (context.equals("lesson")){
+                        // LESSON LOGIC //
                     }
                     break;
                 default:
                     break;
             }
         } catch (Exception e){
-            System.out.println("ERROR: Invalid argument provided. Double check your input and try again.");
+            System.err.println("ERROR: An error ocurred while attempting to execute the desired action. Please try again.");
+            System.out.println("DB: " + e.getMessage());
             return;
         }
     }
@@ -223,7 +345,10 @@ public class Prog4 {
         conn = new DatabaseConnection(args[0], args[1]);
 
         // initialize DB services
+        queryHandler = new QueryService(conn);
         memberHandler = new MemberService(conn);
+        equipmentHandler = new EquipmentService(conn);
+        rentalHandler = new RentalService(conn);
 
         userin = new Scanner(System.in);
         String input = "";

@@ -84,6 +84,10 @@ public class RentalDatabaseAccess {
     }
 
     public void deleteRental(Rental rental) {
+        if (rental.return_status() == 1) {
+            throw new RuntimeException("Cannot delete a rental where the equipment has been used.");
+        }
+
         String sql = "DELETE FROM rentals WHERE id = ?";
 
         try (PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
