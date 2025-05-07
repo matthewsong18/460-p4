@@ -28,9 +28,9 @@ public class LessonService {
     }
 
     private void checkInstructorId(Long instructor_id) {
-        EmployeeService employeeService = new EmployeeService(connection);
-        Optional<Employee> employeeOptional = employeeService.getEmployeeById(instructor_id);
-        if (employeeOptional.isEmpty() || !employeeOptional.get().position().equals("Instructor")) {
+        InstructorService instructorService = new InstructorService(connection);
+        Optional<Instructor> instructorOptional = instructorService.findInstructorById(instructor_id);
+        if (instructorOptional.isEmpty()) {
             throw new RuntimeException("Instructor with id " + instructor_id + " does not exist.");
         }
     }

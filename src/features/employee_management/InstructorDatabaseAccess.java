@@ -24,8 +24,8 @@ public class InstructorDatabaseAccess {
                 String certification_level = resultSet.getString("certification_level");
 
                 Optional<Employee> employeeOptional = employeeDatabaseAccess.findEmployeeById(employee_id);
-                if (employeeOptional.isEmpty()) {
-                    throw new SQLException("Failed to find matching employee with id = " + employee_id);
+                if (employeeOptional.isEmpty() || !employeeOptional.get().position().equals("Instructor")) {
+                    throw new SQLException("Failed to find instructor with id = " + employee_id);
                 }
 
                 return Optional.of(new Instructor(employeeOptional.get(), certification_level));
