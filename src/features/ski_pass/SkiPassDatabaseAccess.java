@@ -1,27 +1,27 @@
 package features.ski_pass;
 
 import common.DatabaseConnection;
-
+import common.DatabaseAccess;
 import java.sql.*;
 import java.util.Optional;
 
-public class SkiPassDatabaseAccess {
+public class SkiPassDatabaseAccess extends DatabaseAccess {
     private final Connection connection;
 
     public SkiPassDatabaseAccess(DatabaseConnection dbConnection) {
         this.connection = dbConnection.getConnection();
+        tableName = "SkiPass";
+        pkFieldName = "pass_id";
+        updateCurrentId();
     }
 
     public Long createSkiPass(SkiPassData skiPass) throws SQLException {
-        String sql = "INSERT INTO SkiPass (member_id, purchase_date, total_uses, remaining_uses, pass_type, price, archived_status) VALUES (?, SYSTIMESTAMP, ?, ?, ?, ?, ?)";
-
-        Long newPassId = getNextPassId(); // Helper to get a new ID
-
-        String insertSql = "INSERT INTO SkiPass (pass_id, member_id, purchase_date, total_uses, remaining_uses, pass_type, price, archived_status) VALUES (?, ?, SYSTIMESTAMP, ?, ?, ?, ?, ?)";
+        String insertSql = "INSERT INTO SkiPass VALUES (?, ?, SYSTIMESTAMP, ?, ?, ?, ?, ?)";
 
         try (PreparedStatement pstmt = connection.prepareStatement(insertSql)) {
+            long newPassId = getCurrentId();
             pstmt.setLong(1, newPassId);
-            pstmt.setInt(2, skiPass.memberId());
+            pstmt.setLong(2, skiPass.memberId());
             // purchase_date is set by SYSTIMESTAMP in SQL
             pstmt.setInt(3, skiPass.totalUses());
             pstmt.setInt(4, skiPass.remainingUses());
@@ -36,20 +36,6 @@ public class SkiPassDatabaseAccess {
             return newPassId;
         }
     }
-
-    // Helper method to get the next pass_id.
-    private Long getNextPassId() throws SQLException {
-        String sql = "SELECT MAX(pass_id) AS max_id FROM SkiPass";
-        try (Statement stmt = connection.createStatement();
-             ResultSet rs = stmt.executeQuery(sql)) {
-            if (rs.next()) {
-                return rs.getLong("max_id") + 1;
-            } else {
-                return 1L; // First pass
-            }
-        }
-    }
-
 
     public Optional<SkiPassData> findSkiPassById(long passId) throws SQLException {
         String sql = "SELECT pass_id, member_id, purchase_date, total_uses, remaining_uses, pass_type, price, archived_status FROM SkiPass WHERE pass_id = ?";
@@ -66,7 +52,7 @@ public class SkiPassDatabaseAccess {
     private SkiPassData mapRowToSkiPassData(ResultSet rs) throws SQLException {
         return new SkiPassData(
                 rs.getLong("pass_id"),
-                rs.getInt("member_id"),
+                rs.getLong("member_id"),
                 rs.getTimestamp("purchase_date"),
                 rs.getInt("total_uses"),
                 rs.getInt("remaining_uses"),
@@ -79,7 +65,7 @@ public class SkiPassDatabaseAccess {
     public void updateSkiPass(SkiPassData skiPass) throws SQLException {
         String sql = "UPDATE SkiPass SET member_id = ?, purchase_date = ?, total_uses = ?, remaining_uses = ?, pass_type = ?, price = ?, archived_status = ? WHERE pass_id = ?";
         try (PreparedStatement pstmt = connection.prepareStatement(sql)) {
-            pstmt.setInt(1, skiPass.memberId());
+            pstmt.setLong(1, skiPass.memberId());
             pstmt.setTimestamp(2, skiPass.purchaseDate());
             pstmt.setInt(3, skiPass.totalUses());
             pstmt.setInt(4, skiPass.remainingUses());
