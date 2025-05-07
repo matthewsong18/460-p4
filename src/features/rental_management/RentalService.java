@@ -91,4 +91,9 @@ public class RentalService {
             throw new RuntimeException("Failed to delete rental with id" + rental.rental_id(), e);
         }
     }
+
+    public Optional<Rental> findActiveRentalByEquipmentId(Long equipmentId) {
+        return rentalDatabaseAccess.findActiveRentalByEquipmentId(equipmentId);
+    }
+
 }
