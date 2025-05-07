@@ -1,0 +1,4 @@
+lot_id,property_id,fee,total_capacity,occupancy
+1,1,0.0,100,40
+2,3,5.0,150,80
+3,5,2.5,120,60

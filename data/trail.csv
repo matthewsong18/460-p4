@@ -1,0 +1,4 @@
+trail_id,trail_name,start_location,end_location,status,difficulty,category
+1,Blue Run,North Gate,East Ridge,Open,2,Beginner
+2,Red Run,South Ridge,North Hill,Closed,3,Advanced
+3,Green Run,Base Area,Top Station,Open,1,Intermediate
