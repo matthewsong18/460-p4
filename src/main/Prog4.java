@@ -37,7 +37,7 @@ public class Prog4 {
             
             // print attribute names
             StringBuilder builder = new StringBuilder("|");
-            for (int i = 0; i < meta.getColumnCount(); i++){
+            for (int i = 1; i < meta.getColumnCount(); i++){
                 builder.append(String.format("| %-25s |", meta.getColumnName(i)));
             }
             builder.append("|");
@@ -46,7 +46,7 @@ public class Prog4 {
             // print all tuples
             while (results.next()) {
                 builder = new StringBuilder("|");
-                for (int i = 0; i < meta.getColumnCount(); i++){
+                for (int i = 1; i < meta.getColumnCount(); i++){
                     builder.append(String.format("| %-25s |", results.getString(i)));
                 }
                 builder.append("|");
@@ -141,8 +141,6 @@ public class Prog4 {
                         System.out.println("ERROR: Invalid option selected.");
                         break;
                 }
-                arg1 = "";
-                input = "";
             } catch (InputMismatchException e){
                 System.out.println("ERROR: Invalid argument provided. Please try again.");
                 input = "";
@@ -151,7 +149,10 @@ public class Prog4 {
                 System.out.println("DB: " + e.getMessage());
             }
 
-            System.out.println("//- AVAILABLE QUERIES -\\\\");
+            arg1 = "";
+            input = "";
+
+            System.out.println("\n\n//- AVAILABLE QUERIES -\\\\");
             System.out.println("1 | List all ski lessons purchased for a member");
             System.out.println("2 | List all lift and rental records for a ski pass");
             System.out.println("3 | List all intermediate-level trails and associated information.");
@@ -448,16 +449,7 @@ public class Prog4 {
                     case "query":
                         // queries
                         queryMenu();
-                        
-                        // main menu print
-                        System.out.println("//- SKI RESORT DATABASE -\\\\");
-                        System.out.println("1 | Add, delete, or update a member.");
-                        System.out.println("2 | Add, delete, or update a ski pass.");
-                        System.out.println("3 | Add, delete, or update an equipment record.");
-                        System.out.println("4 | Add, update, or delete a rental record.");
-                        System.out.println("5 | Add, update, or delete a lesson purchase record.");
-                        System.out.println("Type 'query' to access the queries submenu.");
-                        System.out.println("Type 'exit' to close the application.");
+
                         break;
                     default:
                         System.out.println("ERROR: Invalid option selected.");
@@ -473,7 +465,7 @@ public class Prog4 {
             input = "";
 
             // main menu print
-            System.out.println("//- SKI RESORT DATABASE -\\\\");
+            System.out.println("\n\n//- SKI RESORT DATABASE -\\\\");
             System.out.println("1 | Add, delete, or update a member.");
             System.out.println("2 | Add, delete, or update a ski pass.");
             System.out.println("3 | Add, delete, or update an equipment record.");
