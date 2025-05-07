@@ -41,7 +41,7 @@ class MemberDatabaseAccess extends DatabaseAccess {
     }
 
     public Optional<Member> findMemberById(Long id) {
-        String sql = "SELECT id, name, telephone, email, date_of_birth, emergency_contact FROM stephintomson.Member WHERE id = ?";
+        String sql = "SELECT member_id, name, telephone, email, date_of_birth, emergency_contact FROM stephintomson.Member WHERE member_id = ?";
 
         try (PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
             preparedStatement.setLong(1, id);
@@ -92,7 +92,7 @@ class MemberDatabaseAccess extends DatabaseAccess {
 
     public List<Member> getAllMembers() {
         List<Member> members = new ArrayList<>();
-        String sql = "SELECT id, name, telephone, email, date_of_birth, emergency_contact FROM stephintomson.Member ORDER BY name";
+        String sql = "SELECT member_id, name, telephone, email, date_of_birth, emergency_contact FROM stephintomson.Member ORDER BY name";
 
         try (PreparedStatement preparedStatement = connection.prepareStatement(
                 sql); ResultSet rs = preparedStatement.executeQuery()) {
@@ -111,7 +111,7 @@ class MemberDatabaseAccess extends DatabaseAccess {
         if (member.id() == null) {
             throw new RuntimeException("Cannot update member without an ID.");
         }
-        String sql = "UPDATE stephintomson.Member SET name = ?, telephone = ?, email = ?, date_of_birth = ?, emergency_contact = ?, WHERE id = ?";
+        String sql = "UPDATE stephintomson.Member SET name = ?, telephone = ?, email = ?, date_of_birth = ?, emergency_contact = ?, WHERE member_id = ?";
 
         try (PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
 
@@ -131,7 +131,7 @@ class MemberDatabaseAccess extends DatabaseAccess {
     }
 
     public void deleteMember(Member member) {
-        String sql = "DELETE FROM stephintomson.Member WHERE id = ?";
+        String sql = "DELETE FROM stephintomson.Member WHERE member_id = ?";
 
         try (PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
 
