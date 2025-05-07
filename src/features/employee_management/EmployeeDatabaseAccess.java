@@ -13,7 +13,7 @@ public class EmployeeDatabaseAccess extends DatabaseAccess {
     }
 
     public Long createEmployee(Employee employee) {
-        String sql = "INSERT into Employee (employee_id, name, age, gender, position, salary, start_date, property_id VALUES (?, ?, ?, ?, ?, ?, SYSTIMESTAMP, ?)";
+        String sql = "INSERT into stephintomson.Employee (employee_id, name, age, gender, position, salary, start_date, property_id VALUES (?, ?, ?, ?, ?, ?, SYSTIMESTAMP, ?)";
         try (PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
             Long newEmployeeId = getNextId("Employee", "employee_id");
 
@@ -38,7 +38,7 @@ public class EmployeeDatabaseAccess extends DatabaseAccess {
     }
 
     public Optional<Employee> findEmployeeById(Long id) {
-        String sql = "SELECT * FROM Employee WHERE id = ?";
+        String sql = "SELECT * FROM stephintomson.Employee WHERE id = ?";
         try (PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
             preparedStatement.setLong(1, id);
 
@@ -69,7 +69,7 @@ public class EmployeeDatabaseAccess extends DatabaseAccess {
     }
 
     public void updateEmployee(Employee employee) {
-        String sql = "UPDATE Employee SET name = ?, age = ?, gender = ?, position = ?, salary = ?, start_date = ?, property_id = ? WHERE id = ?";
+        String sql = "UPDATE stephintomson.Employee SET name = ?, age = ?, gender = ?, position = ?, salary = ?, start_date = ?, property_id = ? WHERE id = ?";
 
         try (PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
             preparedStatement.setString(1, employee.name());
@@ -91,7 +91,7 @@ public class EmployeeDatabaseAccess extends DatabaseAccess {
     }
 
     public void deleteEmployee(Employee employee) {
-        String sql = "DELETE FROM Employee WHERE id = ?";
+        String sql = "DELETE FROM stephintomson.Employee WHERE id = ?";
         try (PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
             preparedStatement.setLong(1, employee.employee_id());
 

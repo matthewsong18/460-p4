@@ -15,7 +15,7 @@ public class QueryService {
     private static DatabaseConnection conn;
     private static Statement curStmt;
     
-    public QueryService(DatabaseConnection connection){
+    public static void setConnection(DatabaseConnection connection){
         conn = connection;
         curStmt = null;
     }
@@ -82,7 +82,7 @@ public class QueryService {
         String query = String.format("""
                        select rental_id, equipment_id, datetime_to, datetime_from, returned
                        from stephintomson.Rental
-                       where pass_id = '%s'
+                       where pass_id = %s and archived_status != 0
                 """, passid);
         
         return executeQuery(query);
@@ -102,7 +102,7 @@ public class QueryService {
                        select datetime, lift_name, difficulty_level
                        from stephintomson.EntryLog
                        join stephintomson.Lift using (lift_id)
-                       where pass_id = '%s'
+                       where pass_id = %s
                 """, passid);
         
         return executeQuery(query);
@@ -139,7 +139,7 @@ public class QueryService {
                         select lift_name, open_time, close_time, difficulty_level, location
                         from stephintomson.LiftTrail
                         join stephintomson.Lift using (lift_id)
-                        where trail_id = '%s'  
+                        where trail_id = %s  
                     """, trailid);
 
         return executeQuery(query);
@@ -159,7 +159,7 @@ public class QueryService {
                         select property_id, sum(salary) as "Wage Expense"
                         from stephintomson.Employee
                         join stephintomson.Property using (property_id)
-                        where property_id = '%s'
+                        where property_id = %s
                         group by property_id
                 """, propertyid);
 

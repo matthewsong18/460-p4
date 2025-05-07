@@ -3,7 +3,10 @@ package features.rental_management;
 import common.DatabaseAccess;
 import common.DatabaseConnection;
 
-import java.sql.*;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Timestamp;
 import java.util.Optional;
 
 public class RentalDatabaseAccess extends DatabaseAccess {
@@ -13,12 +16,12 @@ public class RentalDatabaseAccess extends DatabaseAccess {
     }
 
     public Long createRental(Rental rental) {
-        String sql = "INSERT into Rental (rental_id, ski_pass_id, equipment_id, date_time_from, return_status) values (?,?,?,SYSTIMESTAMP,?)";
+        String sql = "INSERT into stephintomson.Rental (rental_id, ski_pass_id, equipment_id, date_time_from, return_status) values (?,?,?,SYSTIMESTAMP,?)";
 
         try (PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
-            Long newPassId = getNextId("Rental", "rental_id"); // Helper to get a new ID
+            Long newRentalId = getNextId("Rental", "rental_id"); // Helper to get a new ID
 
-            preparedStatement.setLong(1, newPassId);
+            preparedStatement.setLong(1, newRentalId);
             preparedStatement.setLong(2, rental.ski_pass_id());
             preparedStatement.setLong(3, rental.equipment_id());
             preparedStatement.setInt(4, rental.return_status());
@@ -28,21 +31,14 @@ public class RentalDatabaseAccess extends DatabaseAccess {
                 throw new SQLException("Failed to create rental; No rows affected.");
             }
 
-            // Get generated id
-            try (ResultSet generatedKeys = preparedStatement.getGeneratedKeys()) {
-                if (!generatedKeys.next()) {
-                    throw new SQLException("Failed to create rental; No ID obtained.");
-                }
-
-                return generatedKeys.getLong(1);
-            }
+            return newRentalId;
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
     }
 
     public Optional<Rental> findRental(Long id) {
-        String sql = "SELECT rental_id, ski_pass_id, equipment_id, date_time_from, date_time_to FROM Rental WHERE id = ?";
+        String sql = "SELECT rental_id, ski_pass_id, equipment_id, date_time_from, return_status FROM stephintomson.Rental WHERE id = ?";
         try (PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
             preparedStatement.setLong(1, id);
 
@@ -70,7 +66,7 @@ public class RentalDatabaseAccess extends DatabaseAccess {
     }
 
     public void updateRental(Rental rental) {
-        String sql = "UPDATE Rental SET ski_pass_id = ?, equipment_id = ?, date_time_from = ?, date_time_to = ? WHERE id = ?";
+        String sql = "UPDATE stephintomson.Rental SET ski_pass_id = ?, equipment_id = ?, date_time_from = ?, return_status = ? WHERE id = ?";
 
         try (PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
             preparedStatement.setLong(1, rental.ski_pass_id());
@@ -89,10 +85,15 @@ public class RentalDatabaseAccess extends DatabaseAccess {
     }
 
     public void deleteRental(Rental rental) {
-        String sql = "DELETE FROM Rental WHERE id = ?";
+        String sql = "DELETE FROM stephintomson.Rental WHERE id = ?";
 
         try (PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
             preparedStatement.setLong(1, rental.rental_id());
+
+            int affectedRows = preparedStatement.executeUpdate();
+            if (affectedRows == 0) {
+                throw new SQLException("Failed to delete rental; No rows affected.");
+            }
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
@@ -100,11 +101,11 @@ public class RentalDatabaseAccess extends DatabaseAccess {
 
     /*
      * Finds an active rental by equipment ID. An active rental is one that has not
-     * been returned yet (date_time_to is NULL).
+     * been returned yet
      */
     public Optional<Rental> findActiveRental(Long equipmentId) {
-        String sql = "SELECT rental_id, ski_pass_id, equipment_id, date_time_from, date_time_to " +
-                "FROM Rental WHERE equipment_id = ? AND date_time_to IS NULL";
+        String sql = "SELECT rental_id, ski_pass_id, equipment_id, date_time_from, return_status " +
+                "FROM stephintomson.Rental WHERE equipment_id = ? AND return_status IS 1";
 
         try (PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
             preparedStatement.setLong(1, equipmentId);
