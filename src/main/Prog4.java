@@ -34,7 +34,7 @@ public class Prog4 {
 
     private static SkiPassService passHandler;
     
-    private static ArrayList<String> tracker;
+    private static ArrayList<String> tracker = new ArrayList<String>();
 
     private static void printResults(ResultSet results){
         try{
