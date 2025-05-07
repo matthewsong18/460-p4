@@ -183,6 +183,7 @@ public class Prog4 {
                         ResultSet results3 = QueryService.queryIntTrails();
                         printResults(results3, true);
                         for (String trail : tracker){
+                            System.out.println("LIFTS GOING TO INTERMEDIATE TRIAL WTH ID " + trail);
                             results3 = QueryService.queryLifts(trail);
                             printResults(results3);
                         }
