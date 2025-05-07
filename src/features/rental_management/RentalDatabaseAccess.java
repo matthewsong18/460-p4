@@ -1,21 +1,26 @@
 package features.rental_management;
 
+import common.DatabaseAccess;
+import common.DatabaseConnection;
+
 import java.sql.*;
 import java.util.Optional;
 
-public class RentalDatabaseAccess {
-    private final Connection connection;
+public class RentalDatabaseAccess extends DatabaseAccess {
 
-    public RentalDatabaseAccess(Connection connection) {
-        this.connection = connection;
+    public RentalDatabaseAccess(DatabaseConnection databaseConnection) {
+        super(databaseConnection);
     }
 
     public Long createRental(Rental rental) {
-        String sql = "INSERT into rentals (ski_pass_id, equipment_id, date_time_from, date_time_to) values (?,?,?,?)";
+        String sql = "INSERT into Rental (rental_id, ski_pass_id, equipment_id, date_time_from, return_status) values (?,?,?,SYSTIMESTAMP,?)";
+
         try (PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
-            preparedStatement.setLong(1, rental.ski_pass_id());
-            preparedStatement.setLong(2, rental.equipment_id());
-            preparedStatement.setTimestamp(3, rental.dateTimeFrom());
+            Long newPassId = getNextId("Rental", "rental_id"); // Helper to get a new ID
+
+            preparedStatement.setLong(1, newPassId);
+            preparedStatement.setLong(2, rental.ski_pass_id());
+            preparedStatement.setLong(3, rental.equipment_id());
             preparedStatement.setInt(4, rental.return_status());
 
             int affectedRows = preparedStatement.executeUpdate();
@@ -37,7 +42,7 @@ public class RentalDatabaseAccess {
     }
 
     public Optional<Rental> findRental(Long id) {
-        String sql = "SELECT rental_id, ski_pass_id, equipment_id, date_time_from, date_time_to FROM rentals WHERE id = ?";
+        String sql = "SELECT rental_id, ski_pass_id, equipment_id, date_time_from, date_time_to FROM Rental WHERE id = ?";
         try (PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
             preparedStatement.setLong(1, id);
 
@@ -65,7 +70,7 @@ public class RentalDatabaseAccess {
     }
 
     public void updateRental(Rental rental) {
-        String sql = "UPDATE rentals SET ski_pass_id = ?, equipment_id = ?, date_time_from = ?, date_time_to = ? WHERE id = ?";
+        String sql = "UPDATE Rental SET ski_pass_id = ?, equipment_id = ?, date_time_from = ?, date_time_to = ? WHERE id = ?";
 
         try (PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
             preparedStatement.setLong(1, rental.ski_pass_id());
@@ -84,7 +89,7 @@ public class RentalDatabaseAccess {
     }
 
     public void deleteRental(Rental rental) {
-        String sql = "DELETE FROM rentals WHERE id = ?";
+        String sql = "DELETE FROM Rental WHERE id = ?";
 
         try (PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
             preparedStatement.setLong(1, rental.rental_id());
@@ -99,7 +104,7 @@ public class RentalDatabaseAccess {
      */
     public Optional<Rental> findActiveRental(Long equipmentId) {
         String sql = "SELECT rental_id, ski_pass_id, equipment_id, date_time_from, date_time_to " +
-                "FROM rentals WHERE equipment_id = ? AND date_time_to IS NULL";
+                "FROM Rental WHERE equipment_id = ? AND date_time_to IS NULL";
 
         try (PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
             preparedStatement.setLong(1, equipmentId);

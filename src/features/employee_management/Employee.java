@@ -14,8 +14,8 @@ public record Employee(
         Timestamp start_date,
         Long property_id
 ) {
-    public Employee(String name, String age, String gender, String position, int salary, Timestamp start_date, Long property_id) {
-        this(null, name, age, gender, position, salary, start_date, property_id);
+    public Employee(String name, String age, String gender, String position, int salary, Long property_id) {
+        this(null, name, age, gender, position, salary, null, property_id);
     }
     public Employee {
         checkEmployeeName(name);
@@ -23,7 +23,6 @@ public record Employee(
         checkEmployeeGender(gender);
         checkEmployeePosition(position);
         checkEmployeeSalary(salary);
-        checkEmployeeStartDate(start_date);
     }
 
     private void checkEmployeeName(String name) {
@@ -53,12 +52,6 @@ public record Employee(
     private void checkEmployeeSalary(int salary) {
         if (salary < 0) {
             throw new IllegalArgumentException("Employee salary cannot be negative");
-        }
-    }
-
-    private void checkEmployeeStartDate(Timestamp startDate) {
-        if (startDate == null) {
-            throw new IllegalArgumentException("Employee startDate cannot be null");
         }
     }
 }
