@@ -30,6 +30,7 @@ public class Prog4 {
     private static MemberService memberHandler;
     private static EquipmentService equipmentHandler;
     private static RentalService rentalHandler;
+    private static LessonOrderService lessonHandler;
 
     private static SkiPassService passHandler;
     
@@ -252,7 +253,7 @@ public class Prog4 {
                         String type = userin.nextLine();
                         System.out.print("Price: ");
                         int price = userin.nextInt();
-                        System.out.print("Uses: ")
+                        System.out.print("Uses: ");
                         int uses = userin.nextInt();
 
                         // add pass
@@ -283,9 +284,12 @@ public class Prog4 {
                         long memid = userin.nextLong();
                         System.out.print("Lesson ID: ");
                         long lesid = userin.nextLong();
-
+                        System.out.print("Sessions: ");
+                        int sess = userin.nextInt();
+                        
                         // add lesson
-
+                        long id = lessonHandler.createLessonOrder(lesid, memid, sess);
+                        System.out.println("Added new lesson order: " + id);
                     }
                     break;
                 case "2":
@@ -332,8 +336,20 @@ public class Prog4 {
                         }
 
                         rentalHandler.deleteRental(values.get());
+                        System.out.println("Deleted rental record with id " + id);
                     } else if (context.equals("lesson")){
                         // LESSON LOGIC //
+                        System.out.print("Order ID: ");
+                        long id = userin.nextLong();
+                        
+                        Optional<LessonOrder> values = lessonHandler.findLessonOrderById(id);
+                        if (!values.isPresent()) {
+                            System.out.println("WARNING: Lesson order with id " + id + " does not exist. Try again.");
+                            return;
+                        }
+
+                        lessonHandler.deleteLessonOrder(values.get());
+                        System.out.println("Deleted lesson order with id " + id);
                     }
                     break;
                 case "3":
@@ -387,10 +403,17 @@ public class Prog4 {
                         System.out.print("Pass ID: ");
                         long id = userin.nextLong();
 
-                        System.out.println("What would you like to update?");
-                        System.out.println("1 | Remaining Uses");
-                        System.out.println("2 | Member ID");
+                        Optional<SkiPassData> values = passHandler.findSkiPassById(id);
+                        if (!values.isPresent()) {
+                            System.out.println("WARNING: Ski pass with id " + id + " does not exist. Try again.");
+                            return;
+                        }
 
+                        System.out.print("New remaining uses: " );
+                        int uses = userin.nextInt();
+                        
+                        passHandler.updatePassDetails(new SkiPassData(values.get().passId(), values.get().memberId(), values.get().purchaseDate(), values.get().totalUses(), uses, values.get().passType(), values.get().price(), values.get().archivedStatus()));
+                        System.out.print("Succesfully updated remaining number of uses on ski pass with id " + id);
                     } else if (context.equals("equipment")) {
                         // EQUIPMENT LOGIC //
                         System.out.print("Equipment ID: ");
@@ -452,9 +475,23 @@ public class Prog4 {
                             return;
                         }
 
-                        rentalHandler.updateRental(new Rental(values.get().ski_pass_id(), values.get().equipment_id(), values.get().dateTimeFrom(), 1));
+                        rentalHandler.updateRental(new Rental(values.get().rental_id(), values.get().ski_pass_id(), values.get().equipment_id(), values.get().dateTimeFrom(), 1));
                     } else if (context.equals("lesson")){
                         // LESSON LOGIC //
+                        System.out.print("Order ID: ");
+                        long id = userin.nextLong();
+                        
+                        Optional<LessonOrder> values = lessonHandler.findLessonOrderById(id);
+                        if (!values.isPresent()) {
+                            System.out.println("WARNING: Lesson order with id " + id + " does not exist. Try again.");
+                            return;
+                        }
+                        
+                        System.out.println("New remaining sessions: ");
+                        int sessions = userin.nextInt();
+
+                        lessonHandler.updateLessonOrder(new LessonOrder(values.get().order_id(), values.get().lesson_id(), values.get().member_id(), values.get().total_sessions(), sessions));
+                        System.out.println("Succesfully updated remaining session on lesson order with id " + id);
                     }
                     break;
                 default:
@@ -463,6 +500,7 @@ public class Prog4 {
         } catch (Exception e){
             System.err.println("ERROR: An error ocurred while attempting to execute the desired action. Please try again.");
             System.out.println("DB: " + e.getMessage());
+            System.out.println();
             return;
         }
     }
