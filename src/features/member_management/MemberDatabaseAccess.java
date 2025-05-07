@@ -93,7 +93,7 @@ class MemberDatabaseAccess {
 
     public List<Member> getAllMembers() {
         List<Member> members = new ArrayList<>();
-        String sql = "SELECT id, name, telephone, email, date_of_birth, emergency_contact FROM stephintomson.member ORDER BY name";
+        String sql = "SELECT id, member_name, telephone, email, date_of_birth, emergency_contact FROM stephintomson.member ORDER BY member_name";
 
         try (PreparedStatement preparedStatement = connection.prepareStatement(
                 sql); ResultSet rs = preparedStatement.executeQuery()) {
