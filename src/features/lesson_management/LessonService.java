@@ -10,7 +10,7 @@ public class LessonService {
     private DatabaseConnection connection;
 
     public LessonService(DatabaseConnection connection) {
-        lessonDatabaseAccess = new LessonDatabaseAccess(connection.getConnection());
+        lessonDatabaseAccess = new LessonDatabaseAccess(connection);
         this.connection = connection;
     }
 
