@@ -154,6 +154,12 @@ public class create_tables {
             } catch (SQLException e) {
                 System.out.println("Error creating Rental table: " + e.getMessage());
             }
+            try {
+                stmt.executeUpdate("AUDIT INSERT, UPDATE, DELETE ON Rental");
+                System.out.println("Enabled standard auditing on Rental table.");
+            } catch (SQLException e) {
+                System.out.println("Error enabling auditing on Rental: " + e.getMessage());
+            }
             /* ———————— Trail / Lift / LiftTrail / EntryLog —— —————— */
             try {
                 stmt.executeUpdate("CREATE TABLE Trail (" +
@@ -294,6 +300,7 @@ public class create_tables {
             } catch (SQLException e) {
                 System.out.println("Error creating trigger trg_dec_uses_rental: " + e.getMessage());
             }
+            
             // Trigger 4: Archive SkiPass when it becomes empty
             try {
 
@@ -313,6 +320,8 @@ public class create_tables {
         } catch (SQLException e) {
             System.err.println("Database error: " + e.getMessage());
         }
+
+       
 
     }
 }
