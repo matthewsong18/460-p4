@@ -102,7 +102,7 @@ public class QueryService {
                        select datetime, lift_name, difficulty_level
                        from stephintomson.EntryLog
                        join stephintomson.Lift using (lift_id)
-                       where pass_id = %s and archived_status != 0
+                       where pass_id = %s
                 """, passid);
         
         return executeQuery(query);

@@ -576,13 +576,13 @@ public class Prog4 {
                         break;
                 }
 
+                input = "";
                executionMenu(actionState, context);
             } catch (InputMismatchException e) {
                 System.out.println("ERROR: Invalid argument provided. Try again.");
             }
              
             System.out.println();
-            input = "";
 
             // main menu print
             System.out.println("\n\n//- SKI RESORT DATABASE -\\\\");
@@ -593,6 +593,9 @@ public class Prog4 {
             System.out.println("5 | Add, update, or delete a lesson purchase record.");
             System.out.println("Type 'query' to access the queries submenu.");
             System.out.println("Type 'exit' to close the application.");
+
+            // flush buffer
+            userin.nextLine();
         }
 
         userin.close();
