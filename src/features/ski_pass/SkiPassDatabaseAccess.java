@@ -89,6 +89,7 @@ public class SkiPassDatabaseAccess extends DatabaseAccess {
             if (affectedRows == 0) {
                 throw new SQLException("Deleting ski pass failed, no rows affected. Pass ID: " + passId);
             }
+            if (passId == currentId) updateCurrentId();
         }
     }
 
