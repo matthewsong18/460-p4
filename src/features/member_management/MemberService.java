@@ -8,7 +8,7 @@ public class MemberService {
     private final MemberDatabaseAccess memberDatabaseAccess;
 
     public MemberService(DatabaseConnection databaseConnection) {
-        memberDatabaseAccess = new MemberDatabaseAccess(databaseConnection.getConnection());
+        memberDatabaseAccess = new MemberDatabaseAccess(databaseConnection);
     }
 
     public long registerMember(String name, String telephoneNumber, String email, String dateOfBirth,
