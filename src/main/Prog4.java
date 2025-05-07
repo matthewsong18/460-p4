@@ -130,6 +130,10 @@ public class Prog4 {
             return input;
         }
 
+        if (input.equals("back")) {
+            return "";
+        }
+
         System.out.println("ERROR: Invalid argument provided. Please try again.");
         return "";
 
