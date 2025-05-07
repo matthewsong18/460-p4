@@ -85,7 +85,7 @@ public class RentalDatabaseAccess extends DatabaseAccess {
     }
 
     public void deleteRental(Rental rental) {
-        String sql = "DELETE FROM stephintomson.Rental WHERE id = ?";
+        String sql = "DELETE FROM stephintomson.Rental WHERE rental_id = ?";
 
         try (PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
             preparedStatement.setLong(1, rental.rental_id());
