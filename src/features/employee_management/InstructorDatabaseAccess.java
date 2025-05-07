@@ -15,7 +15,7 @@ public class InstructorDatabaseAccess extends DatabaseAccess {
     }
 
     public Optional<Instructor> findInstructorById(Long id) {
-        String sql = "SELECT * FROM Instructor WHERE employee_id = ?";
+        String sql = "SELECT * FROM stephintomson.Instructor WHERE employee_id = ?";
         try (PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
             preparedStatement.setLong(1, id);
 

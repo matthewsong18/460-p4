@@ -36,7 +36,7 @@ public abstract class DatabaseAccess {
 //    }
 
     protected Long getNextId(String databaseName, String id_name) throws SQLException {
-        String sql = "SELECT MAX(?) AS max_id FROM ?";
+        String sql = "SELECT MAX(?) AS max_id FROM stephintomson.?";
         try (PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
             preparedStatement.setString(1, id_name);
             preparedStatement.setString(2, databaseName);

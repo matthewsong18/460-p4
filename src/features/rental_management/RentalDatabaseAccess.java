@@ -13,7 +13,7 @@ public class RentalDatabaseAccess extends DatabaseAccess {
     }
 
     public Long createRental(Rental rental) {
-        String sql = "INSERT into Rental (rental_id, ski_pass_id, equipment_id, date_time_from, return_status) values (?,?,?,SYSTIMESTAMP,?)";
+        String sql = "INSERT into stephintomson.Rental (rental_id, ski_pass_id, equipment_id, date_time_from, return_status) values (?,?,?,SYSTIMESTAMP,?)";
 
         try (PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
             Long newPassId = getNextId("Rental", "rental_id"); // Helper to get a new ID
@@ -42,7 +42,7 @@ public class RentalDatabaseAccess extends DatabaseAccess {
     }
 
     public Optional<Rental> findRental(Long id) {
-        String sql = "SELECT rental_id, ski_pass_id, equipment_id, date_time_from, date_time_to FROM Rental WHERE id = ?";
+        String sql = "SELECT rental_id, ski_pass_id, equipment_id, date_time_from, date_time_to FROM stephintomson.Rental WHERE id = ?";
         try (PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
             preparedStatement.setLong(1, id);
 
@@ -70,7 +70,7 @@ public class RentalDatabaseAccess extends DatabaseAccess {
     }
 
     public void updateRental(Rental rental) {
-        String sql = "UPDATE Rental SET ski_pass_id = ?, equipment_id = ?, date_time_from = ?, date_time_to = ? WHERE id = ?";
+        String sql = "UPDATE stephintomson.Rental SET ski_pass_id = ?, equipment_id = ?, date_time_from = ?, date_time_to = ? WHERE id = ?";
 
         try (PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
             preparedStatement.setLong(1, rental.ski_pass_id());
@@ -89,7 +89,7 @@ public class RentalDatabaseAccess extends DatabaseAccess {
     }
 
     public void deleteRental(Rental rental) {
-        String sql = "DELETE FROM Rental WHERE id = ?";
+        String sql = "DELETE FROM stephintomson.Rental WHERE id = ?";
 
         try (PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
             preparedStatement.setLong(1, rental.rental_id());
@@ -104,7 +104,7 @@ public class RentalDatabaseAccess extends DatabaseAccess {
      */
     public Optional<Rental> findActiveRental(Long equipmentId) {
         String sql = "SELECT rental_id, ski_pass_id, equipment_id, date_time_from, date_time_to " +
-                "FROM Rental WHERE equipment_id = ? AND date_time_to IS NULL";
+                "FROM stephintomson.Rental WHERE equipment_id = ? AND date_time_to IS NULL";
 
         try (PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
             preparedStatement.setLong(1, equipmentId);
