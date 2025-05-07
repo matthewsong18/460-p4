@@ -276,7 +276,7 @@ public class Prog4 {
                         System.out.print("Ski Pass ID: ");
                         long skiid = userin.nextLong();
                         
-                        long id = rentalHandler.registerRental(skiid, equpid, new Timestamp(System.currentTimeMillis()), 0);
+                        long id = rentalHandler.registerRental(skiid, equpid, 0);
                         System.out.println("Added new equipment rental: " + id);
                     } else if (context.equals("lesson")){
                         // LESSON LOGIC //
