@@ -6,7 +6,7 @@ import java.sql.*;
 import java.util.Optional;
 
 public class EmployeeDatabaseAccess {
-    Connection connection;
+    private Connection connection;
 
     public EmployeeDatabaseAccess(DatabaseConnection databaseConnection) {
         connection = databaseConnection.getConnection();
