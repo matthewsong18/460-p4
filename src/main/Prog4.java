@@ -545,27 +545,36 @@ public class Prog4 {
                         // member
                         actionState = actionMenu("member");
                         context = "member";
+
+                        executionMenu(actionState, context);
                         break;
                     case "2":
                         // ski pass
                         actionState = actionMenu("ski pass");
                         context = "ski";
+
+                        executionMenu(actionState, context);
                         break;
                     case "3":
                         // equipment
                         actionState = actionMenu("equipment record");
                         context = "equipment";
+
+                        executionMenu(actionState, context);
                         break;
                     case "4":
                         // rental
                         actionState = actionMenu("rental record");
                         context = "rental";
     
+                        executionMenu(actionState, context);
                         break;
                     case "5":  
                         // lesson
                         actionState = actionMenu("lesson purchase record");
                         context = "lesson";
+
+                        executionMenu(actionState, context);
                         break;
                     case "query":
                         // queries
@@ -573,11 +582,9 @@ public class Prog4 {
 
                         break;
                     default:
-                        System.out.println("ERROR: Invalid option selected.");
                         break;
                 }
                 
-               executionMenu(actionState, context);
             } catch (InputMismatchException e) {
                 System.out.println("ERROR: Invalid argument provided. Try again.");
             }
