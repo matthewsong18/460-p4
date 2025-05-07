@@ -13,7 +13,7 @@ class MemberDatabaseAccess {
     }
 
     public Long createMember(Member member) {
-        String sql = "INSERT INTO members (name, telephone, email, date_of_birth, emergency_contact) VALUES (?, ?, ?, ?, ?)";
+        String sql = "INSERT INTO stephintomson.members (name, telephone, email, date_of_birth, emergency_contact) VALUES (?, ?, ?, ?, ?)";
         try (PreparedStatement preparedStatement = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
 
             preparedStatement.setString(1, member.name());
@@ -42,7 +42,7 @@ class MemberDatabaseAccess {
     }
 
     public Optional<Member> findMemberById(Long id) {
-        String sql = "SELECT id, name, telephone, email, date_of_birth, emergency_contact FROM members WHERE id = ?";
+        String sql = "SELECT id, name, telephone, email, date_of_birth, emergency_contact FROM stephintomson.members WHERE id = ?";
 
         try (PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
             preparedStatement.setLong(1, id);
@@ -61,7 +61,7 @@ class MemberDatabaseAccess {
     }
 
     public Optional<Member> findMemberByEmail(String email) {
-        String sql = "SELECT * FROM members WHERE email = ?";
+        String sql = "SELECT * FROM stephintomson.members WHERE email = ?";
 
         try(PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
             preparedStatement.setString(1, email);
@@ -92,19 +92,19 @@ class MemberDatabaseAccess {
     }
 
     public List<Member> getAllMembers() {
-        List<Member> members = new ArrayList<>();
-        String sql = "SELECT id, name, telephone, email, date_of_birth, emergency_contact FROM members ORDER BY name";
+        List<Member> stephintomson.members = new ArrayList<>();
+        String sql = "SELECT id, name, telephone, email, date_of_birth, emergency_contact FROM stephintomson.members ORDER BY name";
 
         try (PreparedStatement preparedStatement = connection.prepareStatement(
                 sql); ResultSet rs = preparedStatement.executeQuery()) {
 
             while (rs.next()) {
-                members.add(mapRowToMember(rs));
+                stephintomson.members.add(mapRowToMember(rs));
             }
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
-        return members;
+        return stephintomson.members;
     }
 
 
@@ -112,7 +112,7 @@ class MemberDatabaseAccess {
         if (member.id() == null) {
             throw new RuntimeException("Cannot update member without an ID.");
         }
-        String sql = "UPDATE members SET name = ?, telephone = ?, email = ?, date_of_birth = ?, emergency_contact = ?, WHERE id = ?";
+        String sql = "UPDATE stephintomson.members SET name = ?, telephone = ?, email = ?, date_of_birth = ?, emergency_contact = ?, WHERE id = ?";
 
         try (PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
 
@@ -132,7 +132,7 @@ class MemberDatabaseAccess {
     }
 
     public boolean deleteMember(Member member) {
-        String sql = "DELETE FROM members WHERE id = ?";
+        String sql = "DELETE FROM stephintomson.members WHERE id = ?";
 
         try (PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
 

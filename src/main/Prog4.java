@@ -56,7 +56,7 @@ public class Prog4 {
             }
 
             if (count == 0) {
-                System.out.println(String.format("| %-25s |", "NO RESULTS"));
+                System.out.println(String.format("|| %-25s ||", "NO RESULTS"));
             }
         } catch (SQLException e){
             throw new RuntimeException("ERROR: " + e.getMessage());

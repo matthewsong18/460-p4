@@ -82,7 +82,7 @@ public class QueryService {
         String query = String.format("""
                        select rental_id, equipment_id, datetime_to, datetime_from, returned
                        from stephintomson.Rental
-                       where pass_id = '%s'
+                       where pass_id = %s
                 """, passid);
         
         return executeQuery(query);
