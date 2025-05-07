@@ -36,6 +36,9 @@ public class LessonService {
     }
 
     public Optional<Lesson> findLessonById(Long id) {
+        if (id == null || id <= 0) {
+            throw new RuntimeException("Lesson id cannot be null");
+        }
         return lessonDatabaseAccess.findLessonById(id);
     }
 

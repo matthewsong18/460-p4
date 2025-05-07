@@ -23,8 +23,7 @@ class LessonDatabaseAccess {
 
             int affectedRows = preparedStatement.executeUpdate();
             if (affectedRows == 0) {
-                System.err.println("Creating member failed, no rows affected.");
-                return null;
+                throw new SQLException("Creating member failed, no rows affected.");
             }
 
             return currentId;
@@ -52,10 +51,6 @@ class LessonDatabaseAccess {
     }
 
     public Optional<Lesson> findLessonById(Long id) {
-        if (id == null || id <= 0) {
-            throw new IllegalArgumentException("Lesson ID cannot be null");
-        }
-
         String sql = "SELECT * FROM Lesson WHERE lesson_id = ?";
 
         try (PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
@@ -83,10 +78,6 @@ class LessonDatabaseAccess {
     }
 
     public void updateLesson(Lesson lesson) {
-        if (lesson == null || lesson.lesson_id() == null) {
-            throw new IllegalArgumentException("Lesson cannot be null");
-        }
-
         String sql = "UPDATE Lesson SET instructor_id = ?, lesson_time = ? WHERE lesson_id = ?";
 
         try (PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
@@ -105,10 +96,6 @@ class LessonDatabaseAccess {
     }
 
     public void deleteLesson(Lesson lesson) {
-        if (lesson == null || lesson.lesson_id() == null) {
-            throw new IllegalArgumentException("Lesson cannot be null");
-        }
-
         String sql = "DELETE from Lesson WHERE lesson_id = ?";
 
         try (PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
