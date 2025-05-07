@@ -18,6 +18,8 @@ package tables;
  ||
  ||     Notes:  • Idempotent – safe to run multiple times.
  ||             • Uses child→parent drop order to avoid FK violations.
+ ||             • Equipment table is audited for INSERT, UPDATE, DELETE. To see log use:
+ ||               SELECT * FROM USER_AUDIT_TRAIL WHERE OBJ_NAME = 'EQUIPMENT';
  ||
  ++----------------------------------------------------------------------*/
 
@@ -137,6 +139,13 @@ public class create_tables {
                 System.out.println("Error creating Equipment table: " + e.getMessage());
             }
             try {
+                stmt.executeUpdate("AUDIT INSERT, UPDATE, DELETE ON Equipment");
+                System.out.println("Enabled standard auditing on Equipment table.");
+            } catch (SQLException e) {
+                System.out.println("Error enabling auditing on Equipment: " + e.getMessage());
+            }
+
+            try {
                 stmt.executeUpdate("CREATE TABLE Rental (" +
                         "rental_id NUMBER PRIMARY KEY, pass_id NUMBER NOT NULL, equipment_id NUMBER NOT NULL, " +
                         "datetime_from TIMESTAMP, datetime_to TIMESTAMP, " +
@@ -240,34 +249,34 @@ public class create_tables {
             // Trigger 2: On LiftTrail changes
             try {
                 stmt.executeUpdate("CREATE OR REPLACE TRIGGER trg_lift_diff_lifttrail\r\n" + //
-                                        "FOR INSERT OR DELETE ON LiftTrail\r\n" + //
-                                        "COMPOUND TRIGGER\r\n" + //
-                                        "\r\n" + //
-                                        "  -- Collect all affected lift_ids\r\n" + //
-                                        "  TYPE LiftIdList IS TABLE OF LiftTrail.lift_id%TYPE INDEX BY PLS_INTEGER;\r\n" + //
-                                        "  g_lift_ids LiftIdList;\r\n" + //
-                                        "  g_index INTEGER := 0;\r\n" + //
-                                        "\r\n" + //
-                                        "AFTER EACH ROW IS\r\n" + //
-                                        "BEGIN\r\n" + //
-                                        "  g_index := g_index + 1;\r\n" + //
-                                        "  g_lift_ids(g_index) := COALESCE(:NEW.lift_id, :OLD.lift_id);\r\n" + //
-                                        "END AFTER EACH ROW;\r\n" + //
-                                        "\r\n" + //
-                                        "AFTER STATEMENT IS\r\n" + //
-                                        "BEGIN\r\n" + //
-                                        "  FOR i IN 1 .. g_index LOOP\r\n" + //
-                                        "    UPDATE Lift\r\n" + //
-                                        "    SET difficulty_level = (\r\n" + //
-                                        "      SELECT ROUND(AVG(t.difficulty), 0)\r\n" + //
-                                        "      FROM LiftTrail lt JOIN Trail t ON lt.trail_id = t.trail_id\r\n" + //
-                                        "      WHERE lt.lift_id = g_lift_ids(i)\r\n" + //
-                                        "    )\r\n" + //
-                                        "    WHERE lift_id = g_lift_ids(i);\r\n" + //
-                                        "  END LOOP;\r\n" + //
-                                        "END AFTER STATEMENT;\r\n" + //
-                                        "\r\n" + //
-                                        "END;\r\n");
+                        "FOR INSERT OR DELETE ON LiftTrail\r\n" + //
+                        "COMPOUND TRIGGER\r\n" + //
+                        "\r\n" + //
+                        "  -- Collect all affected lift_ids\r\n" + //
+                        "  TYPE LiftIdList IS TABLE OF LiftTrail.lift_id%TYPE INDEX BY PLS_INTEGER;\r\n" + //
+                        "  g_lift_ids LiftIdList;\r\n" + //
+                        "  g_index INTEGER := 0;\r\n" + //
+                        "\r\n" + //
+                        "AFTER EACH ROW IS\r\n" + //
+                        "BEGIN\r\n" + //
+                        "  g_index := g_index + 1;\r\n" + //
+                        "  g_lift_ids(g_index) := COALESCE(:NEW.lift_id, :OLD.lift_id);\r\n" + //
+                        "END AFTER EACH ROW;\r\n" + //
+                        "\r\n" + //
+                        "AFTER STATEMENT IS\r\n" + //
+                        "BEGIN\r\n" + //
+                        "  FOR i IN 1 .. g_index LOOP\r\n" + //
+                        "    UPDATE Lift\r\n" + //
+                        "    SET difficulty_level = (\r\n" + //
+                        "      SELECT ROUND(AVG(t.difficulty), 0)\r\n" + //
+                        "      FROM LiftTrail lt JOIN Trail t ON lt.trail_id = t.trail_id\r\n" + //
+                        "      WHERE lt.lift_id = g_lift_ids(i)\r\n" + //
+                        "    )\r\n" + //
+                        "    WHERE lift_id = g_lift_ids(i);\r\n" + //
+                        "  END LOOP;\r\n" + //
+                        "END AFTER STATEMENT;\r\n" + //
+                        "\r\n" + //
+                        "END;\r\n");
             } catch (SQLException e) {
                 System.out
                         .println("Error creating trigger trg__lift_diff_lifttrail: " + e.getMessage());
