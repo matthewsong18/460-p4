@@ -7,6 +7,7 @@
  * 
  * Usage: Prog4.java <username> <password>
  */
+package src;
 
 import java.io.*;
 import java.sql.Timestamp;
