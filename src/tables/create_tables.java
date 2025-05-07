@@ -59,6 +59,24 @@ public class create_tables {
         System.out.println("Drop phase complete.\n");
     }
 
+    // Granting privileges to PUBLIC for all tables
+    private static void grantAllTablePrivilegesToPublic(Statement stmt) {
+        String[] tables = {
+                "Property", "ParkingLot", "Trail", "Lift", "LiftTrail", "EntryLog",
+                "Member", "SkiPass", "Equipment", "Rental", "Employee", "Instructor",
+                "Lesson", "LessonOrder"
+        };
+
+        for (String tbl : tables) {
+            try {
+                stmt.executeUpdate("GRANT SELECT, INSERT, UPDATE, DELETE ON " + tbl + " TO PUBLIC");
+                System.out.println("Granted PUBLIC privileges on " + tbl);
+            } catch (SQLException e) {
+                System.out.println("Error granting privileges on " + tbl + ": " + e.getMessage());
+            }
+        }
+    }
+
     /*------------------------------------------------------------------
      |  Method main
      |
@@ -230,6 +248,7 @@ public class create_tables {
                 System.out.println("Error creating LessonOrder table: " + e.getMessage());
             }
             System.out.println("All tables created successfully.");
+            grantAllTablePrivilegesToPublic(stmt);
 
             /* Triggers */
             // Trigger 1: On Trail changes
@@ -300,7 +319,7 @@ public class create_tables {
             } catch (SQLException e) {
                 System.out.println("Error creating trigger trg_dec_uses_rental: " + e.getMessage());
             }
-            
+
             // Trigger 4: Archive SkiPass when it becomes empty
             try {
 
@@ -317,11 +336,10 @@ public class create_tables {
             } catch (SQLException e) {
                 System.out.println("Error creating trigger trg_archive_skipass: " + e.getMessage());
             }
+
         } catch (SQLException e) {
             System.err.println("Database error: " + e.getMessage());
         }
-
-       
 
     }
 }
