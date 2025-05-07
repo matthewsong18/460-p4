@@ -29,6 +29,11 @@ public class Prog4 {
     private static void printResults(ResultSet results){
         try{
             ResultSetMetaData meta = results.getMetaData();
+            
+            if (meta.getColumnCount() <= 0) {
+                System.out.println("NO RESULTS");
+                return;
+            }
             // print attribute names
             StringBuilder builder = new StringBuilder("|");
             for (int i = 0; i < meta.getColumnCount(); i++){
@@ -47,7 +52,7 @@ public class Prog4 {
                 System.out.println(builder.toString());
             }
         } catch (SQLException e){
-            throw new RuntimeException("ERROR: Something weird happened on the database.");
+            throw new RuntimeException("ERROR: " + e.getMessage());
         }
     }
   
@@ -97,14 +102,6 @@ public class Prog4 {
         while (userin.hasNextLine() && !(input = userin.nextLine().toLowerCase()).equals("back")){
             try {
                 switch (input) {
-                    case "":
-                        System.out.println("//- AVAILABLE QUERIES -\\\\");
-                        System.out.println("1 | List all ski lessons purchased for a member");
-                        System.out.println("2 | List all lift and rental records for a ski pass");
-                        System.out.println("3 | List all intermediate-level trails and associated information.");
-                        System.out.println("4 | List the total wage expense for a given property");
-                        System.out.println("Type 'back' to return to the main menu.");
-                        break;
                     case "1":
                         System.out.print("\nEnter Member ID: ");
                         arg1 = userin.nextLine();
@@ -152,6 +149,13 @@ public class Prog4 {
                 System.err.println("ERROR: Something went wrong. Please try again.");
                 System.out.println("DB: " + e.getMessage());
             }
+
+            System.out.println("//- AVAILABLE QUERIES -\\\\");
+            System.out.println("1 | List all ski lessons purchased for a member");
+            System.out.println("2 | List all lift and rental records for a ski pass");
+            System.out.println("3 | List all intermediate-level trails and associated information.");
+            System.out.println("4 | List the total wage expense for a given property");
+            System.out.println("Type 'back' to return to the main menu.");
         }
 
         return;
