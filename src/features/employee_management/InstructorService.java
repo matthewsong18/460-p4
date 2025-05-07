@@ -25,7 +25,5 @@ public class InstructorService {
         } catch (RuntimeException e) {
             throw new RuntimeException("Failed to find instructor with id = " + id, e);
         }
-
-        return instructorDatabaseAccess.findInstructorById(id);
     }
 }
