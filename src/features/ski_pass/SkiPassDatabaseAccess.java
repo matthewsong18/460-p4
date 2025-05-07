@@ -15,7 +15,7 @@ public class SkiPassDatabaseAccess extends DatabaseAccess {
     }
 
     public Long createSkiPass(SkiPassData skiPass) throws SQLException {
-        String insertSql = "INSERT INTO SkiPass (pass_id, member_id, purchase_date, total_uses, remaining_uses, pass_type, price, archived_status) VALUES (?, ?, SYSTIMESTAMP, ?, ?, ?, ?, ?)";
+        String insertSql = "INSERT INTO stephintomson.SkiPass (pass_id, member_id, purchase_date, total_uses, remaining_uses, pass_type, price, archived_status) VALUES (?, ?, SYSTIMESTAMP, ?, ?, ?, ?, ?)";
 
         try (PreparedStatement preparedStatement = connection.prepareStatement(insertSql)) {
             Long newPassId = getNextId("SkiPass", "pass_id"); // Helper to get a new ID
@@ -38,7 +38,7 @@ public class SkiPassDatabaseAccess extends DatabaseAccess {
     }
 
     public Optional<SkiPassData> findSkiPassById(long passId) throws SQLException {
-        String sql = "SELECT pass_id, member_id, purchase_date, total_uses, remaining_uses, pass_type, price, archived_status FROM SkiPass WHERE pass_id = ?";
+        String sql = "SELECT pass_id, member_id, purchase_date, total_uses, remaining_uses, pass_type, price, archived_status FROM stephintomson.SkiPass WHERE pass_id = ?";
         try (PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
             preparedStatement.setLong(1, passId);
             ResultSet rs = preparedStatement.executeQuery();
@@ -63,7 +63,7 @@ public class SkiPassDatabaseAccess extends DatabaseAccess {
     }
 
     public void updateSkiPass(SkiPassData skiPass) throws SQLException {
-        String sql = "UPDATE SkiPass SET member_id = ?, purchase_date = ?, total_uses = ?, remaining_uses = ?, pass_type = ?, price = ?, archived_status = ? WHERE pass_id = ?";
+        String sql = "UPDATE stephintomson.SkiPass SET member_id = ?, purchase_date = ?, total_uses = ?, remaining_uses = ?, pass_type = ?, price = ?, archived_status = ? WHERE pass_id = ?";
         try (PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
             preparedStatement.setLong(1, skiPass.memberId());
             preparedStatement.setTimestamp(2, skiPass.purchaseDate());
@@ -82,7 +82,7 @@ public class SkiPassDatabaseAccess extends DatabaseAccess {
     }
 
     public void deleteSkiPass(long passId) throws SQLException {
-        String sql = "DELETE FROM SkiPass WHERE pass_id = ?";
+        String sql = "DELETE FROM stephintomson.SkiPass WHERE pass_id = ?";
         try (PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
             preparedStatement.setLong(1, passId);
             int affectedRows = preparedStatement.executeUpdate();
@@ -93,7 +93,7 @@ public class SkiPassDatabaseAccess extends DatabaseAccess {
     }
 
     public int getDaysSincePurchase(long passId) throws SQLException {
-        String sql = "SELECT TRUNC(SYSDATE - purchase_date, 0) AS time_diff FROM SkiPass WHERE pass_id = ?";
+        String sql = "SELECT TRUNC(SYSDATE - purchase_date, 0) AS time_diff FROM stephintomson.SkiPass WHERE pass_id = ?";
         try (PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
             preparedStatement.setLong(1, passId);
             ResultSet rs = preparedStatement.executeQuery();

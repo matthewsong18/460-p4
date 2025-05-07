@@ -18,7 +18,7 @@ public class LessonOrderDatabaseAccess extends DatabaseAccess {
     }
 
     public Long createLessonOrder(LessonOrder lessonOrder) {
-        String sql = "INSERT into LessonOrder VALUES (?, ?, ?, ?, ?)";
+        String sql = "INSERT into stephintomson.LessonOrder VALUES (?, ?, ?, ?, ?)";
 
         try (PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
             long id = getNextId("LessonOrder", "order_id");
@@ -41,7 +41,7 @@ public class LessonOrderDatabaseAccess extends DatabaseAccess {
     }
 
     public Optional<LessonOrder> findLessonOrderById(Long order_id) {
-        String sql = "SELECT * FROM LessonOrder WHERE order_id = ?";
+        String sql = "SELECT * FROM stephintomson.LessonOrder WHERE order_id = ?";
 
         try (PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
             preparedStatement.setLong(1, order_id);
@@ -65,7 +65,7 @@ public class LessonOrderDatabaseAccess extends DatabaseAccess {
     }
 
     public void updateLessonOrder(LessonOrder lessonOrder) {
-        String sql = "UPDATE LessonOrder SET lesson_id = ?, member_id = ?, total_sessions = ?, " +
+        String sql = "UPDATE stephintomson.LessonOrder SET lesson_id = ?, member_id = ?, total_sessions = ?, " +
                 "remaining_sessions = ? WHERE order_id = ?";
 
         try (PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
@@ -85,7 +85,7 @@ public class LessonOrderDatabaseAccess extends DatabaseAccess {
     }
 
     public void deleteLessonOrder(LessonOrder lessonOrder) {
-        String sql = "DELETE from LessonOrder WHERE order_id = ?";
+        String sql = "DELETE from stephintomson.LessonOrder WHERE order_id = ?";
 
         try (PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
             preparedStatement.setLong(1, lessonOrder.order_id());

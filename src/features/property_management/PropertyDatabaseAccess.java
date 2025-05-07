@@ -15,7 +15,7 @@ public class PropertyDatabaseAccess extends DatabaseAccess {
     }
 
     public Long createProperty(Property property) {
-        String sql = "INSERT INTO Property (property_id, property_type, property_monthly_income) VALUES (?, ?, ?)";
+        String sql = "INSERT INTO stephintomson.Property (property_id, property_type, property_monthly_income) VALUES (?, ?, ?)";
 
         try (PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
             Long newPropertyId = getNextId("Property", "property_id");
@@ -36,7 +36,7 @@ public class PropertyDatabaseAccess extends DatabaseAccess {
     }
 
     public Optional<Property> findPropertyById(Long id) {
-        String sql = "SELECT * FROM Property WHERE property_id = ?";
+        String sql = "SELECT * FROM stephintomson.Property WHERE property_id = ?";
 
         try (PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
             preparedStatement.setLong(1, id);
@@ -63,7 +63,7 @@ public class PropertyDatabaseAccess extends DatabaseAccess {
     }
 
     public void updateProperty(Property property) {
-        String sql = "UPDATE Property SET property_type = ?, property_monthly_income = ? WHERE property_id = ?";
+        String sql = "UPDATE stephintomson.Property SET property_type = ?, property_monthly_income = ? WHERE property_id = ?";
 
         try (PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
             preparedStatement.setString(1, property.property_type());
@@ -80,7 +80,7 @@ public class PropertyDatabaseAccess extends DatabaseAccess {
     }
 
     public void deleteProperty(Property property) {
-        String sql = "DELETE FROM Property WHERE property_id = ?";
+        String sql = "DELETE FROM stephintomson.Property WHERE property_id = ?";
 
         try (PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
             preparedStatement.setLong(1, property.property_id());

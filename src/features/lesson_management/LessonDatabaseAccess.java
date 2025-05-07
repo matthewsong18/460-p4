@@ -13,7 +13,7 @@ class LessonDatabaseAccess extends DatabaseAccess {
     }
 
     public Long createLesson(Lesson lesson) {
-        String sql = "INSERT into Lesson VALUES (?, ?, ?)";
+        String sql = "INSERT into stephintomson.Lesson VALUES (?, ?, ?)";
         try (PreparedStatement preparedStatement = connection.prepareStatement(sql)){
             Long newId = getNextId("Lesson", "lesson_id");
 
@@ -33,7 +33,7 @@ class LessonDatabaseAccess extends DatabaseAccess {
     }
 
     public Optional<Lesson> findLessonById(Long id) {
-        String sql = "SELECT * FROM Lesson WHERE lesson_id = ?";
+        String sql = "SELECT * FROM stephintomson.Lesson WHERE lesson_id = ?";
 
         try (PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
             preparedStatement.setLong(1, id);
@@ -60,7 +60,7 @@ class LessonDatabaseAccess extends DatabaseAccess {
     }
 
     public void updateLesson(Lesson lesson) {
-        String sql = "UPDATE Lesson SET instructor_id = ?, lesson_time = ? WHERE lesson_id = ?";
+        String sql = "UPDATE stephintomson.Lesson SET instructor_id = ?, lesson_time = ? WHERE lesson_id = ?";
 
         try (PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
             preparedStatement.setLong(1, lesson.instructor_id());
@@ -78,7 +78,7 @@ class LessonDatabaseAccess extends DatabaseAccess {
     }
 
     public void deleteLesson(Lesson lesson) {
-        String sql = "DELETE from Lesson WHERE lesson_id = ?";
+        String sql = "DELETE from stephintomson.Lesson WHERE lesson_id = ?";
 
         try (PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
             preparedStatement.setLong(1, lesson.lesson_id());
