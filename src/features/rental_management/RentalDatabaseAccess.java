@@ -38,7 +38,7 @@ public class RentalDatabaseAccess extends DatabaseAccess {
     }
 
     public Optional<Rental> findRental(Long id) {
-        String sql = "SELECT rental_id, ski_pass_id, equipment_id, date_time_from, return_status FROM stephintomson.Rental WHERE id = ?";
+        String sql = "SELECT rental_id, ski_pass_id, equipment_id, date_time_from, return_status FROM stephintomson.Rental WHERE rental_id = ?";
         try (PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
             preparedStatement.setLong(1, id);
 
@@ -66,7 +66,7 @@ public class RentalDatabaseAccess extends DatabaseAccess {
     }
 
     public void updateRental(Rental rental) {
-        String sql = "UPDATE stephintomson.Rental SET ski_pass_id = ?, equipment_id = ?, date_time_from = ?, return_status = ? WHERE id = ?";
+        String sql = "UPDATE stephintomson.Rental SET ski_pass_id = ?, equipment_id = ?, date_time_from = ?, return_status = ? WHERE rental_id = ?";
 
         try (PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
             preparedStatement.setLong(1, rental.ski_pass_id());
