@@ -119,7 +119,7 @@ public class create_tables {
             try {
                 stmt.executeUpdate("CREATE TABLE SkiPass (" +
                         "pass_id NUMBER PRIMARY KEY, member_id NUMBER NOT NULL, purchase_date DATE, " +
-                        "total_uses NUMBER, remaining_uses NUMBER, pass_type VARCHAR2(30), price NUMBER(10,2), archived_status VARCHAR2(30), "
+                        "total_uses NUMBER, remaining_uses NUMBER, pass_type VARCHAR2(30), price NUMBER(10,2), archived_status NUMBER(1), "
                         +
                         "FOREIGN KEY(member_id) REFERENCES Member(member_id) ON DELETE CASCADE)");
             } catch (SQLException e) {
@@ -295,7 +295,7 @@ public class create_tables {
                                 "WHEN (NEW.remaining_uses = 0 AND OLD.remaining_uses != 0) " +
                                 "BEGIN " +
                                 "  UPDATE SkiPass " +
-                                "  SET archived_status = 'archived' " +
+                                "  SET archived_status = 1 " +
                                 "  WHERE pass_id = :NEW.pass_id; " +
                                 "END;");
             } catch (SQLException e) {

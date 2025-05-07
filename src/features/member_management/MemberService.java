@@ -19,7 +19,7 @@ public class MemberService {
 
         Long newId = memberDatabaseAccess.createMember(newMember);
         if (newId == null) {
-            throw new RuntimeException("Failed to add new member to the database.");
+            throw new RuntimeException("Failed to return the member id");
         }
 
         return newId;
