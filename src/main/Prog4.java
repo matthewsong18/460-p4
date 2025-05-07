@@ -28,12 +28,13 @@ public class Prog4 {
     
     private static void printResults(ResultSet results){
         try{
-            ResultSetMetaData meta = results.getMetaData();
-            
-            if (meta.getColumnCount() <= 0) {
-                System.out.println("NO RESULTS");
+            if (results == null) {
+                System.out.println("| NO RESULTS |");
                 return;
             }
+
+            ResultSetMetaData meta = results.getMetaData();
+            
             // print attribute names
             StringBuilder builder = new StringBuilder("|");
             for (int i = 0; i < meta.getColumnCount(); i++){
