@@ -15,7 +15,7 @@ public class QueryService {
     private static DatabaseConnection conn;
     private static Statement curStmt;
     
-    public QueryService(DatabaseConnection connection){
+    public static void setConnection(DatabaseConnection connection){
         conn = connection;
         curStmt = null;
     }

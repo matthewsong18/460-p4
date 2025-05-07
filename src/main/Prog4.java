@@ -7,10 +7,10 @@
  * 
  * Usage: Prog4.java <username> <password>
  */
-package src;
+package main;
 
 import java.io.*;
-import java.sql.Timestamp;
+import java.sql.*;
 import java.util.*;
 import common.*;
 import features.member_management.*;
@@ -21,11 +21,19 @@ import features.queries.*;
 public class Prog4 {
     private static DatabaseConnection conn;
     private static Scanner userin;
-    private static QueryService queryHandler;
     private static MemberService memberHandler;
     private static EquipmentService equipmentHandler;
     private static RentalService rentalHandler;
     
+    private static void printResults(ResultSet results){
+        try{
+            while (results.next()) {
+                results.getString("")
+            }
+        } catch (SQLException e){
+            throw new RuntimeException("ERROR: Something weird happened on the database.");
+        }
+    }
   
     private static String actionMenu(String context){
         /*
@@ -85,6 +93,7 @@ public class Prog4 {
                         System.out.print("\nEnter Member ID: ");
                         arg1 = userin.nextLine();
                         // execute
+                        ResultSet results = QueryService.queryLessonHistory(arg1);
                         break;
                     case "2":
                         System.out.print("\nEnter Ski Pass ID: ");
@@ -186,7 +195,7 @@ public class Prog4 {
 
                         // delete member
                         memberHandler.deleteMemberById(values.get());
-                        System.out.println("Deleted member [id here].");
+                        System.out.println("Deleted member " + id);
                     } else if (context.equals("ski")) {
                         // SKI PASS LOGIC //
                     } else if (context.equals("equipment")) {
@@ -194,16 +203,8 @@ public class Prog4 {
                         System.out.print("Equipment ID: ");
                         long id = userin.nextLong();
                         
-                        Optional<Equipment> values = equipmentHandler.findEquipment(id);
-                        if (!values.isPresent()) {
-                            System.out.println("WARNING: Equipment with id " + id + " does not exist. Try again.");
-                            return;
-                        }
-
-                        Equipment toArchive = values.get();
-
-                        // 'delete the equipment' (works as an update to the archived status)
-                        equipmentHandler.updateEquipment(new Equipment(toArchive.equipment_id(), toArchive.type(), toArchive.dimension(), 1));
+                        equipmentHandler.archiveEquipment(id);
+                
                         System.out.println("Archived equipment " + id);
                     } else if (context.equals("rental")){
                         // RENTAL LOGIC //
@@ -322,6 +323,16 @@ public class Prog4 {
                         System.out.println("Update on equipment " + id + " succesful.");
                     } else if (context.equals("rental")){
                         // RENTAL LOGIC //
+                        System.out.print("Rental ID: ");
+                        long id = userin.nextLong();
+
+                        Optional<Rental> values = rentalHandler.findActiveRental(id);
+                        if (!values.isPresent()) {
+                            System.out.println("Rental status cannot be updated because it either does not exist or is not active.");
+                            return;
+                        }
+
+                        rentalHandler.updateRental(new Rental(values.get().ski_pass_id(), values.get().equipment_id(), values.get().dateTimeFrom(), 1));
                     } else if (context.equals("lesson")){
                         // LESSON LOGIC //
                     }
@@ -346,7 +357,7 @@ public class Prog4 {
         conn = new DatabaseConnection(args[0], args[1]);
 
         // initialize DB services
-        queryHandler = new QueryService(conn);
+        QueryService.setConnection(conn);
         memberHandler = new MemberService(conn);
         equipmentHandler = new EquipmentService(conn);
         rentalHandler = new RentalService(conn);
@@ -371,17 +382,6 @@ public class Prog4 {
             // main logic
             try{
                 switch (input) {
-                    case "":
-                        // main menu print
-                        System.out.println("//- SKI RESORT DATABASE -\\\\");
-                        System.out.println("1 | Add, delete, or update a member.");
-                        System.out.println("2 | Add, delete, or update a ski pass.");
-                        System.out.println("3 | Add, delete, or update an equipment record.");
-                        System.out.println("4 | Add, update, or delete a rental record.");
-                        System.out.println("5 | Add, update, or delete a lesson purchase record.");
-                        System.out.println("Type 'query' to access the queries submenu.");
-                        System.out.println("Type 'exit' to close the application.");
-                        break;
                     case "1":
                         // member
                         actionState = actionMenu("member");
@@ -431,11 +431,23 @@ public class Prog4 {
             } catch (InputMismatchException e) {
                 System.out.println("ERROR: Invalid argument provided. Try again.");
             }
-                        
+             
+            System.out.println();
             input = "";
+
+            // main menu print
+            System.out.println("//- SKI RESORT DATABASE -\\\\");
+            System.out.println("1 | Add, delete, or update a member.");
+            System.out.println("2 | Add, delete, or update a ski pass.");
+            System.out.println("3 | Add, delete, or update an equipment record.");
+            System.out.println("4 | Add, update, or delete a rental record.");
+            System.out.println("5 | Add, update, or delete a lesson purchase record.");
+            System.out.println("Type 'query' to access the queries submenu.");
+            System.out.println("Type 'exit' to close the application.");
         }
 
         userin.close();
+        conn.close();
 
         System.exit(0);
     }
