@@ -36,7 +36,7 @@ public class EquipmentDatabaseAccess extends DatabaseAccess {
     }
 
     public Optional<Equipment> findEquipmentById(Long id) {
-        String sql = "SELECT type, dimension, archived_status FROM stephintomson.Equipment WHERE id = ?";
+        String sql = "SELECT type, dimension, archived_status FROM stephintomson.Equipment WHERE equipment_id = ?";
 
         try (PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
             preparedStatement.setLong(1, id);
@@ -64,9 +64,8 @@ public class EquipmentDatabaseAccess extends DatabaseAccess {
         return new Equipment(id, type, dimension, archived_status);
     }
 
-
     public void updateEquipment(Equipment equipment) {
-        String sql = "UPDATE stephintomson.Equipment SET type = ?, dimension = ?, archived_status = ? WHERE id = ?";
+        String sql = "UPDATE stephintomson.Equipment SET type = ?, dimension = ?, archived_status = ? WHERE equipment_id = ?";
 
         try (PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
             preparedStatement.setString(1, equipment.type());
