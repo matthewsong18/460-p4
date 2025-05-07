@@ -37,20 +37,26 @@ public class Prog4 {
             
             // print attribute names
             StringBuilder builder = new StringBuilder("|");
-            for (int i = 1; i < meta.getColumnCount(); i++){
+            for (int i = 1; i <= meta.getColumnCount(); i++){
                 builder.append(String.format("| %-25s |", meta.getColumnName(i)));
             }
             builder.append("|");
             System.out.println(builder.toString());
 
             // print all tuples
+            int count = 0;
             while (results.next()) {
+                count++;
                 builder = new StringBuilder("|");
-                for (int i = 1; i < meta.getColumnCount(); i++){
+                for (int i = 1; i <= meta.getColumnCount(); i++){
                     builder.append(String.format("| %-25s |", results.getString(i)));
                 }
                 builder.append("|");
                 System.out.println(builder.toString());
+            }
+
+            if (count == 0) {
+                System.out.println(String.format("| %-25s |", "NO RESULTS"));
             }
         } catch (SQLException e){
             throw new RuntimeException("ERROR: " + e.getMessage());
