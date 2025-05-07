@@ -31,7 +31,6 @@ public class Prog4 {
     private static EquipmentService equipmentHandler;
     private static RentalService rentalHandler;
     private static LessonOrderService lessonHandler;
-
     private static SkiPassService passHandler;
     
     private static ArrayList<String> tracker = new ArrayList<String>();
@@ -524,6 +523,8 @@ public class Prog4 {
         memberHandler = new MemberService(conn);
         equipmentHandler = new EquipmentService(conn);
         rentalHandler = new RentalService(conn);
+        lessonHandler = new LessonOrderService(conn);
+        passHandler  = new SkiPassService(conn);
 
         userin = new Scanner(System.in);
         String input = "";
