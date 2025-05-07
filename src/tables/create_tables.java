@@ -59,6 +59,24 @@ public class create_tables {
         System.out.println("Drop phase complete.\n");
     }
 
+    // Granting privileges to PUBLIC for all tables
+    private static void grantAllTablePrivilegesToPublic(Statement stmt) {
+        String[] tables = {
+                "Property", "ParkingLot", "Trail", "Lift", "LiftTrail", "EntryLog",
+                "Member", "SkiPass", "Equipment", "Rental", "Employee", "Instructor",
+                "Lesson", "LessonOrder"
+        };
+
+        for (String tbl : tables) {
+            try {
+                stmt.executeUpdate("GRANT SELECT, INSERT, UPDATE, DELETE ON " + tbl + " TO PUBLIC");
+                System.out.println("Granted PUBLIC privileges on " + tbl);
+            } catch (SQLException e) {
+                System.out.println("Error granting privileges on " + tbl + ": " + e.getMessage());
+            }
+        }
+    }
+
     /*------------------------------------------------------------------
      |  Method main
      |
@@ -148,11 +166,17 @@ public class create_tables {
             try {
                 stmt.executeUpdate("CREATE TABLE Rental (" +
                         "rental_id NUMBER PRIMARY KEY, pass_id NUMBER NOT NULL, equipment_id NUMBER NOT NULL, " +
-                        "datetime_from TIMESTAMP, datetime_to TIMESTAMP, " +
+                        "datetime_from DATE, datetime_to DATE, " +
                         "FOREIGN KEY(pass_id) REFERENCES SkiPass(pass_id) ON DELETE CASCADE, " +
                         "FOREIGN KEY(equipment_id) REFERENCES Equipment(equipment_id))");
             } catch (SQLException e) {
                 System.out.println("Error creating Rental table: " + e.getMessage());
+            }
+            try {
+                stmt.executeUpdate("AUDIT INSERT, UPDATE, DELETE ON Rental");
+                System.out.println("Enabled standard auditing on Rental table.");
+            } catch (SQLException e) {
+                System.out.println("Error enabling auditing on Rental: " + e.getMessage());
             }
             /* ———————— Trail / Lift / LiftTrail / EntryLog —— —————— */
             try {
@@ -182,7 +206,7 @@ public class create_tables {
             try {
                 stmt.executeUpdate("CREATE TABLE EntryLog (" +
                         "entry_id NUMBER PRIMARY KEY, lift_id NUMBER NOT NULL, pass_id NUMBER NOT NULL, " +
-                        "datetime TIMESTAMP, " +
+                        "datetime DATE, " +
                         "FOREIGN KEY(lift_id) REFERENCES Lift(lift_id), " +
                         "FOREIGN KEY(pass_id) REFERENCES SkiPass(pass_id) ON DELETE CASCADE)");
             } catch (SQLException e) {
@@ -208,7 +232,7 @@ public class create_tables {
             /* ———————— Lesson & LessonOrder ———————— */
             try {
                 stmt.executeUpdate("CREATE TABLE Lesson (" +
-                        "lesson_id NUMBER PRIMARY KEY, instructor_id NUMBER NOT NULL, lesson_time TIMESTAMP NOT NULL, "
+                        "lesson_id NUMBER PRIMARY KEY, instructor_id NUMBER NOT NULL, lesson_time DATE NOT NULL, "
                         +
                         "FOREIGN KEY(instructor_id) REFERENCES Instructor(employee_id))");
             } catch (SQLException e) {
@@ -224,6 +248,7 @@ public class create_tables {
                 System.out.println("Error creating LessonOrder table: " + e.getMessage());
             }
             System.out.println("All tables created successfully.");
+            grantAllTablePrivilegesToPublic(stmt);
 
             /* Triggers */
             // Trigger 1: On Trail changes
@@ -294,6 +319,7 @@ public class create_tables {
             } catch (SQLException e) {
                 System.out.println("Error creating trigger trg_dec_uses_rental: " + e.getMessage());
             }
+
             // Trigger 4: Archive SkiPass when it becomes empty
             try {
 
@@ -310,6 +336,7 @@ public class create_tables {
             } catch (SQLException e) {
                 System.out.println("Error creating trigger trg_archive_skipass: " + e.getMessage());
             }
+
         } catch (SQLException e) {
             System.err.println("Database error: " + e.getMessage());
         }
