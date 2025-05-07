@@ -10,6 +10,7 @@ class LessonDatabaseAccess {
 
     public LessonDatabaseAccess(Connection connection) {
         this.connection = connection;
+        if (currentId == null) updateCurrentId();
     }
 
     public Long createLesson(Lesson lesson) {
@@ -44,9 +45,6 @@ class LessonDatabaseAccess {
     }
 
     private long getNextId() {
-        if (currentId == null) {
-            updateCurrentId();
-        }
         return ++currentId;
     }
 
