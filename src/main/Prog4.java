@@ -31,7 +31,6 @@ public class Prog4 {
     private static EquipmentService equipmentHandler;
     private static RentalService rentalHandler;
     private static LessonOrderService lessonHandler;
-
     private static SkiPassService passHandler;
     
     private static ArrayList<String> tracker = new ArrayList<String>();
@@ -128,6 +127,10 @@ public class Prog4 {
 
         if (input.equals("1") || input.equals("2") || input.equals("3")) {
             return input;
+        }
+
+        if (input.equals("back")) {
+            return "";
         }
 
         System.out.println("ERROR: Invalid argument provided. Please try again.");
@@ -251,7 +254,7 @@ public class Prog4 {
                         System.out.print("Member ID: ");
                         long memid = userin.nextLong();
                         System.out.print("Pass type: ");
-                        String type = userin.nextLine();
+                        String type = userin.next();
                         System.out.print("Price: ");
                         int price = userin.nextInt();
                         System.out.print("Uses: ");
@@ -520,6 +523,8 @@ public class Prog4 {
         memberHandler = new MemberService(conn);
         equipmentHandler = new EquipmentService(conn);
         rentalHandler = new RentalService(conn);
+        lessonHandler = new LessonOrderService(conn);
+        passHandler  = new SkiPassService(conn);
 
         userin = new Scanner(System.in);
         String input = "";
@@ -545,27 +550,36 @@ public class Prog4 {
                         // member
                         actionState = actionMenu("member");
                         context = "member";
+
+                        executionMenu(actionState, context);
                         break;
                     case "2":
                         // ski pass
                         actionState = actionMenu("ski pass");
                         context = "ski";
+
+                        executionMenu(actionState, context);
                         break;
                     case "3":
                         // equipment
                         actionState = actionMenu("equipment record");
                         context = "equipment";
+
+                        executionMenu(actionState, context);
                         break;
                     case "4":
                         // rental
                         actionState = actionMenu("rental record");
                         context = "rental";
     
+                        executionMenu(actionState, context);
                         break;
                     case "5":  
                         // lesson
                         actionState = actionMenu("lesson purchase record");
                         context = "lesson";
+
+                        executionMenu(actionState, context);
                         break;
                     case "query":
                         // queries
@@ -573,11 +587,9 @@ public class Prog4 {
 
                         break;
                     default:
-                        System.out.println("ERROR: Invalid option selected.");
                         break;
                 }
                 
-               executionMenu(actionState, context);
             } catch (InputMismatchException e) {
                 System.out.println("ERROR: Invalid argument provided. Try again.");
             }
