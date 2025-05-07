@@ -1,33 +1,27 @@
 package features.member_management;
 
-import common.DatabaseConnection;
-
 import java.util.Optional;
 
 public class MemberService {
-    private final MemberDatabaseAccess memberDatabaseAccess;
+    private final IMemberDatabaseAccess memberDatabaseAccess;
 
-    public MemberService(DatabaseConnection databaseConnection) {
-        memberDatabaseAccess = new MemberDatabaseAccess(databaseConnection.getConnection());
+    public MemberService(IMemberDatabaseAccess memberDatabaseAccess) {
+        this.memberDatabaseAccess = memberDatabaseAccess;
     }
 
     public long registerMember(String name, String telephoneNumber, String email, String dateOfBirth,
                                String emergencyContact) {
+        // Member has internal validation as well
         Member newMember = new Member(name, telephoneNumber, email, dateOfBirth, emergencyContact);
 
         checkEmailDuplicate(email);
 
-        Long newId = memberDatabaseAccess.createMember(newMember);
-        if (newId == null) {
-            throw new RuntimeException("Failed to return the member id");
-        }
-
-        return newId;
+        return memberDatabaseAccess.createMember(newMember);
     }
 
     private void checkEmailDuplicate(String email) {
         if (memberDatabaseAccess.findMemberByEmail(email).isPresent()) {
-            throw new RuntimeException("Member with email " + email + " already exists.");
+            throw new IllegalArgumentException("Member with email " + email + " already exists.");
         }
     }
 
@@ -48,10 +42,10 @@ public class MemberService {
             throw new IllegalArgumentException("Member id cannot be null");
         }
 
-        boolean status = memberDatabaseAccess.updateMember(member);
-
-        if (!status) {
-            throw new RuntimeException("Failed to update member with id " + member.id());
+        try {
+            memberDatabaseAccess.updateMember(member);
+        } catch (RuntimeException e) {
+            throw new RuntimeException("Failed to update member with id " + member.id(), e);
         }
     }
 

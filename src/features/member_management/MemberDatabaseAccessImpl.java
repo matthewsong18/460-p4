@@ -5,13 +5,14 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-class MemberDatabaseAccess {
+class MemberDatabaseAccessImpl implements IMemberDatabaseAccess {
     private final Connection connection;
 
-    public MemberDatabaseAccess(Connection connection) {
+    public MemberDatabaseAccessImpl(Connection connection) {
         this.connection = connection;
     }
 
+    @Override
     public Long createMember(Member member) {
         String sql = "INSERT INTO members (name, telephone, email, date_of_birth, emergency_contact) VALUES (?, ?, ?, ?, ?)";
         try (PreparedStatement preparedStatement = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
@@ -41,30 +42,12 @@ class MemberDatabaseAccess {
         }
     }
 
+    @Override
     public Optional<Member> findMemberById(Long id) {
         String sql = "SELECT id, name, telephone, email, date_of_birth, emergency_contact FROM members WHERE id = ?";
 
         try (PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
             preparedStatement.setLong(1, id);
-
-            try (ResultSet resultSet = preparedStatement.executeQuery()) {
-                if (resultSet.next()) {
-                    Member member = mapRowToMember(resultSet);
-                    return Optional.of(member);
-                }
-            }
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        }
-
-        return Optional.empty();
-    }
-
-    public Optional<Member> findMemberByEmail(String email) {
-        String sql = "SELECT * FROM members WHERE email = ?";
-
-        try(PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
-            preparedStatement.setString(1, email);
 
             try (ResultSet resultSet = preparedStatement.executeQuery()) {
                 if (resultSet.next()) {
@@ -91,6 +74,66 @@ class MemberDatabaseAccess {
         return new Member(id, name, telephone, email, dateOfBirth, emergencyContact);
     }
 
+    @Override
+    public void updateMember(Member member) {
+        String sql = "UPDATE members SET name = ?, telephone = ?, email = ?, date_of_birth = ?, emergency_contact = ?, WHERE id = ?";
+
+        try (PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
+
+            preparedStatement.setString(1, member.name());
+            preparedStatement.setString(2, member.telephoneNumber());
+            preparedStatement.setString(3, member.email());
+            preparedStatement.setString(4, member.dateOfBirth());
+            preparedStatement.setString(5, member.emergencyContact());
+            preparedStatement.setLong(6, member.id()); // WHERE
+
+            int affectedRows = preparedStatement.executeUpdate();
+            if (affectedRows == 0) {
+                throw new SQLException("Updating member failed, no rows affected.");
+            }
+
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    @Override
+    public void deleteMember(Member member) {
+        String sql = "DELETE FROM members WHERE id = ?";
+
+        try (PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
+            preparedStatement.setLong(1, member.id());
+
+            int affectedRows = preparedStatement.executeUpdate();
+            if (affectedRows == 0) {
+                throw new SQLException("Deleting member failed, no rows affected.");
+            }
+
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    @Override
+    public Optional<Member> findMemberByEmail(String email) {
+        String sql = "SELECT * FROM members WHERE email = ?";
+
+        try (PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
+            preparedStatement.setString(1, email);
+
+            try (ResultSet resultSet = preparedStatement.executeQuery()) {
+                if (resultSet.next()) {
+                    Member member = mapRowToMember(resultSet);
+                    return Optional.of(member);
+                }
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+
+        return Optional.empty();
+    }
+
     public List<Member> getAllMembers() {
         List<Member> members = new ArrayList<>();
         String sql = "SELECT id, name, telephone, email, date_of_birth, emergency_contact FROM members ORDER BY name";
@@ -105,45 +148,6 @@ class MemberDatabaseAccess {
             throw new RuntimeException(e);
         }
         return members;
-    }
-
-
-    public boolean updateMember(Member member) {
-        if (member.id() == null) {
-            throw new RuntimeException("Cannot update member without an ID.");
-        }
-        String sql = "UPDATE members SET name = ?, telephone = ?, email = ?, date_of_birth = ?, emergency_contact = ?, WHERE id = ?";
-
-        try (PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
-
-            preparedStatement.setString(1, member.name());
-            preparedStatement.setString(2, member.telephoneNumber());
-            preparedStatement.setString(3, member.email());
-            preparedStatement.setString(4, member.dateOfBirth());
-            preparedStatement.setString(5, member.emergencyContact());
-            preparedStatement.setLong(6, member.id()); // WHERE
-
-            int affectedRows = preparedStatement.executeUpdate();
-            return affectedRows > 0;
-
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        }
-    }
-
-    public boolean deleteMember(Member member) {
-        String sql = "DELETE FROM members WHERE id = ?";
-
-        try (PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
-
-            preparedStatement.setLong(1, member.id());
-
-            int affectedRows = preparedStatement.executeUpdate();
-            return affectedRows > 0;
-
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        }
     }
 
 }
