@@ -15,7 +15,7 @@ public class EmployeeDatabaseAccess extends DatabaseAccess {
     public Long createEmployee(Employee employee) {
         String sql = "INSERT into Employee (employee_id, name, age, gender, position, salary, start_date, property_id VALUES (?, ?, ?, ?, ?, ?, SYSTIMESTAMP, ?)";
         try (PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
-            Long newEmployeeId = getNextPassId("Employee");
+            Long newEmployeeId = getNextId("Employee", "employee_id");
 
             preparedStatement.setLong(1, newEmployeeId);
             preparedStatement.setString(2, employee.name());

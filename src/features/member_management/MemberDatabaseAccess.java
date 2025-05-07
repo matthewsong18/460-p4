@@ -19,7 +19,7 @@ class MemberDatabaseAccess extends DatabaseAccess {
     public Long createMember(Member member) {
         String sql = "INSERT INTO Member (member_id, name, telephone, email, date_of_birth, emergency_contact) VALUES (?, ?, ?, ?, ?, ?)";
         try (PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
-            Long newMemberId = getNextPassId("Member");
+            Long newMemberId = getNextId("Member", "member_id");
 
             preparedStatement.setLong(1, newMemberId);
             preparedStatement.setString(2, member.name());

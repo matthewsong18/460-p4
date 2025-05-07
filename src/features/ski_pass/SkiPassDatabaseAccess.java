@@ -18,7 +18,7 @@ public class SkiPassDatabaseAccess extends DatabaseAccess {
         String insertSql = "INSERT INTO SkiPass (pass_id, member_id, purchase_date, total_uses, remaining_uses, pass_type, price, archived_status) VALUES (?, ?, SYSTIMESTAMP, ?, ?, ?, ?, ?)";
 
         try (PreparedStatement preparedStatement = connection.prepareStatement(insertSql)) {
-            Long newPassId = getNextPassId("SkiPass"); // Helper to get a new ID
+            Long newPassId = getNextId("SkiPass", "pass_id"); // Helper to get a new ID
 
             preparedStatement.setLong(1, newPassId);
             preparedStatement.setLong(2, skiPass.memberId());

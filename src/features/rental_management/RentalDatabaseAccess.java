@@ -16,7 +16,7 @@ public class RentalDatabaseAccess extends DatabaseAccess {
         String sql = "INSERT into Rental (rental_id, ski_pass_id, equipment_id, date_time_from, return_status) values (?,?,?,SYSTIMESTAMP,?)";
 
         try (PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
-            Long newPassId = getNextPassId("Rental"); // Helper to get a new ID
+            Long newPassId = getNextId("Rental", "rental_id"); // Helper to get a new ID
 
             preparedStatement.setLong(1, newPassId);
             preparedStatement.setLong(2, rental.ski_pass_id());

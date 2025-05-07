@@ -35,10 +35,11 @@ public abstract class DatabaseAccess {
 //        return ++currentId;
 //    }
 
-    protected Long getNextPassId(String databaseName) throws SQLException {
-        String sql = "SELECT MAX(pass_id) AS max_id FROM ?";
+    protected Long getNextId(String databaseName, String id_name) throws SQLException {
+        String sql = "SELECT MAX(?) AS max_id FROM ?";
         try (PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
-            preparedStatement.setString(1, databaseName);
+            preparedStatement.setString(1, id_name);
+            preparedStatement.setString(2, databaseName);
 
             try (ResultSet resultSet = preparedStatement.executeQuery()) {
                 if (resultSet.next()) {

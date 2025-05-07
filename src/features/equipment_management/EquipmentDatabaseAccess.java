@@ -17,7 +17,7 @@ public class EquipmentDatabaseAccess extends DatabaseAccess {
     public Long createEquipment(Equipment equipment) {
         String sql = "INSERT into Equipment (equipment_id, type, dimension, archived_status) VALUES (?,?,?,?)";
         try (PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
-            Long newEquipmentId = getNextPassId("Equipment");
+            Long newEquipmentId = getNextId("Equipment", "equipment_id");
 
             preparedStatement.setLong(1, newEquipmentId);
             preparedStatement.setString(2, equipment.type());

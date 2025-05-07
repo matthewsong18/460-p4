@@ -15,7 +15,7 @@ class LessonDatabaseAccess extends DatabaseAccess {
     public Long createLesson(Lesson lesson) {
         String sql = "INSERT into Lesson VALUES (?, ?, ?)";
         try (PreparedStatement preparedStatement = connection.prepareStatement(sql)){
-            Long newId = getNextPassId("Lesson");
+            Long newId = getNextId("Lesson", "lesson_id");
 
             preparedStatement.setLong(1, newId);
             preparedStatement.setLong(2, lesson.instructor_id());
