@@ -251,7 +251,7 @@ public class Prog4 {
                         System.out.print("Member ID: ");
                         long memid = userin.nextLong();
                         System.out.print("Pass type: ");
-                        String type = userin.nextLine();
+                        String type = userin.next();
                         System.out.print("Price: ");
                         int price = userin.nextInt();
                         System.out.print("Uses: ");
