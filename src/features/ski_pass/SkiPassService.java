@@ -23,7 +23,7 @@ public class SkiPassService {
             throw new IllegalArgumentException("Member with ID " + memberId + " not found.");
         }
 
-        SkiPassData newSkiPass = new SkiPassData(memberId, purchaseDate, totalUses, passType, price);
+        SkiPass newSkiPass = new SkiPass(memberId, purchaseDate, totalUses, passType, price);
         try {
             return skiPassDatabaseAccess.createSkiPass(newSkiPass);
         } catch (SQLException e) {
@@ -31,7 +31,7 @@ public class SkiPassService {
         }
     }
 
-    public Optional<SkiPassData> findSkiPassById(long passId) {
+    public Optional<SkiPass> findSkiPassById(long passId) {
         try {
             return skiPassDatabaseAccess.findSkiPassById(passId);
         } catch (SQLException e) {
@@ -42,12 +42,12 @@ public class SkiPassService {
 
     public void useSkiPass(long passId) {
         try {
-            Optional<SkiPassData> passOpt = skiPassDatabaseAccess.findSkiPassById(passId);
+            Optional<SkiPass> passOpt = skiPassDatabaseAccess.findSkiPassById(passId);
             if (passOpt.isEmpty()) {
                 throw new IllegalArgumentException("Ski pass with ID " + passId + " not found.");
             }
 
-            SkiPassData pass = passOpt.get();
+            SkiPass pass = passOpt.get();
             if (pass.archivedStatus() == 1) {
                 throw new IllegalArgumentException("Ski pass " + passId + " is archived.");
             }
@@ -60,7 +60,7 @@ public class SkiPassService {
                 throw new IllegalArgumentException("Ski pass " + passId + " has no remaining uses.");
             }
 
-            SkiPassData updatedPass = new SkiPassData(
+            SkiPass updatedPass = new SkiPass(
                     pass.passId(),
                     pass.memberId(),
                     pass.purchaseDate(),
@@ -78,15 +78,15 @@ public class SkiPassService {
 
     public void archivePass(long passId, boolean forceArchive) {
         try {
-            Optional<SkiPassData> skiPassDataOptional = skiPassDatabaseAccess.findSkiPassById(passId);
+            Optional<SkiPass> skiPassDataOptional = skiPassDatabaseAccess.findSkiPassById(passId);
             if (skiPassDataOptional.isEmpty()) {
                 throw new IllegalArgumentException("Ski pass " + passId + " not found.");
             }
-            SkiPassData skiPassData = skiPassDataOptional.get();
+            SkiPass skiPassData = skiPassDataOptional.get();
             if (skiPassData.archivedStatus() == 1 && !forceArchive) {
                 throw new IllegalArgumentException("Ski pass " + passId + " is already archived.");
             }
-            SkiPassData updatedPass = new SkiPassData(
+            SkiPass updatedPass = new SkiPass(
                     skiPassData.passId(),
                     skiPassData.memberId(),
                     skiPassData.purchaseDate(),
@@ -102,7 +102,7 @@ public class SkiPassService {
         }
     }
 
-    private boolean isPassExpired(SkiPassData pass) throws SQLException {
+    private boolean isPassExpired(SkiPass pass) throws SQLException {
         if (pass.purchaseDate() == null) {
             System.err.println("Pass " + pass.passId() + " has no purchase date, cannot determine expiration.");
             return false;
@@ -123,11 +123,11 @@ public class SkiPassService {
             throw new IllegalArgumentException("Uses to add must be positive.");
         }
         try {
-            Optional<SkiPassData> skiPassDataOptional = skiPassDatabaseAccess.findSkiPassById(passId);
+            Optional<SkiPass> skiPassDataOptional = skiPassDatabaseAccess.findSkiPassById(passId);
             if (skiPassDataOptional.isEmpty()) {
                 throw new IllegalArgumentException("Ski pass " + passId + " not found.");
             }
-            SkiPassData pass = skiPassDataOptional.get();
+            SkiPass pass = skiPassDataOptional.get();
             if (pass.archivedStatus() == 1) {
                 throw new IllegalArgumentException("Cannot add uses to an archived pass: " + passId);
             }
@@ -135,7 +135,7 @@ public class SkiPassService {
                 throw new IllegalArgumentException("Cannot add uses; exceeds total allowed uses for pass " + passId);
             }
 
-            SkiPassData updatedPass = new SkiPassData(
+            SkiPass updatedPass = new SkiPass(
                     pass.passId(),
                     pass.memberId(),
                     pass.purchaseDate(),
@@ -153,7 +153,7 @@ public class SkiPassService {
 
     public boolean isPassExpired(long passId) {
         try {
-            Optional<SkiPassData> passOpt = skiPassDatabaseAccess.findSkiPassById(passId);
+            Optional<SkiPass> passOpt = skiPassDatabaseAccess.findSkiPassById(passId);
             if (passOpt.isEmpty()) {
                 throw new IllegalArgumentException("Ski pass " + passId + " not found.");
             }
@@ -164,7 +164,7 @@ public class SkiPassService {
         }
     }
 
-    public void updatePassDetails(SkiPassData skiPassData) {
+    public void updatePassDetails(SkiPass skiPassData) {
         try {
             skiPassDatabaseAccess.updateSkiPass(skiPassData);
         } catch (SQLException e) {

@@ -4,6 +4,7 @@ import common.DatabaseConnection;
 import features.equipment_management.Equipment;
 import features.equipment_management.EquipmentService;
 import features.ski_pass.SkiPass;
+import features.ski_pass.SkiPassService;
 
 import java.sql.Timestamp;
 import java.util.Optional;
@@ -37,8 +38,10 @@ public class RentalService {
             throw new IllegalArgumentException("SkiPass id cannot be null");
         }
 
-        SkiPass.setConnection(databaseConnection);
-        if (SkiPass.getSkiPassById(Math.toIntExact(ski_pass_id)) == null) {
+        SkiPassService skiPassService = new SkiPassService(databaseConnection);
+
+        Optional<SkiPass> skiPassOptional = skiPassService.findSkiPassById(ski_pass_id);
+        if (skiPassOptional.isEmpty()) {
             throw new IllegalArgumentException("SkiPass id does not exist");
         }
     }
