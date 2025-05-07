@@ -92,19 +92,19 @@ class MemberDatabaseAccess {
     }
 
     public List<Member> getAllMembers() {
-        List<Member> stephintomson.members = new ArrayList<>();
+        List<Member> members = new ArrayList<>();
         String sql = "SELECT id, name, telephone, email, date_of_birth, emergency_contact FROM stephintomson.members ORDER BY name";
 
         try (PreparedStatement preparedStatement = connection.prepareStatement(
                 sql); ResultSet rs = preparedStatement.executeQuery()) {
 
             while (rs.next()) {
-                stephintomson.members.add(mapRowToMember(rs));
+                members.add(mapRowToMember(rs));
             }
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
-        return stephintomson.members;
+        return members;
     }
 
 
