@@ -36,17 +36,18 @@ public class EquipmentService {
 
         equipmentDatabaseAccess.updateEquipment(equipment);
     }
+
     /*
-     *  Archives the equipment if it is not currently rented.
+     * Archives the equipment if it is not currently rented.
      */
-    public void archiveEquipmentIfNotRented(Long equipmentId) {
+    public void archiveEquipment(Long equipmentId) {
         Optional<Equipment> equipmentOpt = equipmentDatabaseAccess.findEquipmentById(equipmentId);
 
         if (equipmentOpt.isEmpty()) {
             throw new IllegalArgumentException("Equipment with id " + equipmentId + " not found.");
         }
 
-        boolean isRented = rentalService.findActiveRentalByEquipmentId(equipmentId).isPresent();
+        boolean isRented = rentalService.findActiveRental(equipmentId).isPresent();
         if (isRented) {
             throw new IllegalStateException("Cannot archive equipment; it is currently rented.");
         }

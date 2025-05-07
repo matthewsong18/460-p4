@@ -92,13 +92,15 @@ public class RentalDatabaseAccess {
             throw new RuntimeException(e);
         }
     }
+
     /*
-     * Finds an active rental by equipment ID. An active rental is one that has not been returned yet (date_time_to is NULL).
+     * Finds an active rental by equipment ID. An active rental is one that has not
+     * been returned yet (date_time_to is NULL).
      */
-    public Optional<Rental> findActiveRentalByEquipmentId(Long equipmentId) {
+    public Optional<Rental> findActiveRental(Long equipmentId) {
         String sql = "SELECT rental_id, ski_pass_id, equipment_id, date_time_from, date_time_to " +
-                     "FROM rentals WHERE equipment_id = ? AND date_time_to IS NULL";
-    
+                "FROM rentals WHERE equipment_id = ? AND date_time_to IS NULL";
+
         try (PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
             preparedStatement.setLong(1, equipmentId);
             try (ResultSet resultSet = preparedStatement.executeQuery()) {
@@ -109,8 +111,8 @@ public class RentalDatabaseAccess {
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
-    
+
         return Optional.empty();
     }
-    
+
 }
