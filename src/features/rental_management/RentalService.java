@@ -92,8 +92,8 @@ public class RentalService {
         }
     }
 
-    public Optional<Rental> findActiveRentalByEquipmentId(Long equipmentId) {
-        return rentalDatabaseAccess.findActiveRentalByEquipmentId(equipmentId);
+    public Optional<Rental> findActiveRental(Long equipmentId) {
+        return rentalDatabaseAccess.findActiveRental(equipmentId);
     }
 
 }
