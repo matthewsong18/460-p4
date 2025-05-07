@@ -80,6 +80,9 @@ public class LessonOrderService {
         }
 
         try {
+            if (lessonOrder.remaining_sessions() < lessonOrder.total_sessions()) {  // inside try so that "failed to delete" is also thrown
+                throw new RuntimeException("Lesson order must be unused");
+            }
             databaseAccess.deleteLessonOrder(lessonOrder);
         } catch (RuntimeException e) {
             throw new RuntimeException("Failed to delete lesson order with id = " + lessonOrder.order_id(), e);
