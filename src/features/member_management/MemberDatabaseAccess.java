@@ -13,7 +13,7 @@ class MemberDatabaseAccess {
     }
 
     public Long createMember(Member member) {
-        String sql = "INSERT INTO stephintomson.member (name, telephone, email, date_of_birth, emergency_contact) VALUES (?, ?, ?, ?, ?)";
+        String sql = "INSERT INTO stephintomson.member (member_name, telephone, email, date_of_birth, emergency_contact) VALUES (?, ?, ?, ?, ?)";
         try (PreparedStatement preparedStatement = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
 
             preparedStatement.setString(1, member.name());
@@ -42,7 +42,7 @@ class MemberDatabaseAccess {
     }
 
     public Optional<Member> findMemberById(Long id) {
-        String sql = "SELECT id, name, telephone, email, date_of_birth, emergency_contact FROM stephintomson.member WHERE id = ?";
+        String sql = "SELECT id, member_name, telephone, email, date_of_birth, emergency_contact FROM stephintomson.member WHERE id = ?";
 
         try (PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
             preparedStatement.setLong(1, id);
@@ -112,7 +112,7 @@ class MemberDatabaseAccess {
         if (member.id() == null) {
             throw new RuntimeException("Cannot update member without an ID.");
         }
-        String sql = "UPDATE stephintomson.member SET name = ?, telephone = ?, email = ?, date_of_birth = ?, emergency_contact = ?, WHERE id = ?";
+        String sql = "UPDATE stephintomson.member SET member_name = ?, telephone = ?, email = ?, date_of_birth = ?, emergency_contact = ?, WHERE id = ?";
 
         try (PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
 

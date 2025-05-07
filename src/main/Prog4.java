@@ -12,11 +12,16 @@ package main;
 import java.io.*;
 import java.sql.*;
 import java.util.*;
+
+import javax.management.Query;
+
 import java.lang.*;
 import common.*;
 import features.member_management.*;
 import features.equipment_management.*;
 import features.rental_management.*;
+import features.lesson_management.*;
+import features.ski_pass.*;
 import features.queries.*;
 
 public class Prog4 {
@@ -25,7 +30,11 @@ public class Prog4 {
     private static MemberService memberHandler;
     private static EquipmentService equipmentHandler;
     private static RentalService rentalHandler;
+
+    private static SkiPassService passHandler;
     
+    private static ArrayList<String> tracker;
+
     private static void printResults(ResultSet results){
         try{
             if (results == null) {
@@ -56,7 +65,45 @@ public class Prog4 {
             }
 
             if (count == 0) {
-                System.out.println(String.format("|| %-25s ||", "NO RESULTS"));
+                System.out.println(String.format("|| %-25s ||b ", "NO RESULTS"));
+            }
+        } catch (SQLException e){
+            throw new RuntimeException("ERROR: " + e.getMessage());
+        }
+    }
+
+    private static void printResults(ResultSet results, boolean track){
+        try{
+            if (results == null) {
+                System.out.println("| NO RESULTS |");
+                return;
+            }
+
+            ResultSetMetaData meta = results.getMetaData();
+            
+            // print attribute names
+            StringBuilder builder = new StringBuilder("|");
+            for (int i = 1; i <= meta.getColumnCount(); i++){
+                builder.append(String.format("| %-25s |", meta.getColumnName(i)));
+            }
+            builder.append("|");
+            System.out.println(builder.toString());
+
+            // print all tuples
+            int count = 0;
+            while (results.next()) {
+                count++;
+                builder = new StringBuilder("|");
+                for (int i = 1; i <= meta.getColumnCount(); i++){
+                    builder.append(String.format("| %-25s |", results.getString(i)));
+                }
+                builder.append("|");
+                tracker.add(results.getString(1));
+                System.out.println(builder.toString());
+            }
+
+            if (count == 0) {
+                System.out.println(String.format("|| %-25s ||b ", "NO RESULTS"));
             }
         } catch (SQLException e){
             throw new RuntimeException("ERROR: " + e.getMessage());
@@ -131,8 +178,13 @@ public class Prog4 {
                         break;
                     case "3":
                         // execute
+                        System.out.println("INTERMEDIATE TRAILS AND ASSOCIATED LIFTS");
                         ResultSet results3 = QueryService.queryIntTrails();
-                        
+                        printResults(results3, true);
+                        for (String trail : tracker){
+                            results3 = QueryService.queryLifts(trail);
+                            printResults(results3);
+                        }
                         break;
                     case "4":
                         System.out.print("\nEnter Property ID: ");
@@ -195,12 +247,17 @@ public class Prog4 {
                     } else if (context.equals("ski")){
                         // SKI PASS LOGIC //
                         System.out.print("Member ID: ");
-                        String id = userin.nextLine();
+                        long memid = userin.nextLong();
                         System.out.print("Pass type: ");
                         String type = userin.nextLine();
-    
+                        System.out.print("Price: ");
+                        int price = userin.nextInt();
+                        System.out.print("Uses: ")
+                        int uses = userin.nextInt();
+
                         // add pass
-                        System.out.println("Added new ski pass: [id here]");
+                        long id = passHandler.createSkiPass(memid, new Timestamp(System.currentTimeMillis()), uses, type, price);
+                        System.out.println("Added new ski pass: ");
                     } else if (context.equals("equipment")){
                         // EQUIPMENT LOGIC //
                         System.out.print("Equipment type: ");
@@ -221,6 +278,13 @@ public class Prog4 {
                         long id = rentalHandler.registerRental(skiid, equpid, new Timestamp(System.currentTimeMillis()), 0);
                         System.out.println("Added new equipment rental: " + id);
                     } else if (context.equals("lesson")){
+                        // LESSON LOGIC //
+                        System.out.print("Member ID: ");
+                        long memid = userin.nextLong();
+                        System.out.print("Lesson ID: ");
+                        long lesid = userin.nextLong();
+
+                        // add lesson
 
                     }
                     break;
@@ -242,6 +306,12 @@ public class Prog4 {
                         System.out.println("Deleted member " + id);
                     } else if (context.equals("ski")) {
                         // SKI PASS LOGIC //
+                        System.out.print("Pass ID: ");
+                        long id = userin.nextLong();
+
+                        passHandler.archivePass(id, false);
+
+                        System.out.println("Archived pass " + id);
                     } else if (context.equals("equipment")) {
                         // EQUIPMENT LOGIC //
                         System.out.print("Equipment ID: ");
@@ -314,6 +384,12 @@ public class Prog4 {
                         System.out.println("Update on member " + id + " succesful.");
                     } else if (context.equals("ski")) {
                         // SKI PASS LOGIC //
+                        System.out.print("Pass ID: ");
+                        long id = userin.nextLong();
+
+                        System.out.println("What would you like to update?");
+                        System.out.println("1 | Remaining Uses");
+                        System.out.println("2 | Member ID");
 
                     } else if (context.equals("equipment")) {
                         // EQUIPMENT LOGIC //
