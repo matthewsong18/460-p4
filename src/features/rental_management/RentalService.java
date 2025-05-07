@@ -14,7 +14,7 @@ public class RentalService {
 
     public RentalService(DatabaseConnection databaseConnection) {
         this.databaseConnection = databaseConnection;
-        rentalDatabaseAccess = new RentalDatabaseAccess(databaseConnection.getConnection());
+        rentalDatabaseAccess = new RentalDatabaseAccess(databaseConnection);
     }
 
     // Returns new id

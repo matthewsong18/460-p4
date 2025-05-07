@@ -1,45 +1,42 @@
 package features.equipment_management;
 
-import java.sql.Connection;
+import common.DatabaseAccess;
+import common.DatabaseConnection;
+
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Optional;
 
-public class EquipmentDatabaseAccess {
-    private final Connection connection;
+public class EquipmentDatabaseAccess extends DatabaseAccess {
 
-    public EquipmentDatabaseAccess(Connection connection) {
-        this.connection = connection;
+    public EquipmentDatabaseAccess(DatabaseConnection databaseConnection) {
+        super(databaseConnection);
     }
 
     public Long createEquipment(Equipment equipment) {
-        String sql = "INSERT into equipment (type, dimension, archived_status) VALUES (?,?,?)";
+        String sql = "INSERT into Equipment (equipment_id, type, dimension, archived_status) VALUES (?,?,?,?)";
         try (PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
-            preparedStatement.setString(1, equipment.type());
-            preparedStatement.setString(2, equipment.dimension());
-            preparedStatement.setInt(3, equipment.archived_status());
+            Long newEquipmentId = getNextPassId("Equipment");
+
+            preparedStatement.setLong(1, newEquipmentId);
+            preparedStatement.setString(2, equipment.type());
+            preparedStatement.setString(3, equipment.dimension());
+            preparedStatement.setInt(4, equipment.archived_status());
 
             int affectedRows = preparedStatement.executeUpdate();
             if (affectedRows == 0) {
                 throw new SQLException("Creating equipment failed; No rows affected.");
             }
 
-            // Get the generated ID
-            try (ResultSet generatedKeys = preparedStatement.getGeneratedKeys()) {
-                if (generatedKeys.next()) {
-                    return generatedKeys.getLong(1);
-                } else {
-                    throw new SQLException("Creating member failed; no ID obtained.");
-                }
-            }
+            return newEquipmentId;
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
     }
 
     public Optional<Equipment> findEquipmentById(Long id) {
-        String sql = "SELECT type, dimension, archived_status FROM equipment WHERE id = ?";
+        String sql = "SELECT type, dimension, archived_status FROM Equipment WHERE id = ?";
 
         try (PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
             preparedStatement.setLong(1, id);
@@ -69,7 +66,7 @@ public class EquipmentDatabaseAccess {
 
 
     public void updateEquipment(Equipment equipment) {
-        String sql = "UPDATE equipment SET type = ?, dimension = ?, archived_status = ? WHERE id = ?";
+        String sql = "UPDATE Equipment SET type = ?, dimension = ?, archived_status = ? WHERE id = ?";
 
         try (PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
             preparedStatement.setString(1, equipment.type());

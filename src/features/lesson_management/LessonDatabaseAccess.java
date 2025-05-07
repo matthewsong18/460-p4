@@ -1,24 +1,23 @@
 package features.lesson_management;
 
+import common.DatabaseAccess;
+import common.DatabaseConnection;
+
 import java.sql.*;
 import java.util.Optional;
 
-class LessonDatabaseAccess {
-    private final Connection connection;
+class LessonDatabaseAccess extends DatabaseAccess {
 
-    private static Long currentId;
-
-    public LessonDatabaseAccess(Connection connection) {
-        this.connection = connection;
-        if (currentId == null) updateCurrentId();
+    public LessonDatabaseAccess(DatabaseConnection databaseConnection) {
+        super(databaseConnection);
     }
 
     public Long createLesson(Lesson lesson) {
         String sql = "INSERT into Lesson VALUES (?, ?, ?)";
-        try {
-            PreparedStatement preparedStatement = connection.prepareStatement(sql);
+        try (PreparedStatement preparedStatement = connection.prepareStatement(sql)){
+            Long newId = getNextPassId("Lesson");
 
-            preparedStatement.setLong(1, getNextId());
+            preparedStatement.setLong(1, newId);
             preparedStatement.setLong(2, lesson.instructor_id());
             preparedStatement.setTimestamp(3, lesson.lesson_time());
 
@@ -27,25 +26,10 @@ class LessonDatabaseAccess {
                 throw new SQLException("Creating member failed, no rows affected.");
             }
 
-            return currentId;
+            return newId;
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
-    }
-
-    private void updateCurrentId() {
-        String sql = "SELECT max(lesson_id) FROM Lesson";
-        try (PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
-            try (ResultSet resultSet = preparedStatement.executeQuery()) {
-                currentId = resultSet.next() ? resultSet.getLong("max(lesson_id)") : 0L;
-            }
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        }
-    }
-
-    private long getNextId() {
-        return ++currentId;
     }
 
     public Optional<Lesson> findLessonById(Long id) {
@@ -103,10 +87,6 @@ class LessonDatabaseAccess {
             if (affectedRows == 0) {
                 throw new SQLException("Updating lesson failed; No rows affected.");
             }
-
-            if (lesson.lesson_id() == currentId)    // Update the next ID from database if the current max was deleted
-                updateCurrentId();
-
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }

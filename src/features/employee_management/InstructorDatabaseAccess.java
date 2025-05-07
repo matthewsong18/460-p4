@@ -3,15 +3,15 @@ package features.employee_management;
 import java.sql.*;
 import java.util.Optional;
 
+import common.DatabaseAccess;
 import common.DatabaseConnection;
 
-public class InstructorDatabaseAccess {
-    private Connection connection;
-    private EmployeeDatabaseAccess employeeDatabaseAccess;
+public class InstructorDatabaseAccess extends DatabaseAccess {
+    private final EmployeeDatabaseAccess employeeDatabaseAccess;
 
     public InstructorDatabaseAccess(DatabaseConnection databaseConnection) {
+        super(databaseConnection);
         employeeDatabaseAccess = new EmployeeDatabaseAccess(databaseConnection);
-        connection = databaseConnection.getConnection();
     }
 
     public Optional<Instructor> findInstructorById(Long id) {

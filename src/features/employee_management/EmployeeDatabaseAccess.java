@@ -1,53 +1,44 @@
 package features.employee_management;
 
+import common.DatabaseAccess;
 import common.DatabaseConnection;
 
 import java.sql.*;
 import java.util.Optional;
 
-public class EmployeeDatabaseAccess {
-    private Connection connection;
+public class EmployeeDatabaseAccess extends DatabaseAccess {
 
     public EmployeeDatabaseAccess(DatabaseConnection databaseConnection) {
-        connection = databaseConnection.getConnection();
+        super(databaseConnection);
     }
 
     public Long createEmployee(Employee employee) {
-        String sql = "INSERT into employees (name, age, gender, position, salary, start_date property_id VALUES (?, ?, ?, ?, ?, ?, ?)";
+        String sql = "INSERT into Employee (employee_id, name, age, gender, position, salary, start_date, property_id VALUES (?, ?, ?, ?, ?, ?, SYSTIMESTAMP, ?)";
         try (PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
-            setEmployeePreparedStatement(employee, preparedStatement);
+            Long newEmployeeId = getNextPassId("Employee");
+
+            preparedStatement.setLong(1, newEmployeeId);
+            preparedStatement.setString(2, employee.name());
+            preparedStatement.setString(3, employee.age());
+            preparedStatement.setString(4, employee.gender());
+            preparedStatement.setString(5, employee.position());
+            preparedStatement.setInt(6, employee.salary());
+            // SYSTIMESTAMP
+            preparedStatement.setLong(8, employee.property_id());
 
             int affectedRows = preparedStatement.executeUpdate();
             if (affectedRows == 0) {
                 throw new SQLException("Creating employee failed; No rows affected.");
             }
 
-            // Get the generated ID
-            try (ResultSet generatedKeys = preparedStatement.getGeneratedKeys()) {
-                if (!generatedKeys.next()) {
-                    throw new SQLException("Creating employee failed; No ID obtained.");
-                }
-                return generatedKeys.getLong(1);
-
-            }
+            return newEmployeeId;
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
     }
 
-    private void setEmployeePreparedStatement(Employee employee,
-                                              PreparedStatement preparedStatement) throws SQLException {
-        preparedStatement.setString(1, employee.name());
-        preparedStatement.setString(2, employee.age());
-        preparedStatement.setString(3, employee.gender());
-        preparedStatement.setString(4, employee.position());
-        preparedStatement.setInt(5, employee.salary());
-        preparedStatement.setTimestamp(6, employee.start_date());
-        preparedStatement.setLong(7, employee.property_id());
-    }
-
     public Optional<Employee> findEmployeeById(Long id) {
-        String sql = "SELECT * FROM employees WHERE id = ?";
+        String sql = "SELECT * FROM Employee WHERE id = ?";
         try (PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
             preparedStatement.setLong(1, id);
 
@@ -78,10 +69,16 @@ public class EmployeeDatabaseAccess {
     }
 
     public void updateEmployee(Employee employee) {
-        String sql = "UPDATE employees SET name = ?, age = ?, gender = ?, position = ?, salary = ?, start_date = ?, property_id = ? WHERE id = ?";
+        String sql = "UPDATE Employee SET name = ?, age = ?, gender = ?, position = ?, salary = ?, start_date = ?, property_id = ? WHERE id = ?";
 
         try (PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
-            setEmployeePreparedStatement(employee, preparedStatement);
+            preparedStatement.setString(1, employee.name());
+            preparedStatement.setString(2, employee.age());
+            preparedStatement.setString(3, employee.gender());
+            preparedStatement.setString(4, employee.position());
+            preparedStatement.setInt(5, employee.salary());
+            preparedStatement.setTimestamp(6, employee.start_date());
+            preparedStatement.setLong(7, employee.property_id());
             preparedStatement.setLong(8, employee.employee_id()); // WHERE
 
             int affectedRows = preparedStatement.executeUpdate();
@@ -94,7 +91,7 @@ public class EmployeeDatabaseAccess {
     }
 
     public void deleteEmployee(Employee employee) {
-        String sql = "DELETE FROM employees WHERE id = ?";
+        String sql = "DELETE FROM Employee WHERE id = ?";
         try (PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
             preparedStatement.setLong(1, employee.employee_id());
 

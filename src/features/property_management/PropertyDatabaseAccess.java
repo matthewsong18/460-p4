@@ -1,47 +1,42 @@
 package features.property_management;
 
+import common.DatabaseAccess;
 import common.DatabaseConnection;
 
-import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Optional;
 
-public class PropertyDatabaseAccess {
-    Connection connection;
+public class PropertyDatabaseAccess extends DatabaseAccess {
 
     public PropertyDatabaseAccess(DatabaseConnection databaseConnection) {
-        connection = databaseConnection.getConnection();
+        super(databaseConnection);
     }
 
     public Long createProperty(Property property) {
-        String sql = "INSERT INTO property (property_type, property_monthly_income) VALUES (?, ?)";
+        String sql = "INSERT INTO Property (property_id, property_type, property_monthly_income) VALUES (?, ?, ?)";
 
         try (PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
-            preparedStatement.setString(1, property.property_type());
-            preparedStatement.setInt(2, property.property_monthly_income());
+            Long newPropertyId = getNextPassId("Property");
+
+            preparedStatement.setLong(1, newPropertyId);
+            preparedStatement.setString(2, property.property_type());
+            preparedStatement.setInt(3, property.property_monthly_income());
 
             int affectedRows = preparedStatement.executeUpdate();
             if (affectedRows == 0) {
                 throw new SQLException("Failed to create property; No rows affected.");
             }
 
-            // Get generated id
-            try (ResultSet resultSet = preparedStatement.getGeneratedKeys()) {
-                if (!resultSet.next()) {
-                    throw new SQLException("Failed to create property; No rows affected.");
-                }
-
-                return resultSet.getLong(1);
-            }
+            return newPropertyId;
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
     }
 
     public Optional<Property> findPropertyById(Long id) {
-        String sql = "SELECT * FROM property WHERE property_id = ?";
+        String sql = "SELECT * FROM Property WHERE property_id = ?";
 
         try (PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
             preparedStatement.setLong(1, id);
@@ -68,7 +63,7 @@ public class PropertyDatabaseAccess {
     }
 
     public void updateProperty(Property property) {
-        String sql = "UPDATE property SET property_type = ?, property_monthly_income = ? WHERE property_id = ?";
+        String sql = "UPDATE Property SET property_type = ?, property_monthly_income = ? WHERE property_id = ?";
 
         try (PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
             preparedStatement.setString(1, property.property_type());
@@ -85,7 +80,7 @@ public class PropertyDatabaseAccess {
     }
 
     public void deleteProperty(Property property) {
-        String sql = "DELETE FROM property WHERE property_id = ?";
+        String sql = "DELETE FROM Property WHERE property_id = ?";
 
         try (PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
             preparedStatement.setLong(1, property.property_id());
