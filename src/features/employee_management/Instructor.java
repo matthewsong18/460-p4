@@ -1,11 +1,11 @@
 package features.employee_management;
 
-import java.util.Optional;
 import common.InputValidation;
 
 public record Instructor(Employee employee, String certification_level) {
     public Instructor {
         checkEmployee(employee);
+        checkCertificationLevel(certification_level);
     }
 
     private void checkEmployee(Employee employee) {
@@ -15,6 +15,12 @@ public record Instructor(Employee employee, String certification_level) {
     }
 
     private void checkCertificationLevel(String certification_level) {
-        InputValidation.checkStringBlank(certification_level);
+        if (InputValidation.checkStringBlank(certification_level)) {
+            throw new IllegalArgumentException("Certification level cannot be null");
+        }
+    }
+
+    public Long employee_id() {
+        return employee.employee_id();
     }
 }
