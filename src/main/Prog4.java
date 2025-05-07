@@ -404,7 +404,7 @@ public class Prog4 {
                         System.out.print("Pass ID: ");
                         long id = userin.nextLong();
 
-                        Optional<SkiPassData> values = passHandler.findSkiPassById(id);
+                        Optional<SkiPass> values = passHandler.findSkiPassById(id);
                         if (!values.isPresent()) {
                             System.out.println("WARNING: Ski pass with id " + id + " does not exist. Try again.");
                             return;
@@ -413,7 +413,7 @@ public class Prog4 {
                         System.out.print("New remaining uses: " );
                         int uses = userin.nextInt();
                         
-                        passHandler.updatePassDetails(new SkiPassData(values.get().passId(), values.get().memberId(), values.get().purchaseDate(), values.get().totalUses(), uses, values.get().passType(), values.get().price(), values.get().archivedStatus()));
+                        passHandler.updatePassDetails(new SkiPass(values.get().passId(), values.get().memberId(), values.get().purchaseDate(), values.get().totalUses(), uses, values.get().passType(), values.get().price(), values.get().archivedStatus()));
                         System.out.print("Succesfully updated remaining number of uses on ski pass with id " + id);
                     } else if (context.equals("equipment")) {
                         // EQUIPMENT LOGIC //
