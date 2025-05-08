@@ -6,6 +6,34 @@ import java.util.Optional;
 import common.DatabaseAccess;
 import common.DatabaseConnection;
 
+/*+----------------------------------------------------------------------
+ ||
+ ||  Class InstructorDatabaseAccess
+ ||
+ ||         Author:  Ethan Huang
+ ||
+ ||        Purpose:  Interfaces with the Instructor database to provide
+ ||                  methods for retrieving Instructor records
+ ||
+ ||  Inherits From:  DatabaseAccess
+ ||
+ ||     Interfaces:  None
+ ||
+ |+-----------------------------------------------------------------------
+ ||
+ ||      Constants:  EmployeeDatabaseAccess employeeDatabaseAccess -- provides
+ ||                  access to Employee database
+ ||
+ |+-----------------------------------------------------------------------
+ ||
+ ||   Constructors:  InstructorDatabaseAccess(DatabaseConnection databaseConnection)
+ ||
+ ||  Class Methods:  None
+ ||
+ ||  Inst. Methods:  Optional<Instructor> findInstructorById(Long id)
+ ||
+ ++-----------------------------------------------------------------------*/
+
 public class InstructorDatabaseAccess extends DatabaseAccess {
     private final EmployeeDatabaseAccess employeeDatabaseAccess;
 
@@ -14,6 +42,21 @@ public class InstructorDatabaseAccess extends DatabaseAccess {
         employeeDatabaseAccess = new EmployeeDatabaseAccess(databaseConnection);
     }
 
+    /*---------------------------------------------------------------------
+     |  Method findInstructorById(Long id)
+     |
+     |  Purpose:  Finds an Instructor record using its employee_id
+     |
+     |  Pre-condition:  id matches an Employee record on employee_id
+     |
+     |  Post-condition: Returned Optional contains the corresponding 
+     |      Instructor or is empty
+     |
+     |  Parameters: Long id -- instructor_id to find
+     |
+     |  Returns:  Optional object with Instructor if found, otherwise empty
+     *-------------------------------------------------------------------*/
+    
     public Optional<Instructor> findInstructorById(Long id) {
         String sql = "SELECT * FROM stephintomson.Instructor WHERE employee_id = ?";
         try (PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
