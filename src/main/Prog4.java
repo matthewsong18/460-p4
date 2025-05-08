@@ -68,7 +68,7 @@ public class Prog4 {
                 System.out.println(String.format("|| %-25s || ", "NO RESULTS"));
             }
         } catch (SQLException e){
-            throw new RuntimeException("ERROR: " + e.getMessage());
+            throw new RuntimeException("ERROR: ", e);
         }
     }
 
@@ -106,7 +106,7 @@ public class Prog4 {
                 System.out.println(String.format("|| %-25s ||b ", "NO RESULTS"));
             }
         } catch (SQLException e){
-            throw new RuntimeException("ERROR: " + e.getMessage());
+            throw new RuntimeException("ERROR: ", e);
         }
     }
   
@@ -234,7 +234,8 @@ public class Prog4 {
                 input = "";
             } catch (RuntimeException e){
                 System.err.println("ERROR: Something went wrong. Please try again.");
-                System.out.println("DB: " + e.getMessage());
+                System.out.print("DB: ");
+                e.printStackTrace();
             }
 
             arg1 = "";
@@ -533,7 +534,8 @@ public class Prog4 {
             }
         } catch (Exception e){
             System.err.println("ERROR: An error ocurred while attempting to execute the desired action. Please try again.");
-            System.out.println("DB: " + e.getMessage());
+            System.out.print("DB: ");
+            e.printStackTrace();
             System.out.println();
             return;
         }
