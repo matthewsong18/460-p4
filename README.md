@@ -95,19 +95,50 @@ Type 'back' to return to the main menu.
 
 
 ### Elias Zheng
-
+    *  Prog4.java
+    *  QueryService
 ### Stephin Tomson
-    * ```create_tables.java```
-    * ``` delete_tables.java```
-    * ``` populate_tables.java```
-    * ``` Prog4.java```
-    * data(all csv files)
-    * ``` Rental.java```
-    * ``` RentalDatabaseAccess.java```
-    * ``` RentalService.java```
-    * ``` Equipment.java```
-    * ``` EquipmentDatabaseAccess.java```
-    * ``` EquipmentService.java```
+    *  create_tables.java 
+    *  delete_tables.java
+    *  populate_tables.java
+    *  Prog4.java
+    *  data(all csv files)
+    *  Rental.java
+    *  RentalDatabaseAccess.java
+    *  RentalService.java
+    *  Equipment.java
+    *  EquipmentDatabaseAccess.java
+    *  EquipmentService.java
+    *  MemberService.java
+    *  MemberDatabaseAccess.java
 ### Matthew William Song
-
+    * DatabaseAccess.java  
+    * DatabaseConnection.java
+    * LessonService.java
+    * Member.java
+    * Prog4.java
+    * MemberService.java
+    * MemberDatabaseAccess.java
+    * Property.java
+    * PropertyDatabaseAccess.java
+    * PropertyService.java
+    * SkiPass.java
+    * SkiPassDatabaseAccess.java
+    * SkiPassService.java
 ### Ethan Huang
+    * DatabaseAccess.java  
+    * DatabaseConnection.java
+    * DatabaseConnection.java
+    * InstructorService.java
+    * LessonOrder.java
+    * LessonOrderDatabaseAccess.java
+    * LessonOrderService.java
+    * LessonService.java
+    * Prog4.java
+    * PropertyService.java
+    * Rental.java
+    * RentalDatabaseAccess.java
+    * RentalService.java
+    * SkiPass.java
+    * SkiPassDatabaseAccess.java
+    * SkiPassService.java
