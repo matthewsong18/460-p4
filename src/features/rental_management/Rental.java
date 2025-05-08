@@ -2,6 +2,7 @@
  * File: Rental.java
  * 
  * Author: Ethan Huang
+ *         Stephin Tomson
  * 
  * Description: Local representation of a tuple in the rental table.
  * 

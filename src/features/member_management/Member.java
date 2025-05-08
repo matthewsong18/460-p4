@@ -2,6 +2,7 @@
  * File: Member
  * 
  * Author: Matthew Song
+ *         Stephin Tomson
  * 
  * Description: Local representation of a member tuple in the database
  * 

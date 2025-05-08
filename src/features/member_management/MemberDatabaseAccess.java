@@ -2,6 +2,7 @@
  * File: MemberDatabaseAccess
  * 
  * Author: Matthew Song
+ *         Stephin Tomson
  * 
  * Description: Backend for member services.
  * 
@@ -11,7 +12,6 @@ package features.member_management;
 
 import common.DatabaseAccess;
 import common.DatabaseConnection;
-
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;

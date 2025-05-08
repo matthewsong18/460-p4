@@ -3,11 +3,11 @@
  * 
  * Author: Matthew Song
  *         Ethan Huang
+ *        Stephin Tomson
  * 
  * Description: Client-facing API for database services on the rental table.
  * 
  */
-
 
 package features.rental_management;
 

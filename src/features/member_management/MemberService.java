@@ -2,6 +2,7 @@
  * File: MemberService
  * 
  * Author: Matthew Song
+ *         Stephin Tomson
  * 
  * Description: Client-facing API for database interactions involving the member table.
  * 

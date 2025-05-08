@@ -3,11 +3,12 @@
  * 
  * Author: Matthew Song
  *         Ethan Huang
+ *         Stephin
+Tomson
  * 
  * Description: Backend for database services on rental table
  * 
  */
-
 
 package features.rental_management;
 
