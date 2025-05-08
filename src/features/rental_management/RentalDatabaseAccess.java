@@ -123,11 +123,11 @@ public class RentalDatabaseAccess extends DatabaseAccess {
         return Optional.empty();
     }
 
-    /*
-     * Finds an active rental by ski pass ID. An active rental is one that has not
-     * been returned yet
+    /**
+     * Checks if a member has any rentals.
+     * Returns 1 if at least one rental is found, otherwise 0.
      */
-    public boolean hasRentalByMember(Long memberId) {
+    public int hasRentalByMember(Long memberId) {
         String sql = """
                 SELECT 1
                   FROM stephintomson.Rental r
@@ -139,7 +139,7 @@ public class RentalDatabaseAccess extends DatabaseAccess {
         try (PreparedStatement ps = connection.prepareStatement(sql)) {
             ps.setLong(1, memberId);
             try (ResultSet rs = ps.executeQuery()) {
-                return rs.next(); // true if at least one matching row exists
+                return rs.next() ? 1 : 0;
             }
         } catch (SQLException e) {
             throw new RuntimeException("Error checking rental for member: " + memberId, e);

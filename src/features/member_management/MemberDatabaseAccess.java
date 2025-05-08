@@ -14,7 +14,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-class MemberDatabaseAccess extends DatabaseAccess {
+public class MemberDatabaseAccess extends DatabaseAccess {
 
     public MemberDatabaseAccess(DatabaseConnection databaseConnection) {
         super(databaseConnection);
@@ -133,25 +133,8 @@ class MemberDatabaseAccess extends DatabaseAccess {
         }
     }
 
-    // This method checks if the member is associated with any ski pass data, lift
-    // usage logs, rental history,
-    // or lesson transactions. If any associations are found, it returns 1;
-    // otherwise, it returns 0.
-    // This method checks if the member is associated with any ski pass data.
-    // If any associations are found, it returns 1; otherwise, it returns 0.
-    private int memberPreCheck(Member member) {
-        try {
-            if (SkiPassDatabaseAccess.activeSkiPassbyMemberId(member.id()) == 1
-                    || RentalDatabaseAccess.hasRentalByMember(member.id()) // e.g., returns 1 if any rental
-                    || LessonDatabaseAccess.hasLessonForMember(member.id())) {
-                return 1;
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        return 0;
-    }
-
+  
+    
     // This method remove all related records, including ski pass data, lift usage
     // logs, rental history, and
     // lesson transactions associated with the member.
@@ -160,6 +143,7 @@ class MemberDatabaseAccess extends DatabaseAccess {
     }
 
     public void deleteMember(Member member) {
+        
         String sql = "DELETE FROM stephintomson.Member WHERE member_id = ?";
 
         try (PreparedStatement preparedStatement = connection.prepareStatement(sql)) {

@@ -8,6 +8,7 @@
  * Usage: Prog4.java <username> <password>
  */
 package main;
+
 import java.sql.*;
 import java.sql.Date;
 import java.time.LocalDate;
@@ -340,21 +341,36 @@ public class Prog4 {
                 case "2":
                     // delete
                     if (context.equals("member")) {
-                        // MEMBER LOGIC //
                         System.out.print("Member ID: ");
                         long id = userin.nextLong();
-                        userin.nextLine();
+                        userin.nextLine(); // clear input buffer
 
                         Optional<Member> values = memberHandler.findMemberById(id);
+
                         if (!values.isPresent()) {
                             System.out.println("WARNING: Member with id " + id + " does not exist. Try again.");
                             return;
                         }
 
-                        // delete member
-                        memberHandler.deleteMemberById(values.get());
-                        System.out.println("Deleted member " + id);
-                    } else if (context.equals("ski")) {
+                        if (memberHandler.memberPreCheck(values) == 1) {
+                            System.out.println("WARNING: Member with id " + id + " is associated with other data.");
+                            System.out.print("Are you sure you want to delete this member? (y/n): ");
+                            String confirm = userin.nextLine().trim();
+
+                            if (confirm.equalsIgnoreCase("y")) {
+                                memberHandler.deleteMemberById(values.get());
+                                System.out.println("Deleted member " + id);
+                            } else {
+                                System.out.println("Member deletion cancelled.");
+                            }
+                        } else {
+                            // No associated data — safe to delete
+                            memberHandler.deleteMemberById(values.get());
+                            System.out.println("Deleted member " + id);
+                        }
+                    }
+
+                    else if (context.equals("ski")) {
                         // SKI PASS LOGIC //
                         System.out.print("Pass ID: ");
                         long id = userin.nextLong();
@@ -570,7 +586,9 @@ public class Prog4 {
                 default:
                     break;
             }
-        } catch (Exception e) {
+        } catch (
+
+        Exception e) {
             System.err.println(
                     "ERROR: An error ocurred while attempting to execute the desired action. Please try again.");
             System.out.print("DB: ");
