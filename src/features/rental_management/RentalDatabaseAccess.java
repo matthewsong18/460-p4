@@ -17,7 +17,7 @@ public class RentalDatabaseAccess extends DatabaseAccess {
     }
 
     public Long createRental(Rental rental) {
-        String sql = "INSERT into stephintomson.Rental values (?,?,?,SYSTIMESTAMP,?)";
+        String sql = "INSERT into stephintomson.Rental values (?,?,?,SYSTIMESTAMP,SYSTIMESTAMP+1)";
 
         try (PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
             Long newRentalId = getNextId("Rental", "rental_id"); // Helper to get a new ID

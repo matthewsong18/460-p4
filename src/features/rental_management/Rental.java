@@ -25,7 +25,7 @@ public record Rental(Long rental_id,
     /** Computed rental status: 1 = active, 0 = returned */
     public int return_status() {
         if (dateTime_To == null)
-            return 1;
+            return 0;
         return dateTime_To.toLocalDate().isAfter(java.time.LocalDate.now()) ? 1 : 0;
     }
 
