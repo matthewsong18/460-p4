@@ -44,6 +44,6 @@ Table Initiaztion
 
 ## Workload Distribution
 
-Backend: Ethan Huang, Matthew Song
-UI, Queries: Elias Zheng
-Database, Triggers: Stephin Tomson
+```Backend: Ethan Huang, Matthew Song```
+```UI, Queries: Elias Zheng```
+```Database, Triggers: Stephin Tomson```
