@@ -91,7 +91,7 @@ Type 'back' to return to the main menu.
 ```Backend: Ethan Huang, Matthew Song```
 ```UI, Queries: Elias Zheng```
 ```Database, Triggers: Stephin Tomson```
-``` Debugging and Testing: Etha Huang, Matthew Song, Stephin Tomson``
+``` Debugging and Testing: Etha Huang, Matthew Song, Stephin Tomson```
 
 
 ### Elias Zheng
