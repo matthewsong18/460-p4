@@ -16,14 +16,13 @@ public class SkiPassService {
         this.skiPassDatabaseAccess = new SkiPassDatabaseAccess(dbConnection);
     }
 
-    public Long createSkiPass(Long memberId, Date purchaseDate, Integer totalUses, String passType,
-            Integer price, Integer archivedStatus) {
+    public Long createSkiPass(Long memberId, Integer totalUses, String passType, Integer price) {
         MemberService memberService = new MemberService(dbConnection);
         if (memberService.findMemberById(memberId).isEmpty()) {
             throw new IllegalArgumentException("Member with ID " + memberId + " not found.");
         }
 
-        SkiPass newSkiPass = new SkiPass(memberId, purchaseDate, totalUses, passType, price, archivedStatus);
+        SkiPass newSkiPass = new SkiPass(memberId, totalUses, passType, price);
         try {
             return skiPassDatabaseAccess.createSkiPass(newSkiPass);
         } catch (SQLException e) {

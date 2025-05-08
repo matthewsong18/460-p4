@@ -16,20 +16,18 @@ public class SkiPassDatabaseAccess extends DatabaseAccess {
 
     public Long createSkiPass(SkiPass skiPass) throws SQLException {
 
-        String insertSql = "INSERT INTO stephintomson.SkiPass VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
-
+        String insertSql = "INSERT INTO stephintomson.SkiPass VALUES (?, ?, SYSDATE, ?, ?, ?, ?, 0)";
+                // SYSDATE is used for consistency (database server time)
+                // all new passes are not archived (archived_status = 0)
 
         try (PreparedStatement preparedStatement = connection.prepareStatement(insertSql)) {
             Long newPassId = getNextId("SkiPass", "pass_id"); // Helper to get a new ID
-            java.sql.Date sqlDate = java.sql.Date.valueOf(skiPass.purchaseDate() + "");
             preparedStatement.setLong(1, newPassId);
             preparedStatement.setLong(2, skiPass.memberId());
-            preparedStatement.setDate(3, sqlDate);
-            preparedStatement.setInt(4, skiPass.totalUses());
-            preparedStatement.setInt(5, skiPass.remainingUses());
-            preparedStatement.setString(6, skiPass.passType());
-            preparedStatement.setInt(7, skiPass.price());
-            preparedStatement.setInt(8, skiPass.archivedStatus());
+            preparedStatement.setInt(3, skiPass.totalUses());
+            preparedStatement.setInt(4, skiPass.remainingUses());
+            preparedStatement.setString(5, skiPass.passType());
+            preparedStatement.setInt(6, skiPass.price());
 
             int affectedRows = preparedStatement.executeUpdate();
             if (affectedRows == 0) {
@@ -40,8 +38,7 @@ public class SkiPassDatabaseAccess extends DatabaseAccess {
     }
 
     public Optional<SkiPass> findSkiPassById(long passId) throws SQLException {
-        String sql = "SELECT pass_id, member_id, purchase_date, total_uses, remaining_uses, " +
-                "pass_type, price, archived_status FROM stephintomson.SkiPass WHERE pass_id = ?";
+        String sql = "SELECT * FROM stephintomson.SkiPass WHERE pass_id = ?";
 
         try (PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
             preparedStatement.setLong(1, passId);
