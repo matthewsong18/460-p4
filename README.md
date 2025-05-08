@@ -41,3 +41,9 @@ Table Initiaztion
   ```bash
       SELECT * FROM USER_AUDIT_TRAIL WHERE OBJ_NAME = 'EQUIPMENT';
   ````
+
+## Workload Distribution
+
+```Backend: Ethan Huang, Matthew Song```
+```UI, Queries: Elias Zheng```
+```Database, Triggers: Stephin Tomson```
