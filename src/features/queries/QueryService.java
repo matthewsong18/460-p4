@@ -200,6 +200,12 @@ public class QueryService {
         return executeQuery(query);
     }
 
+    public static ResultSet queryOrder(){
+        String query = "select * from stephintomson.LessonOrder";
+
+        return executeQuery(query);
+    }
+
     public static void close(){
         /*
          * Closes the current open statement.

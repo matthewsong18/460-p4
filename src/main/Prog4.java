@@ -239,15 +239,16 @@ public class Prog4 {
             input = "";
 
             System.out.println("\n\n//- AVAILABLE QUERIES -\\\\");
-            System.out.println("1 | List all ski lessons purchased for a member");
-            System.out.println("2 | List all lift and rental records for a ski pass");
-            System.out.println("3 | List all intermediate-level trails and associated information.");
-            System.out.println("4 | List the total wage expense for a given property");
-            System.out.println("5 | List all members");
-            System.out.println("6 | List all active ski passes");
-            System.out.println("7 | List all equipment");
-            System.out.println("8 | List all rentals");
-            System.out.println("9 | List all lesson orders");
+            System.out.println("1  | List all ski lessons purchased for a member");
+            System.out.println("2  | List all lift and rental records for a ski pass");
+            System.out.println("3  | List all intermediate-level trails and associated information.");
+            System.out.println("4  | List the total wage expense for a given property");
+            System.out.println("5  | List all members");
+            System.out.println("6  | List all active ski passes");
+            System.out.println("7  | List all equipment");
+            System.out.println("8  | List all rentals");
+            System.out.println("9  | List all lessons");
+            System.out.println("10 | List all lesson orders ");
             System.out.println("Type 'back' to return to the main menu.");
         }
 
