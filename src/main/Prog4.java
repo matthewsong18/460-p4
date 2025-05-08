@@ -12,7 +12,6 @@ package main;
 import java.io.*;
 import java.sql.*;
 import java.sql.Date;
-import java.time.LocalDate;
 import java.util.*;
 import java.lang.*;
 
@@ -158,7 +157,7 @@ public class Prog4 {
         System.out.println("3 | List all intermediate-level trails and associated information.");
         System.out.println("4 | List the total wage expense for a given property");
         System.out.println("5 | List all members");
-        System.out.println("6 | List all ski passes");
+        System.out.println("6 | List all active ski passes");
         System.out.println("7 | List all equipment");
         System.out.println("8 | List all rentals");
         System.out.println("9 | List all lesson orders");
@@ -249,7 +248,7 @@ public class Prog4 {
             System.out.println("3 | List all intermediate-level trails and associated information.");
             System.out.println("4 | List the total wage expense for a given property");
             System.out.println("5 | List all members");
-            System.out.println("6 | List all ski passes");
+            System.out.println("6 | List all active ski passes");
             System.out.println("7 | List all equipment");
             System.out.println("8 | List all rentals");
             System.out.println("9 | List all lesson orders");
@@ -299,12 +298,14 @@ public class Prog4 {
                         int uses = userin.nextInt();
                         userin.nextLine();
 
+
                         // add pass
                         LocalDate todayLocal = LocalDate.now(); // 2025‑05‑07
                         java.sql.Date today = java.sql.Date.valueOf(todayLocal);
 
                         long id = passHandler.createSkiPass(memid, today, uses,
                                 type, price, 0);
+
                         System.out.println("Added new ski pass: " + id);
 
                     } else if (context.equals("equipment")) {
