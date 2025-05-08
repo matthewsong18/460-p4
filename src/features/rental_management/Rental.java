@@ -18,6 +18,15 @@ public record Rental(Long rental_id,
         Date dateTime_From,
         Date dateTime_To) {
 
+    public Rental {
+        if (pass_id == null)
+            throw new IllegalArgumentException("Pass id cannot be null");
+        if (equipment_id == null)
+            throw new IllegalArgumentException("Equipment id cannot be null");
+        if (rental_id != null && dateTime_From == null)
+            throw new IllegalArgumentException("DateTime_from cannot be null on existing rental");
+    }
+
     /** Convenience constructor for new rentals */
     public Rental(Long pass_id, Long equipment_id) {
         this(null, pass_id, equipment_id, null, null);

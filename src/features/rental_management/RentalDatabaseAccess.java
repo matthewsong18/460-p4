@@ -126,11 +126,7 @@ public class RentalDatabaseAccess extends DatabaseAccess {
             preparedStatement.setLong(1, rental_id);
             try (ResultSet resultSet = preparedStatement.executeQuery()) {
                 if (resultSet.next()) {
-                    // System.out.println("Equipment ID: " + equipmentId);
                     Rental rental = mapRowToRental(resultSet);
-                    // System.out.println("Rental is active: " + rental.isActive());
-                    // System.out.println("To: " + rental.dateTime_To());
-                    // System.out.println("Today: " + java.time.LocalDate.now());
 
                     if (rental.isActive()) {
                         return Optional.of(rental);
