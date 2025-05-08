@@ -25,7 +25,7 @@ public class RentalDatabaseAccess extends DatabaseAccess {
             preparedStatement.setLong(1, newRentalId);
             preparedStatement.setLong(2, rental.pass_id());
             preparedStatement.setLong(3, rental.equipment_id());
-            preparedStatement.setDate(4, rental.dateTime_To());
+          
 
             int affectedRows = preparedStatement.executeUpdate();
             if (affectedRows == 0) {
