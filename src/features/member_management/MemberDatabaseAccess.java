@@ -2,9 +2,7 @@ package features.member_management;
 
 import common.DatabaseAccess;
 import common.DatabaseConnection;
-import features.rental_management.RentalDatabaseAccess;
-import features.ski_pass.SkiPassDatabaseAccess;
-import features.lesson_management.LessonDatabaseAccess;
+
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -133,10 +131,8 @@ public class MemberDatabaseAccess extends DatabaseAccess {
         }
     }
 
-
-
     public void deleteMember(Member member) {
-        
+
         String sql = "DELETE FROM stephintomson.Member WHERE member_id = ?";
 
         try (PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
