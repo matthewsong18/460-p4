@@ -1,21 +1,22 @@
 package features.ski_pass;
 
 import common.InputValidation;
-import java.sql.Timestamp;
+
+import java.sql.Date;
 
 public record SkiPass(
         Long passId,
         Long memberId,
-        Timestamp purchaseDate,
+        Date purchaseDate,
         Integer totalUses,
         Integer remainingUses,
         String passType,
         Integer price,
-        Integer archivedStatus
-) {
+        Integer archivedStatus) {
 
     // Constructor for creating a new ski pass (passId will be null)
-    public SkiPass(Long memberId, Timestamp purchaseDate, Integer totalUses, String passType, Integer price) {
+    public SkiPass(Long memberId, Date purchaseDate, Integer totalUses, String passType, Integer price,
+            Integer archivedStatus) {
         this(null, memberId, purchaseDate, totalUses, totalUses, passType, price, 0);
     }
 

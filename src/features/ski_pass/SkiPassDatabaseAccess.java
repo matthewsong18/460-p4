@@ -39,7 +39,7 @@ public class SkiPassDatabaseAccess extends DatabaseAccess {
 
     public Optional<SkiPass> findSkiPassById(long passId) throws SQLException {
         String sql = "SELECT pass_id, member_id, purchase_date, total_uses, remaining_uses, " +
-                        "pass_type, price, archived_status FROM stephintomson.SkiPass WHERE pass_id = ?";
+                "pass_type, price, archived_status FROM stephintomson.SkiPass WHERE pass_id = ?";
 
         try (PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
             preparedStatement.setLong(1, passId);
@@ -55,13 +55,12 @@ public class SkiPassDatabaseAccess extends DatabaseAccess {
         return new SkiPass(
                 rs.getLong("pass_id"),
                 rs.getLong("member_id"),
-                rs.getTimestamp("purchase_date"),
+                rs.getDate("purchase_date"),
                 rs.getInt("total_uses"),
                 rs.getInt("remaining_uses"),
                 rs.getString("pass_type"),
                 rs.getInt("price"),
-                rs.getInt("archived_status")
-        );
+                rs.getInt("archived_status"));
     }
 
     public void updateSkiPass(SkiPass skiPass) throws SQLException {
@@ -69,7 +68,7 @@ public class SkiPassDatabaseAccess extends DatabaseAccess {
 
         try (PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
             preparedStatement.setLong(1, skiPass.memberId());
-            preparedStatement.setTimestamp(2, skiPass.purchaseDate());
+            preparedStatement.setDate(2, skiPass.purchaseDate());
             preparedStatement.setInt(3, skiPass.totalUses());
             preparedStatement.setInt(4, skiPass.remainingUses());
             preparedStatement.setString(5, skiPass.passType());
