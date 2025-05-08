@@ -10,8 +10,8 @@ import features.member_management.*;
  ||
  ||         Author:  Ethan Huang
  ||
- ||        Purpose:  [A description of why this class exists.  For what
- ||                   reason was it written?  Which jobs does it perform?]
+ ||        Purpose:  Service layer to provide an interface for CRUD 
+ ||                  operations and validation for referential integrity
  ||
  ||  Inherits From:  None.
  ||

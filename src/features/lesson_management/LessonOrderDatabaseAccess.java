@@ -13,8 +13,8 @@ import java.util.Optional;
  ||
  ||         Author:  Ethan Huang
  ||
- ||        Purpose:  [A description of why this class exists.  For what
- ||                   reason was it written?  Which jobs does it perform?]
+ ||        Purpose:  Interfaces with database to provide CRUD methods for
+ ||                  lesson orders
  ||
  ||  Inherits From:  DatabaseAccess
  ||
@@ -97,8 +97,7 @@ public class LessonOrderDatabaseAccess extends DatabaseAccess {
      |  Post-condition: Returned Optional contains a populated LessonOrder
      |      object or is empty
      |
-     |  Parameters: 
-     |      Long order_id -- order_id of the LessonOrder to find
+     |  Parameters:  Long order_id -- order_id of the LessonOrder to find
      |
      |  Returns:  Optional object that contains the LessonOrder record if 
      |      found.
@@ -140,8 +139,8 @@ public class LessonOrderDatabaseAccess extends DatabaseAccess {
      |      with the new values.
      |
      |  Parameters: 
-     |      LessonOrder lessonOrder -- contains the order_id to find and 
-     |          updated attributes
+     |      LessonOrder lessonOrder -- Data carrier for order_id and updated
+     |          attributes
      |
      |  Returns:  None.
      *-------------------------------------------------------------------*/
@@ -178,8 +177,7 @@ public class LessonOrderDatabaseAccess extends DatabaseAccess {
      |      been deleted from the database.
      |
      |  Parameters:
-     |      LessonOrder lessonOrder -- LessonOrder record to delete from 
-     |          the database.
+     |      LessonOrder lessonOrder -- Data carrier for order_id
      |
      |  Returns:  None.
      *-------------------------------------------------------------------*/

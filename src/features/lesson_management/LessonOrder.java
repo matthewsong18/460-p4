@@ -6,8 +6,7 @@ package features.lesson_management;
  ||
  ||         Author:  Ethan Huang
  ||
- ||        Purpose:  [A description of why this class exists.  For what
- ||                   reason was it written?  Which jobs does it perform?]
+ ||        Purpose:  Data carrier for LessonOrder records
  ||
  ||  Inherits From:  None.
  ||
@@ -15,18 +14,20 @@ package features.lesson_management;
  ||
  |+-----------------------------------------------------------------------
  ||
- ||      Constants:  [Name all public class constants, and provide a very
- ||                   brief (but useful!) description of each.]
+ ||      Constants:  None
  ||
  |+-----------------------------------------------------------------------
  ||
- ||   Constructors:  [List the names and arguments of all defined
- ||                   constructors.]
+ ||   Constructors:  LessonOrder(Long lesson_id, Long member_id, int total_sessions, int remaining_sessions)
+ ||                  LessonOrder(Long order_id, Long lesson_id, Long member_id, int total_sessions, int remaining_sessions)
  ||
- ||  Class Methods:  [List the names, arguments, and return types of all
- ||                   public class methods.]
+ ||  Class Methods:  None
  ||
- ||  Inst. Methods:  
+ ||  Inst. Methods:  Long order_id()
+ ||                  Long lesson_id()
+ ||                  Long member_id()
+ ||                  int total_sessions()
+ ||                  int remaining_sessions()
  ||
  ++-----------------------------------------------------------------------*/
 

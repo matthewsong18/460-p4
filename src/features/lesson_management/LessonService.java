@@ -167,7 +167,7 @@ public class LessonService {
      |  Post-condition: Corresponding lesson record in database is removed.
      |
      |  Parameters:
-     |      Lesson lesson -- Data carrier with lesson_id to find
+     |      Lesson lesson -- Data carrier for lesson_id
      |
      |  Returns:  None.
      *-------------------------------------------------------------------*/

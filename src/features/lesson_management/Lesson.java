@@ -29,10 +29,9 @@ import java.sql.Timestamp;
  ||
  ||  Class Methods:  None.
  ||
- ||  Inst. Methods:
- ||     Long lesson_id()
- ||     Long instructor_id()
- ||     Timestamp lesson_time()
+ ||  Inst. Methods:  Long lesson_id()
+ ||                  Long instructor_id()
+ ||                  Timestamp lesson_time()
  ||
  ++-----------------------------------------------------------------------*/
 

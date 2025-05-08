@@ -11,8 +11,8 @@ import java.util.Optional;
  ||
  ||         Author:  Ethan Huang
  ||
- ||        Purpose:  [A description of why this class exists.  For what
- ||                   reason was it written?  Which jobs does it perform?]
+ ||        Purpose:  Interfaces with database to provide CRUD operations 
+ ||                  for lessons and lesson schedules
  ||
  ||  Inherits From:  DatabaseAccess
  ||
@@ -56,8 +56,7 @@ public class LessonDatabaseAccess extends DatabaseAccess {
      |  Post-condition: A new Lesson record exists with the data passed in
      |      by lesson
      |
-     |  Parameters: 
-     |      Lesson lesson -- Lesson record to be inserted
+     |  Parameters:  Lesson lesson -- Lesson record to be inserted
      |
      |  Returns:  Primary key (lesson_id) of new Lesson record
      *-------------------------------------------------------------------*/
@@ -92,8 +91,7 @@ public class LessonDatabaseAccess extends DatabaseAccess {
      |  Post-condition: Returned Optional contains the corresponding Lesson
      |      or is empty.
      |
-     |  Parameters: 
-     |      Long id -- lesson_id to find
+     |  Parameters:  Long id -- lesson_id to find
      |
      |  Returns:  Optional object that contains the corresponding Lesson
      |      if found, otherwise empty
@@ -127,8 +125,7 @@ public class LessonDatabaseAccess extends DatabaseAccess {
      |
      |  Post-condition: Database is unchanged.
      |
-     |  Parameters: 
-     |      Long memberId -- member_id of member to find lessons for
+     |  Parameters:  Long memberId -- member_id of existing member
      |
      |  Returns:  1 if the member has bought lessons, otherwise 0
      *-------------------------------------------------------------------*/
@@ -187,12 +184,10 @@ public class LessonDatabaseAccess extends DatabaseAccess {
      |  Post-condition: Corresponding Lesson record contains updated 
      |      attributes from lesson.
      |
-     |  Parameters: 
-     |      Lesson lesson -- holds updated attributes
+     |  Parameters:  Lesson lesson -- Data carrier for lesson_id and 
+     |      updated attributes
      |
-     |  Returns:  [If this method sends back a value via the return
-     |      mechanism, describe the purpose of that value here, otherwise
-     |      state 'None.']
+     |  Returns:  None.
      *-------------------------------------------------------------------*/
     
     public void updateLesson(Lesson lesson) {
@@ -213,6 +208,20 @@ public class LessonDatabaseAccess extends DatabaseAccess {
         }
     }
 
+    /*---------------------------------------------------------------------
+     |  Method deleteLesson(Lesson lesson)
+     |
+     |  Purpose:  Deletes a lesson from the database
+     |
+     |  Pre-condition:  Lesson record matching lesson_id exists in database
+     |
+     |  Post-condition: Lesson record is removed from database
+     |
+     |  Parameters: Lesson lesson -- Data carrier for lesson_id
+     |
+     |  Returns:  None.
+     *-------------------------------------------------------------------*/
+    
     public void deleteLesson(Lesson lesson) {
         String sql = "DELETE from stephintomson.Lesson WHERE lesson_id = ?";
 
