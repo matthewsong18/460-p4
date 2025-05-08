@@ -17,7 +17,7 @@ public class RentalDatabaseAccess extends DatabaseAccess {
     }
 
     public Long createRental(Rental rental) {
-        String sql = "INSERT into stephintomson.Rental values (?,?,?,SYSTIMESTAMP,SYSTIMESTAMP+1)";
+        String sql = "INSERT into stephintomson.Rental values (?,?,?,SYSTIMESTAMP,SYSTIMESTAMP+2)";
 
         try (PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
             Long newRentalId = getNextId("Rental", "rental_id"); // Helper to get a new ID
@@ -104,15 +104,19 @@ public class RentalDatabaseAccess extends DatabaseAccess {
      * been returned yet
      */
     public Optional<Rental> findActiveRental(Long equipmentId) {
-        String sql = "SELECT rental_id, pass_id, equipment_id, datetime_from, datetime_to " +
-                "FROM stephintomson.Rental WHERE equipment_id = ?";
+        String sql = """
+                SELECT rental_id, pass_id, equipment_id, datetime_from, datetime_to
+                  FROM stephintomson.Rental
+                 WHERE equipment_id = ?
+                """;
 
         try (PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
             preparedStatement.setLong(1, equipmentId);
             try (ResultSet resultSet = preparedStatement.executeQuery()) {
                 if (resultSet.next()) {
-                    if (mapRowToRental(resultSet).isActive()) {
-                        return Optional.of(mapRowToRental(resultSet));
+                    Rental rental = mapRowToRental(resultSet);
+                    if (rental.isActive()) {
+                        return Optional.of(rental);
                     }
                 }
             }

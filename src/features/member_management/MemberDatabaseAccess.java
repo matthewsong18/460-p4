@@ -133,14 +133,7 @@ public class MemberDatabaseAccess extends DatabaseAccess {
         }
     }
 
-  
-    
-    // This method remove all related records, including ski pass data, lift usage
-    // logs, rental history, and
-    // lesson transactions associated with the member.
-    private void memberPostCheck(Member member) {
 
-    }
 
     public void deleteMember(Member member) {
         
