@@ -91,3 +91,23 @@ Type 'back' to return to the main menu.
 ```Backend: Ethan Huang, Matthew Song```
 ```UI, Queries: Elias Zheng```
 ```Database, Triggers: Stephin Tomson```
+``` Debugging and Testing: Etha Huang, Matthew Song, Stephin Tomson``
+
+
+### Elias Zheng
+
+### Stephin Tomson
+    * ```create_tables.java```
+    * ``` delete_tables.java```
+    * ``` populate_tables.java```
+    * ``` Prog4.java```
+    * data(all csv files)
+    * ``` Rental.java```
+    * ``` RentalDatabaseAccess.java```
+    * ``` RentalService.java```
+    * ``` Equipment.java```
+    * ``` EquipmentDatabaseAccess.java```
+    * ``` EquipmentService.java```
+### Matthew William Song
+
+### Ethan Huang
