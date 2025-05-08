@@ -41,7 +41,7 @@ class MemberDatabaseAccess extends DatabaseAccess {
     }
 
     public Optional<Member> findMemberById(Long id) {
-        String sql = "SELECT member_id, name, telephone, email, date_of_birth, emergency_contact FROM stephintomson.Member WHERE member_id = ?";
+        String sql = "SELECT * FROM stephintomson.Member WHERE member_id = ?";
 
         try (PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
             preparedStatement.setLong(1, id);
@@ -92,7 +92,7 @@ class MemberDatabaseAccess extends DatabaseAccess {
 
     public List<Member> getAllMembers() {
         List<Member> members = new ArrayList<>();
-        String sql = "SELECT member_id, name, telephone, email, date_of_birth, emergency_contact FROM stephintomson.Member ORDER BY name";
+        String sql = "SELECT * FROM stephintomson.Member ORDER BY name";
 
         try (PreparedStatement preparedStatement = connection.prepareStatement(
                 sql); ResultSet rs = preparedStatement.executeQuery()) {
