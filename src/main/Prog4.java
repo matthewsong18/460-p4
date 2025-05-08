@@ -3,7 +3,7 @@
  |       Author:  Stephin Tomson (stephintomson@arizona.edu)
  |                Ethan Huang
  |                Matthew Song
- |                
+ |                Ellias Zheng                
  | 
  |       Course:  CS460 Database Design Spring 2025
  |   Instructor:  L. McCann
