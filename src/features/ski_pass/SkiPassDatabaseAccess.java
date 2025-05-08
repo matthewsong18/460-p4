@@ -1,13 +1,3 @@
-/*
- * File: SkiPassDatabaseAccess.java
- * 
- * Author: Matthew Song
- *         Ethan Huang
- * 
- * Description: Backend for ski pass database services.
- * 
- */
-
 package features.ski_pass;
 
 import common.DatabaseAccess;
@@ -18,12 +8,61 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Optional;
 
+/*+----------------------------------------------------------------------
+ ||
+ ||  Class SkiPassDatabaseAccess
+ ||
+ ||         Author:  Ethan Huang
+ ||                  Matthew Song
+ ||
+ ||        Purpose:  Backend for ski pass database services. Directly 
+ ||                  interfaces with the SkiPass relation.
+ ||
+ ||  Inherits From:  DatabaseAccess
+ ||
+ ||     Interfaces:  None
+ ||
+ |+-----------------------------------------------------------------------
+ ||
+ ||      Constants:  None
+ ||
+ |+-----------------------------------------------------------------------
+ ||
+ ||   Constructors:  SkiPassDatabaseAccess(DatabaseConnection dbConnection)
+ ||
+ ||  Class Methods:  None
+ ||
+ ||  Inst. Methods:  Long createSkiPass(SkiPass skiPass)
+ ||                  Optional<SkiPass> findSkiPassById(long passId)
+ ||                  SkiPass mapRowToSkiPassData(ResultSet rs)
+ ||                  void updateSkiPass(SkiPass skiPass)
+ ||                  void deleteSkiPass(long passId)
+ ||                  int getDaysSincePurchase(long passId)
+ ||                  int hasActiveSkiPassByMember(Long memberId)
+ ||
+ ++-----------------------------------------------------------------------*/
+
 public class SkiPassDatabaseAccess extends DatabaseAccess {
 
     public SkiPassDatabaseAccess(DatabaseConnection dbConnection) {
         super(dbConnection);
     }
 
+    /*---------------------------------------------------------------------
+     |  Method createSkiPass(SkiPass skiPass)
+     |
+     |  Purpose:  Creates a ski pass in the database.
+     |
+     |  Pre-condition:  Nothing that is not obvious.
+     |
+     |  Post-condition: Database contains a new SkiPass tuple with the 
+     |      provided fields
+     |
+     |  Parameters: SkiPass skiPass -- Data carrier for all attributes
+     |
+     |  Returns:  Primary key (pass_id) of new ski pass
+     *-------------------------------------------------------------------*/
+    
     public Long createSkiPass(SkiPass skiPass) throws SQLException {
 
         String insertSql = "INSERT INTO stephintomson.SkiPass VALUES (?, ?, SYSDATE, ?, ?, ?, ?, 0)";
@@ -47,6 +86,21 @@ public class SkiPassDatabaseAccess extends DatabaseAccess {
         }
     }
 
+    /*---------------------------------------------------------------------
+     |  Method findSkiPassById(long passId)
+     |
+     |  Purpose:  Finds a SkiPass tuple that matches passId on pass_id
+     |
+     |  Pre-condition:  Nothing that is not obvious
+     |
+     |  Post-condition: Returned Optional contains a valid SkiPass record 
+     |      or is empty
+     |
+     |  Parameters: long passId -- pass_id to find in the relation
+     |
+     |  Returns:  Optional with matching SkiPass record or empty if not found
+     *-------------------------------------------------------------------*/
+    
     public Optional<SkiPass> findSkiPassById(long passId) throws SQLException {
         String sql = "SELECT * FROM stephintomson.SkiPass WHERE pass_id = ?";
 
@@ -60,6 +114,22 @@ public class SkiPassDatabaseAccess extends DatabaseAccess {
         return Optional.empty();
     }
 
+    /*---------------------------------------------------------------------
+     |  Method mapRowToSkiPassData(ResultSet rs)
+     |
+     |  Purpose:  Returns the SkiPass representation of a tuple in an SQL 
+     |      query result on SkiPass
+     |
+     |  Pre-condition:  rs contains all of the columns listed in the method
+     |
+     |  Post-condition: All SkiPass object attributes match the database 
+     |      tuple values
+     |
+     |  Parameters: ResultSet rs -- points to a row in an SQL query result
+     |
+     |  Returns:  SkiPass object with all attributes represented
+     *-------------------------------------------------------------------*/
+    
     private SkiPass mapRowToSkiPassData(ResultSet rs) throws SQLException {
         return new SkiPass(
                 rs.getLong("pass_id"),
@@ -72,6 +142,21 @@ public class SkiPassDatabaseAccess extends DatabaseAccess {
                 rs.getInt("archived_status"));
     }
 
+    /*---------------------------------------------------------------------
+     |  Method updateSkiPass(SkiPass skiPass)
+     |
+     |  Purpose:  Updates a SkiPass tuple in the database.
+     |
+     |  Pre-condition:  A SkiPass tuple exists with matching pass_id
+     |
+     |  Post-condition: Same SkiPass tuple now contains the new values from
+     |      skiPass
+     |
+     |  Parameters: SkiPass skiPass -- data carrier for new values
+     |
+     |  Returns:  None.
+     *-------------------------------------------------------------------*/
+    
     public void updateSkiPass(SkiPass skiPass) throws SQLException {
         String sql = "UPDATE stephintomson.SkiPass SET member_id = ?, purchase_date = ?, total_uses = ?, remaining_uses = ?, pass_type = ?, price = ?, archived_status = ? WHERE pass_id = ?";
 
@@ -92,6 +177,20 @@ public class SkiPassDatabaseAccess extends DatabaseAccess {
         }
     }
 
+    /*---------------------------------------------------------------------
+     |  Method deleteSkiPass(long passId)
+     |
+     |  Purpose:  Deletes a tuple from the SkiPass relation
+     |
+     |  Pre-condition:  A SkiPass tuple exists with matching pass_id
+     |
+     |  Post-condition: Same tuple is removed from the database
+     |
+     |  Parameters: long passId -- pass_id of tuple to delete
+     |
+     |  Returns:  None.
+     *-------------------------------------------------------------------*/
+    
     public void deleteSkiPass(long passId) throws SQLException {
         String sql = "DELETE FROM stephintomson.SkiPass WHERE pass_id = ?";
         try (PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
@@ -103,6 +202,21 @@ public class SkiPassDatabaseAccess extends DatabaseAccess {
         }
     }
 
+    /*---------------------------------------------------------------------
+     |  Method getDaysSincePurchase(long passId)
+     |
+     |  Purpose:  Calculates the days (rounded down) since a ski pass was 
+     |      purchased
+     |
+     |  Pre-condition:  SkiPass tuple exists with pass_id = passId
+     |
+     |  Post-condition: Database is unaffected
+     |
+     |  Parameters: long passId -- pass_id to search for
+     |
+     |  Returns:  Days as integer since ski pass was purchased
+     *-------------------------------------------------------------------*/
+    
     public int getDaysSincePurchase(long passId) throws SQLException {
         String sql = "SELECT TRUNC(SYSDATE - purchase_date, 0) AS time_diff FROM stephintomson.SkiPass WHERE pass_id = ?";
         try (PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
@@ -116,8 +230,20 @@ public class SkiPassDatabaseAccess extends DatabaseAccess {
         }
     }
 
-    // Active lession return 1, else 0
-    // Active ski pass return 1, else 0
+    /*---------------------------------------------------------------------
+     |  Method hasActiveSkiPassByMember(Long memberId)
+     |
+     |  Purpose:  Determines if a member owns active (unarchived) ski passes
+     |
+     |  Pre-condition:  memberId represents a valid Member
+     |
+     |  Post-condition: Database is unaffected
+     |
+     |  Parameters: Long memberId -- member_id of Member
+     |
+     |  Returns:  1 if member has an active ski pass, else 0
+     *-------------------------------------------------------------------*/
+    
     public int hasActiveSkiPassByMember(Long memberId) throws SQLException {
         String sql = """
                 SELECT COUNT(*) AS active_pass_count

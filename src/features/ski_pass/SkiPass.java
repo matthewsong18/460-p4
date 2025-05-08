@@ -1,18 +1,45 @@
-/*
- * File: SkiPass.java
- * 
- * Author: Matthew Song
- *         Ethan Huang
- * 
- * Description: Local representation of a ski pass tuple in the database.
- * 
- */
-
 package features.ski_pass;
 
 import common.InputValidation;
-
 import java.sql.Date;
+
+/*+----------------------------------------------------------------------
+ ||
+ ||  Class SkiPass
+ ||
+ ||         Author:  Ethan Huang
+ ||                  Matthew Song
+ ||
+ ||        Purpose:  Local representation of a ski pass tuple in the database.
+ ||
+ ||  Inherits From:  None
+ ||
+ ||     Interfaces:  None
+ ||
+ |+-----------------------------------------------------------------------
+ ||
+ ||      Constants:  None
+ ||
+ |+-----------------------------------------------------------------------
+ ||
+ ||   Constructors:  SkiPass(Long passId, Long memberId, Date purchaseDate, Integer totalUses,
+ ||                         Integer remainingUses, String passType, Integer price, Integer archivedStatus)
+ ||
+ ||                  SkiPass(Long memberId, Integer totalUses, String passType, Integer price)
+ ||
+ ||  Class Methods:  None
+ ||
+ ||  Inst. Methods:  Long passId()
+ ||                  Long memberId()
+ ||                  Date purchaseDate()
+ ||                  Integer totalUses()
+ ||                  Integer remainingUses()
+ ||                  String passType()
+ ||                  Integer price()
+ ||                  Integer archivedStatus()
+ ||
+ ++-----------------------------------------------------------------------*/
+
 
 public record SkiPass(
         Long passId,
