@@ -97,6 +97,12 @@ Type 'back' to return to the main menu.
 ### Elias Zheng
     *  Prog4.java
     *  QueryService
+    *  Rental.java
+    *  RentalDatabaseAccess.java
+    *  RentalService.java
+    *  Equipment.java
+    *  EquipmentDatabaseAccess.java
+    *  EquipmentService.java
 ### Stephin Tomson
     *  create_tables.java 
     *  delete_tables.java
