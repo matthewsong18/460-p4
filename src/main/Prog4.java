@@ -302,10 +302,12 @@ public class Prog4 {
                         // add pass
                         LocalDate todayLocal = LocalDate.now(); // 2025‑05‑07
                         java.sql.Date today = java.sql.Date.valueOf(todayLocal);
+
                        
                         long id = passHandler.createSkiPass(memid, today, uses,
                                 type, price, 0);
                         System.out.println("Added new ski pass: " + id);
+
                     } else if (context.equals("equipment")) {
                         // EQUIPMENT LOGIC //
                         System.out.print("Equipment type: ");
