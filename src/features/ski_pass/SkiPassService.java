@@ -132,7 +132,8 @@ public class SkiPassService {
                 throw new IllegalArgumentException("Cannot add uses to an archived pass: " + passId);
             }
             if (pass.remainingUses() + usesToAdd > pass.totalUses()) {
-                throw new IllegalArgumentException("Cannot add uses; exceeds total allowed uses for pass " + passId);
+                usesToAdd = pass.totalUses() - pass.remainingUses(); // Cap remaining uses to total uses
+                System.out.println("Capping uses to " + pass.remainingUses() + ", to avoid exceeding total uses.");
             }
 
             SkiPass updatedPass = new SkiPass(
