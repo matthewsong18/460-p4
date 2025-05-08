@@ -173,7 +173,11 @@ public class QueryService {
     }
 
     public static ResultSet queryPasses(){
-        String query = "select * from stephintomson.SkiPass";
+        String query = String.format("""
+                        select pass_id, member_id, purchase_date,
+                                total_uses, remaining_uses, pass_type, price
+                        from stephintomson.SkiPass
+                        where archived_status = 0""");
 
         return executeQuery(query);
     }

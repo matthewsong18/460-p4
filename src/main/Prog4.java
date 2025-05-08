@@ -157,7 +157,7 @@ public class Prog4 {
         System.out.println("3 | List all intermediate-level trails and associated information.");
         System.out.println("4 | List the total wage expense for a given property");
         System.out.println("5 | List all members");
-        System.out.println("6 | List all ski passes");
+        System.out.println("6 | List all active ski passes");
         System.out.println("7 | List all equipment");
         System.out.println("8 | List all rentals");
         System.out.println("9 | List all lesson orders");
@@ -248,7 +248,7 @@ public class Prog4 {
             System.out.println("3 | List all intermediate-level trails and associated information.");
             System.out.println("4 | List the total wage expense for a given property");
             System.out.println("5 | List all members");
-            System.out.println("6 | List all ski passes");
+            System.out.println("6 | List all active ski passes");
             System.out.println("7 | List all equipment");
             System.out.println("8 | List all rentals");
             System.out.println("9 | List all lesson orders");
