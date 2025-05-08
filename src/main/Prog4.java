@@ -305,6 +305,7 @@ public class Prog4 {
 
                         long id = passHandler.createSkiPass(memid, today, uses,
                                 type, price, 0);
+
                         System.out.println("Added new ski pass: ");
                     } else if (context.equals("equipment")) {
                         // EQUIPMENT LOGIC //
