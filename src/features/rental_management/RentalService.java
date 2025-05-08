@@ -1,3 +1,14 @@
+/*
+ * File: RentalService.java
+ * 
+ * Author: Matthew Song
+ *         Ethan Huang
+ * 
+ * Description: Client-facing API for database services on the rental table.
+ * 
+ */
+
+
 package features.rental_management;
 
 import common.DatabaseConnection;

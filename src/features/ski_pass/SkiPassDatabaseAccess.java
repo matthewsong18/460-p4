@@ -1,3 +1,13 @@
+/*
+ * File: SkiPassDatabaseAccess.java
+ * 
+ * Author: Matthew Song
+ *         Ethan Huang
+ * 
+ * Description: Backend for ski pass database services.
+ * 
+ */
+
 package features.ski_pass;
 
 import common.DatabaseAccess;

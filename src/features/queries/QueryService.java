@@ -167,12 +167,24 @@ public class QueryService {
     }
 
     public static ResultSet queryMembers(){
+        /*
+         * Simple query to return all member tuples.
+         * 
+         * Return: ResultSet with DB response, null if exception occurred.
+         */
+
         String query = "select * from stephintomson.Member";
         
         return executeQuery(query);
     }
 
     public static ResultSet queryPasses(){
+        /*
+         * Simple query to return all active ski passes
+         * 
+         * Return: ResultSet with DB response, null if exception occurred.
+         */
+
         String query = String.format("""
                         select pass_id, member_id, purchase_date,
                                 total_uses, remaining_uses, pass_type, price
@@ -183,24 +195,48 @@ public class QueryService {
     }
 
     public static ResultSet queryEquipment(){
+        /*
+         * Simple query to return all equipment tuples
+         * 
+         * Return: ResultSet with DB response, null if exception occurred.
+         */
+
         String query = "select * from stephintomson.Equipment";
 
         return executeQuery(query);    
     }
 
     public static ResultSet queryRental(){
+        /*
+         * Simple query to return all rental tuples.
+         * 
+         * Return: ResultSet with DB response, null if exception occurred.
+         */
+
         String query = "select * from stephintomson.Rental";
 
         return executeQuery(query);
     }
 
     public static ResultSet queryLesson(){
+        /*
+         * Simple query to return all lesson tuples.
+         * 
+         * Return: ResultSet with DB response, null if exception occurred.
+         */
+
         String query = "select * from stephintomson.Lesson";
 
         return executeQuery(query);
     }
 
     public static ResultSet queryOrder(){
+        /*
+         * Simple query to return all lesson order tuples.
+         * 
+         * Return: ResultSet with DB response, null if exception occurred.
+         */
+
         String query = "select * from stephintomson.LessonOrder";
 
         return executeQuery(query);
