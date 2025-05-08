@@ -32,14 +32,18 @@ public record Rental(Long rental_id,
         this(null, pass_id, equipment_id, null, null);
     }
 
-    /** Computed rental status: 1 = active, 0 = returned */
-    public int return_status() {
-        if (dateTime_To == null)
-            return 0;
-        return dateTime_To.toLocalDate().isAfter(java.time.LocalDate.now()) ? 1 : 0;
+    // /** Computed rental status: 1 = active, 0 = returned */
+    // public int return_status() {
+    // if (dateTime_To == null)
+    // return 0;
+    // return dateTime_To.toLocalDate().isAfter(java.time.LocalDate.now()) ? 1 : 0;
+    // }
+
+    // public boolean isActive() {
+    // return return_status() == 1;
+    // }
+    public boolean isActive() {
+        return dateTime_To == null || dateTime_To.toLocalDate().isAfter(java.time.LocalDate.now());
     }
 
-    public boolean isActive() {
-        return return_status() == 1;
-    }
 }

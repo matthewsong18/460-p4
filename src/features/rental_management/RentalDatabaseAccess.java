@@ -115,18 +115,23 @@ public class RentalDatabaseAccess extends DatabaseAccess {
      * Finds an active rental by equipment ID. An active rental is one that has not
      * been returned yet
      */
-    public Optional<Rental> findActiveRental(Long equipmentId) {
+    public Optional<Rental> findActiveRental(Long rental_id) {
         String sql = """
                 SELECT rental_id, pass_id, equipment_id, datetime_from, datetime_to
                   FROM stephintomson.Rental
-                 WHERE equipment_id = ?
+                 WHERE rental_id = ?
                 """;
 
         try (PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
-            preparedStatement.setLong(1, equipmentId);
+            preparedStatement.setLong(1, rental_id);
             try (ResultSet resultSet = preparedStatement.executeQuery()) {
                 if (resultSet.next()) {
+                    // System.out.println("Equipment ID: " + equipmentId);
                     Rental rental = mapRowToRental(resultSet);
+                    // System.out.println("Rental is active: " + rental.isActive());
+                    // System.out.println("To: " + rental.dateTime_To());
+                    // System.out.println("Today: " + java.time.LocalDate.now());
+
                     if (rental.isActive()) {
                         return Optional.of(rental);
                     }
