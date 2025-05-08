@@ -2,6 +2,9 @@ package features.member_management;
 
 import common.DatabaseAccess;
 import common.DatabaseConnection;
+import features.rental_management.RentalDatabaseAccess;
+import features.ski_pass.SkiPassDatabaseAccess;
+import features.lesson_management.LessonDatabaseAccess;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -11,7 +14,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-class MemberDatabaseAccess extends DatabaseAccess {
+public class MemberDatabaseAccess extends DatabaseAccess {
 
     public MemberDatabaseAccess(DatabaseConnection databaseConnection) {
         super(databaseConnection);
@@ -107,7 +110,6 @@ class MemberDatabaseAccess extends DatabaseAccess {
         return members;
     }
 
-
     public boolean updateMember(Member member) {
         if (member.id() == null) {
             throw new RuntimeException("Cannot update member without an ID.");
@@ -131,7 +133,17 @@ class MemberDatabaseAccess extends DatabaseAccess {
         }
     }
 
+  
+    
+    // This method remove all related records, including ski pass data, lift usage
+    // logs, rental history, and
+    // lesson transactions associated with the member.
+    private void memberPostCheck(Member member) {
+
+    }
+
     public void deleteMember(Member member) {
+        
         String sql = "DELETE FROM stephintomson.Member WHERE member_id = ?";
 
         try (PreparedStatement preparedStatement = connection.prepareStatement(sql)) {

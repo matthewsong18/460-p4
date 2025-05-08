@@ -25,7 +25,6 @@ public class RentalDatabaseAccess extends DatabaseAccess {
             preparedStatement.setLong(1, newRentalId);
             preparedStatement.setLong(2, rental.pass_id());
             preparedStatement.setLong(3, rental.equipment_id());
-          
 
             int affectedRows = preparedStatement.executeUpdate();
             if (affectedRows == 0) {
@@ -122,6 +121,29 @@ public class RentalDatabaseAccess extends DatabaseAccess {
         }
 
         return Optional.empty();
+    }
+
+    /**
+     * Checks if a member has any rentals.
+     * Returns 1 if at least one rental is found, otherwise 0.
+     */
+    public int hasRentalByMember(Long memberId) {
+        String sql = """
+                SELECT 1
+                  FROM stephintomson.Rental r
+                  JOIN stephintomson.SkiPass s ON r.pass_id = s.pass_id
+                 WHERE s.member_id = ?
+                   AND ROWNUM = 1
+                """;
+
+        try (PreparedStatement ps = connection.prepareStatement(sql)) {
+            ps.setLong(1, memberId);
+            try (ResultSet rs = ps.executeQuery()) {
+                return rs.next() ? 1 : 0;
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException("Error checking rental for member: " + memberId, e);
+        }
     }
 
 }
