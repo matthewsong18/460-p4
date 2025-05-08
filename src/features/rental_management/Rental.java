@@ -1,19 +1,35 @@
 package features.rental_management;
 
-import java.sql.Timestamp;
+import java.sql.Date;
 
-public record Rental(Long rental_id, Long ski_pass_id, Long equipment_id, Timestamp dateTimeFrom, int return_status) {
-    public Rental(Long ski_pass_id, Long equipment_id, int return_status) {
-        this(null, ski_pass_id, equipment_id, null, return_status);
+public record Rental(Long rental_id,
+        Long pass_id,
+        Long equipment_id,
+        Date dateTime_From,
+        Date dateTime_To) {
+
+    /** Canonical constructor — preserves all values */
+    public Rental(Long rental_id, Long pass_id, Long equipment_id, Date dateTime_From, Date dateTime_To) {
+        this.rental_id = rental_id;
+        this.pass_id = pass_id;
+        this.equipment_id = equipment_id;
+        this.dateTime_From = dateTime_From;
+        this.dateTime_To = dateTime_To;
     }
 
-    public Rental {
-        checkReturnStatus(return_status);
+    /** Convenience constructor for new rentals */
+    public Rental(Long pass_id, Long equipment_id) {
+        this(null, pass_id, equipment_id, null, null);
     }
 
-    private void checkReturnStatus(int return_status) {
-        if (return_status != 0 && return_status != 1) {
-            throw new IllegalArgumentException("Invalid return status: " + return_status);
-        }
+    /** Computed rental status: 0 = active, 1 = returned */
+    public int return_status() {
+        if (dateTime_To == null)
+            return 0;
+        return dateTime_To.toLocalDate().isAfter(java.time.LocalDate.now()) ? 0 : 1;
+    }
+
+    public boolean isActive() {
+        return return_status() == 0;
     }
 }

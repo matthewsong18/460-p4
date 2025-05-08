@@ -36,30 +36,28 @@ public class EquipmentDatabaseAccess extends DatabaseAccess {
     }
 
     public Optional<Equipment> findEquipmentById(Long id) {
-        String sql = "SELECT equipment_type, dimension, archived_status FROM stephintomson.Equipment WHERE equipment_id = ?";
+        String sql = "SELECT equipment_type, dimension, archived_status " +
+                "FROM stephintomson.Equipment WHERE equipment_id = ?";
 
-        try (PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
-            preparedStatement.setLong(1, id);
-
-            try (ResultSet resultSet = preparedStatement.executeQuery()) {
-                if (resultSet.next()) {
-                    Equipment equipment = mapRowToEquipment(resultSet);
-                    return Optional.of(equipment);
+        try (PreparedStatement ps = connection.prepareStatement(sql)) {
+            ps.setLong(1, id);
+            try (ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) {
+                    return Optional.of(mapRowToEquipment(rs,id));
                 }
             }
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
-
         return Optional.empty();
     }
 
     // Helper method to map a ResultSet row to an Equipment object
-    private Equipment mapRowToEquipment(ResultSet resultSet) throws SQLException {
-        long id = resultSet.getLong("id");
-        String type = resultSet.getString("type");
-        String dimension = resultSet.getString("dimension");
-        int archived_status = resultSet.getInt("archived_status");
+    private Equipment mapRowToEquipment(ResultSet resultSet,Long id1) throws SQLException {
+        long id = id1;
+        String type = resultSet.getString("EQUIPMENT_TYPE");
+        String dimension = resultSet.getString("DIMENSION");
+        int archived_status = resultSet.getInt("ARCHIVED_STATUS");
 
         return new Equipment(id, type, dimension, archived_status);
     }

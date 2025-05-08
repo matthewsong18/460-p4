@@ -18,12 +18,12 @@ public class RentalService {
     }
 
     // Returns new id
-    public Long registerRental(Long ski_pass_id, Long equipment_id, int return_status) {
+    public Long registerRental(Long pass_id, Long equipment_id) {
         // Check ids
-        checkSkiPass(ski_pass_id);
+        checkSkiPass(pass_id);
         checkEquipment(equipment_id);
 
-        Rental rental = new Rental(ski_pass_id, equipment_id, return_status);
+        Rental rental = new Rental(pass_id, equipment_id);
 
         try {
             return rentalDatabaseAccess.createRental(rental);
