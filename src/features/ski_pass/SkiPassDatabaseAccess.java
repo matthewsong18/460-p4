@@ -15,14 +15,14 @@ public class SkiPassDatabaseAccess extends DatabaseAccess {
     }
 
     public Long createSkiPass(SkiPass skiPass) throws SQLException {
-        String insertSql = "INSERT INTO stephintomson.SkiPass VALUES (?, ?, SYSDATE, ?, ?, ?, ?, ?)";
+        String insertSql = "INSERT INTO stephintomson.SkiPass VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
 
         try (PreparedStatement preparedStatement = connection.prepareStatement(insertSql)) {
             Long newPassId = getNextId("SkiPass", "pass_id"); // Helper to get a new ID
-
+            java.sql.Date sqlDate = java.sql.Date.valueOf(skiPass.purchaseDate() + "");
             preparedStatement.setLong(1, newPassId);
             preparedStatement.setLong(2, skiPass.memberId());
-            // purchase_date is set by SYSTIMESTAMP in SQL
+            preparedStatement.setDate(3, sqlDate);
             preparedStatement.setInt(4, skiPass.totalUses());
             preparedStatement.setInt(5, skiPass.remainingUses());
             preparedStatement.setString(6, skiPass.passType());
