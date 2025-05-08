@@ -61,8 +61,8 @@ class MemberDatabaseAccess extends DatabaseAccess {
 
     // Helper method to map a ResultSet row to a Member object
     private Member mapRowToMember(ResultSet resultSet) throws SQLException {
-        Long id = resultSet.getLong("id");
-        String name = resultSet.getString("name");
+        Long id = resultSet.getLong("member_id");
+        String name = resultSet.getString("member_name");
         String telephone = resultSet.getString("telephone");
         String email = resultSet.getString("email");
         String dateOfBirth = resultSet.getString("date_of_birth");
@@ -111,7 +111,7 @@ class MemberDatabaseAccess extends DatabaseAccess {
         if (member.id() == null) {
             throw new RuntimeException("Cannot update member without an ID.");
         }
-        String sql = "UPDATE stephintomson.Member SET name = ?, telephone = ?, email = ?, date_of_birth = ?, emergency_contact = ? WHERE member_id = ?";
+        String sql = "UPDATE stephintomson.Member SET member_name = ?, telephone = ?, email = ?, date_of_birth = ?, emergency_contact = ? WHERE member_id = ?";
 
         try (PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
 
