@@ -41,11 +41,16 @@ import java.util.Optional;
  ||
  ||   Constructors:  SkiPassService(DatabaseConnection dbConnection)
  ||
- ||  Class Methods:  [List the names, arguments, and return types of all
- ||                   public class methods.]
+ ||  Class Methods:  None
  ||
- ||  Inst. Methods:  [List the names, arguments, and return types of all
- ||                   public instance methods.]
+ ||  Inst. Methods:  Long createSkiPass(Long memberId, Integer totalUses, String passType, Integer price)
+ ||                  Optional<SkiPass> findSkiPassById(long passId)
+ ||                  void useSkiPass(long passId)
+ ||                  void archivePass(long passId, boolean forceArchive)
+ ||                  void addUsesToPass(long passId, int usesToAdd)
+ ||                  boolean isPassExpired(long passId)
+ ||                  void updatePassDetails(SkiPass skiPassData)
+ ||                  void deletePass(long passId)
  ||
  ++-----------------------------------------------------------------------*/
 
