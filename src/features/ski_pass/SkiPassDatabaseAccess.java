@@ -27,8 +27,8 @@ public class SkiPassDatabaseAccess extends DatabaseAccess {
     public Long createSkiPass(SkiPass skiPass) throws SQLException {
 
         String insertSql = "INSERT INTO stephintomson.SkiPass VALUES (?, ?, SYSDATE, ?, ?, ?, ?, 0)";
-                // SYSDATE is used for consistency (database server time)
-                // all new passes are not archived (archived_status = 0)
+        // SYSDATE is used for consistency (database server time)
+        // all new passes are not archived (archived_status = 0)
 
         try (PreparedStatement preparedStatement = connection.prepareStatement(insertSql)) {
             Long newPassId = getNextId("SkiPass", "pass_id"); // Helper to get a new ID
@@ -115,4 +115,27 @@ public class SkiPassDatabaseAccess extends DatabaseAccess {
             }
         }
     }
+
+    // Active lession return 1, else 0
+    // Active ski pass return 1, else 0
+    public int hasActiveSkiPassByMember(Long memberId) throws SQLException {
+        String sql = """
+                SELECT COUNT(*) AS active_pass_count
+                  FROM stephintomson.SkiPass
+                 WHERE member_id = ?
+                   AND archived_status = 0
+                """;
+
+        try (PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
+            preparedStatement.setLong(1, memberId);
+            ResultSet rs = preparedStatement.executeQuery();
+
+            if (rs.next()) {
+                return rs.getInt("active_pass_count") > 0 ? 1 : 0;
+            } else {
+                throw new SQLException("Member not found for ski pass check, ID: " + memberId);
+            }
+        }
+    }
+
 }

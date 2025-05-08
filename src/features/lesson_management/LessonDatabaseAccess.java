@@ -6,7 +6,7 @@ import common.DatabaseConnection;
 import java.sql.*;
 import java.util.Optional;
 
-class LessonDatabaseAccess extends DatabaseAccess {
+public class LessonDatabaseAccess extends DatabaseAccess {
 
     public LessonDatabaseAccess(DatabaseConnection databaseConnection) {
         super(databaseConnection);
@@ -14,7 +14,7 @@ class LessonDatabaseAccess extends DatabaseAccess {
 
     public Long createLesson(Lesson lesson) {
         String sql = "INSERT into stephintomson.Lesson VALUES (?, ?, ?)";
-        try (PreparedStatement preparedStatement = connection.prepareStatement(sql)){
+        try (PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
             Long newId = getNextId("Lesson", "lesson_id");
 
             preparedStatement.setLong(1, newId);
@@ -49,6 +49,29 @@ class LessonDatabaseAccess extends DatabaseAccess {
         }
 
         return Optional.empty();
+    }
+
+    // This method is used to check if a lesson exists for a given member ID.
+    // It returns true if at least one lesson exists for the member, false
+    // otherwise.
+    // Active lesson return 1, else 0
+    public int hasLessonByMember(Long memberId) throws SQLException {
+        String sql = """
+                SELECT COUNT(*) AS lesson_count
+                  FROM stephintomson.LessonOrder
+                 WHERE member_id = ?
+                """;
+
+        try (PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
+            preparedStatement.setLong(1, memberId);
+            ResultSet rs = preparedStatement.executeQuery();
+
+            if (rs.next()) {
+                return rs.getInt("lesson_count") > 0 ? 1 : 0;
+            } else {
+                throw new SQLException("Member not found for lesson check, ID: " + memberId);
+            }
+        }
     }
 
     private Lesson mapToLesson(ResultSet resultSet) throws SQLException {
