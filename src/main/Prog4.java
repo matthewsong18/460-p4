@@ -11,6 +11,8 @@ package main;
 
 import java.io.*;
 import java.sql.*;
+import java.sql.Date;
+import java.time.LocalDate;
 import java.util.*;
 import java.lang.*;
 
@@ -298,8 +300,11 @@ public class Prog4 {
                         userin.nextLine();
 
                         // add pass
-                        long id = passHandler.createSkiPass(memid, new Timestamp(System.currentTimeMillis()), uses,
-                                type, price);
+                        LocalDate todayLocal = LocalDate.now(); // 2025‑05‑07
+                        java.sql.Date today = java.sql.Date.valueOf(todayLocal);
+
+                        long id = passHandler.createSkiPass(memid, today, uses,
+                                type, price, 0);
                         System.out.println("Added new ski pass: ");
                     } else if (context.equals("equipment")) {
                         // EQUIPMENT LOGIC //

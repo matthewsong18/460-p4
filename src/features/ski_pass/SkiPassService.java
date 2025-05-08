@@ -4,7 +4,7 @@ import common.DatabaseConnection;
 import features.member_management.MemberService;
 
 import java.sql.SQLException;
-import java.sql.Timestamp;
+import java.sql.Date;
 import java.util.Optional;
 
 public class SkiPassService {
@@ -16,14 +16,14 @@ public class SkiPassService {
         this.skiPassDatabaseAccess = new SkiPassDatabaseAccess(dbConnection);
     }
 
-    public Long createSkiPass(Long memberId, Timestamp purchaseDate, Integer totalUses, String passType,
-                              Integer price) {
+    public Long createSkiPass(Long memberId, Date purchaseDate, Integer totalUses, String passType,
+            Integer price, Integer archivedStatus) {
         MemberService memberService = new MemberService(dbConnection);
         if (memberService.findMemberById(memberId).isEmpty()) {
             throw new IllegalArgumentException("Member with ID " + memberId + " not found.");
         }
 
-        SkiPass newSkiPass = new SkiPass(memberId, purchaseDate, totalUses, passType, price);
+        SkiPass newSkiPass = new SkiPass(memberId, purchaseDate, totalUses, passType, price, archivedStatus);
         try {
             return skiPassDatabaseAccess.createSkiPass(newSkiPass);
         } catch (SQLException e) {
@@ -143,8 +143,7 @@ public class SkiPassService {
                     pass.remainingUses() + usesToAdd,
                     pass.passType(),
                     pass.price(),
-                    pass.archivedStatus()
-            );
+                    pass.archivedStatus());
             skiPassDatabaseAccess.updateSkiPass(updatedPass);
         } catch (SQLException e) {
             throw new RuntimeException("Failed to add uses to ski pass ID " + passId + ": " + e.getMessage(), e);
