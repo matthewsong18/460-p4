@@ -22,11 +22,11 @@ public record Rental(Long rental_id,
         this(null, pass_id, equipment_id, null, null);
     }
 
-    /** Computed rental status: 0 = active, 1 = returned */
+    /** Computed rental status: 1 = active, 0 = returned */
     public int return_status() {
         if (dateTime_To == null)
-            return 0;
-        return dateTime_To.toLocalDate().isAfter(java.time.LocalDate.now()) ? 0 : 1;
+            return 1;
+        return dateTime_To.toLocalDate().isAfter(java.time.LocalDate.now()) ? 1 : 0;
     }
 
     public boolean isActive() {
