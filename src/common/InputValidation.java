@@ -2,11 +2,11 @@ package common;
 
 /*+----------------------------------------------------------------------
  ||
- ||  Class DatabaseConnection 
+ ||  Class InputValidation
  ||
- ||        Author:  Ethan Huang
+ ||         Author:  Matthew Song
  ||
- ||     Purpose:  Validation methods for inputs
+ ||        Purpose:  Validation methods for Strings
  ||
  ||  Inherits From:  None
  ||
