@@ -6,12 +6,72 @@ import common.DatabaseConnection;
 import java.sql.*;
 import java.util.Optional;
 
+/*+----------------------------------------------------------------------
+ ||
+ ||  Class EmployeeDatabaseAccess
+ ||
+ ||      Author:  Matthew Song
+ ||
+ ||      Purpose:  Handles database operations for employees (CRUD).
+ ||
+ ||  Inherits From:  common.DatabaseAccess
+ ||
+ ||      Interfaces:  None.
+ ||
+ |+-----------------------------------------------------------------------
+ ||
+ ||      Constants:  None.
+ ||
+ |+-----------------------------------------------------------------------
+ ||
+ ||   Constructors:  EmployeeDatabaseAccess(DatabaseConnection databaseConnection)
+ ||
+ ||  Class Methods:  None.
+ ||
+ ||  Inst. Methods:  Long createEmployee(Employee employee)
+ ||                  Optional<Employee> findEmployeeById(Long id)
+ ||                  void updateEmployee(Employee employee)
+ ||                  void deleteEmployee(Employee employee)
+ ||                  private Employee mapRowToEmployee(ResultSet resultSet) throws SQLException
+ ||
+ ++-----------------------------------------------------------------------*/
 public class EmployeeDatabaseAccess extends DatabaseAccess {
 
+    /*---------------------------------------------------------------------
+     |  Method EmployeeDatabaseAccess (Constructor)
+     |
+     |  Purpose:  Initializes with a database connection.
+     |
+     |  Pre-condition:  Valid databaseConnection.
+     |
+     |  Post-condition: Instance ready for database operations.
+     |
+     |  Parameters:
+     |      databaseConnection -- Database connection.
+     |
+     |  Returns:  None.
+     *-------------------------------------------------------------------*/
     public EmployeeDatabaseAccess(DatabaseConnection databaseConnection) {
         super(databaseConnection);
     }
 
+    /*---------------------------------------------------------------------
+     |  Method createEmployee
+     |
+     |  Purpose:  Creates a new employee record in the database.
+     |            Uses SYSTIMESTAMP for start_date.
+     |
+     |  Pre-condition:  Valid employee object; active DB connection.
+     |                  Assumes 'Employee' table and 'employee_id' sequence exist.
+     |
+     |  Post-condition: Employee created, new ID returned. Throws RuntimeException
+     |                  on SQL error or if no rows affected.
+     |
+     |  Parameters:
+     |      employee -- Employee data to create. 'start_date' in object is ignored.
+     |
+     |  Returns:  ID (Long) of the new employee.
+     *-------------------------------------------------------------------*/
     public Long createEmployee(Employee employee) {
         String sql = "INSERT into stephintomson.Employee (employee_id, name, age, gender, position, salary, start_date, property_id VALUES (?, ?, ?, ?, ?, ?, SYSTIMESTAMP, ?)";
         try (PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
@@ -37,6 +97,22 @@ public class EmployeeDatabaseAccess extends DatabaseAccess {
         }
     }
 
+    /*---------------------------------------------------------------------
+     |  Method findEmployeeById
+     |
+     |  Purpose:  Finds an employee by ID.
+     |
+     |  Pre-condition:  Valid ID; active DB connection.
+     |                  SQL uses 'id' for column name; ensure this matches table schema.
+     |
+     |  Post-condition: Returns Optional of employee if found. Throws
+     |                  RuntimeException on SQL error.
+     |
+     |  Parameters:
+     |      id -- Employee ID to find.
+     |
+     |  Returns:  Optional<Employee>. Empty if not found.
+     *-------------------------------------------------------------------*/
     public Optional<Employee> findEmployeeById(Long id) {
         String sql = "SELECT * FROM stephintomson.Employee WHERE id = ?";
         try (PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
@@ -55,6 +131,22 @@ public class EmployeeDatabaseAccess extends DatabaseAccess {
         }
     }
 
+    /*---------------------------------------------------------------------
+     |  Method mapRowToEmployee
+     |
+     |  Purpose:  Maps a ResultSet row to an Employee object.
+     |
+     |  Pre-condition:  ResultSet pointing to a valid row with employee data.
+     |                  Column names in ResultSet match expected values.
+     |
+     |  Post-condition: Returns mapped Employee object. Throws SQLException
+     |                  if column access fails.
+     |
+     |  Parameters:
+     |      resultSet -- ResultSet with employee data.
+     |
+     |  Returns:  Employee object.
+     *-------------------------------------------------------------------*/
     private Employee mapRowToEmployee(ResultSet resultSet) throws SQLException {
         Long id = resultSet.getLong("employee_id");
         String name = resultSet.getString("name");
@@ -68,6 +160,22 @@ public class EmployeeDatabaseAccess extends DatabaseAccess {
         return new Employee(id, name, age, gender, position, salary, start_date, property_id);
     }
 
+    /*---------------------------------------------------------------------
+     |  Method updateEmployee
+     |
+     |  Purpose:  Updates an existing employee's record.
+     |
+     |  Pre-condition:  Valid employee object with ID; active DB connection.
+     |                  SQL uses 'id' for WHERE clause; ensure matches schema.
+     |
+     |  Post-condition: Employee updated. Throws RuntimeException on SQL
+     |                  error or if no rows affected.
+     |
+     |  Parameters:
+     |      employee -- Employee data to update. employee_id identifies record.
+     |
+     |  Returns:  None.
+     *-------------------------------------------------------------------*/
     public void updateEmployee(Employee employee) {
         String sql = "UPDATE stephintomson.Employee SET name = ?, age = ?, gender = ?, position = ?, salary = ?, start_date = ?, property_id = ? WHERE id = ?";
 
@@ -90,6 +198,22 @@ public class EmployeeDatabaseAccess extends DatabaseAccess {
         }
     }
 
+    /*---------------------------------------------------------------------
+     |  Method deleteEmployee
+     |
+     |  Purpose:  Deletes an employee's record by ID.
+     |
+     |  Pre-condition:  Valid employee object with ID; active DB connection.
+     |                  SQL uses 'id' for WHERE clause; ensure matches schema.
+     |
+     |  Post-condition: Employee deleted. Throws RuntimeException on SQL
+     |                  error or if no rows affected.
+     |
+     |  Parameters:
+     |      employee -- Employee to delete (uses employee_id).
+     |
+     |  Returns:  None.
+     *-------------------------------------------------------------------*/
     public void deleteEmployee(Employee employee) {
         String sql = "DELETE FROM stephintomson.Employee WHERE id = ?";
         try (PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
