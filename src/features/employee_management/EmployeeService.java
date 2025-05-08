@@ -4,7 +4,6 @@ import common.DatabaseConnection;
 import features.property_management.Property;
 import features.property_management.PropertyService;
 
-import java.sql.Timestamp;
 import java.util.Optional;
 
 public class EmployeeService {

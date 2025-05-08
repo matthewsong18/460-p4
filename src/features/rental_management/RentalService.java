@@ -6,7 +6,6 @@ import features.equipment_management.EquipmentService;
 import features.ski_pass.SkiPass;
 import features.ski_pass.SkiPassService;
 
-import java.sql.Timestamp;
 import java.util.Optional;
 
 public class RentalService {

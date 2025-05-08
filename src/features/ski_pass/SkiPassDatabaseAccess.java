@@ -15,7 +15,7 @@ public class SkiPassDatabaseAccess extends DatabaseAccess {
     }
 
     public Long createSkiPass(SkiPass skiPass) throws SQLException {
-        String insertSql = "INSERT INTO stephintomson.SkiPass VALUES (?, ?, SYSTIMESTAMP, ?, ?, ?, ?, ?)";
+        String insertSql = "INSERT INTO stephintomson.SkiPass VALUES (?, ?, SYSDATE, ?, ?, ?, ?, ?)";
 
         try (PreparedStatement preparedStatement = connection.prepareStatement(insertSql)) {
             Long newPassId = getNextId("SkiPass", "pass_id"); // Helper to get a new ID

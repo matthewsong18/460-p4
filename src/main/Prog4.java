@@ -32,21 +32,21 @@ public class Prog4 {
     private static RentalService rentalHandler;
     private static LessonOrderService lessonHandler;
     private static SkiPassService passHandler;
-    
+
     private static ArrayList<String> tracker = new ArrayList<String>();
 
-    private static void printResults(ResultSet results){
-        try{
+    private static void printResults(ResultSet results) {
+        try {
             if (results == null) {
                 System.out.println("| NO RESULTS |");
                 return;
             }
 
             ResultSetMetaData meta = results.getMetaData();
-            
+
             // print attribute names
             StringBuilder builder = new StringBuilder("|");
-            for (int i = 1; i <= meta.getColumnCount(); i++){
+            for (int i = 1; i <= meta.getColumnCount(); i++) {
                 builder.append(String.format("| %-25s |", meta.getColumnName(i)));
             }
             builder.append("|");
@@ -57,7 +57,7 @@ public class Prog4 {
             while (results.next()) {
                 count++;
                 builder = new StringBuilder("|");
-                for (int i = 1; i <= meta.getColumnCount(); i++){
+                for (int i = 1; i <= meta.getColumnCount(); i++) {
                     builder.append(String.format("| %-25s |", results.getString(i)));
                 }
                 builder.append("|");
@@ -67,23 +67,23 @@ public class Prog4 {
             if (count == 0) {
                 System.out.println(String.format("|| %-25s || ", "NO RESULTS"));
             }
-        } catch (SQLException e){
+        } catch (SQLException e) {
             throw new RuntimeException("ERROR: ", e);
         }
     }
 
-    private static void printResults(ResultSet results, boolean track){
-        try{
+    private static void printResults(ResultSet results, boolean track) {
+        try {
             if (results == null) {
                 System.out.println("| NO RESULTS |");
                 return;
             }
 
             ResultSetMetaData meta = results.getMetaData();
-            
+
             // print attribute names
             StringBuilder builder = new StringBuilder("|");
-            for (int i = 1; i <= meta.getColumnCount(); i++){
+            for (int i = 1; i <= meta.getColumnCount(); i++) {
                 builder.append(String.format("| %-25s |", meta.getColumnName(i)));
             }
             builder.append("|");
@@ -94,7 +94,7 @@ public class Prog4 {
             while (results.next()) {
                 count++;
                 builder = new StringBuilder("|");
-                for (int i = 1; i <= meta.getColumnCount(); i++){
+                for (int i = 1; i <= meta.getColumnCount(); i++) {
                     builder.append(String.format("| %-25s |", results.getString(i)));
                 }
                 builder.append("|");
@@ -105,12 +105,12 @@ public class Prog4 {
             if (count == 0) {
                 System.out.println(String.format("|| %-25s ||b ", "NO RESULTS"));
             }
-        } catch (SQLException e){
+        } catch (SQLException e) {
             throw new RuntimeException("ERROR: ", e);
         }
     }
-  
-    private static String actionMenu(String context){
+
+    private static String actionMenu(String context) {
         /*
          * Handles logic for the action state menu
          * 
@@ -138,7 +138,7 @@ public class Prog4 {
 
     }
 
-    private static void queryMenu(){
+    private static void queryMenu() {
         /*
          * Handles logic for the query submenu.
          * 
@@ -162,7 +162,7 @@ public class Prog4 {
         System.out.println("9 | List all lesson orders");
         System.out.println("Type 'back' to return to the main menu.");
 
-        while (userin.hasNextLine() && !(input = userin.nextLine().toLowerCase()).equals("back")){
+        while (userin.hasNextLine() && !(input = userin.nextLine().toLowerCase()).equals("back")) {
             try {
                 switch (input) {
                     case "1":
@@ -190,7 +190,7 @@ public class Prog4 {
                         System.out.println("INTERMEDIATE TRAILS AND ASSOCIATED LIFTS");
                         ResultSet results3 = QueryService.queryIntTrails();
                         printResults(results3, true);
-                        for (String trail : tracker){
+                        for (String trail : tracker) {
                             System.out.println("LIFTS GOING TO INTERMEDIATE TRIAL WTH ID " + trail);
                             results3 = QueryService.queryLifts(trail);
                             printResults(results3);
@@ -199,7 +199,7 @@ public class Prog4 {
                     case "4":
                         System.out.print("\nEnter Property ID: ");
                         arg1 = userin.nextLine();
-                        //execute
+                        // execute
                         ResultSet results4 = QueryService.queryWageExpense(arg1);
                         printResults(results4);
                         break;
@@ -229,10 +229,10 @@ public class Prog4 {
                         System.out.println("ERROR: Invalid option selected.");
                         break;
                 }
-            } catch (InputMismatchException e){
+            } catch (InputMismatchException e) {
                 System.out.println("ERROR: Invalid argument provided. Please try again.");
                 input = "";
-            } catch (RuntimeException e){
+            } catch (RuntimeException e) {
                 System.err.println("ERROR: Something went wrong. Please try again.");
                 System.out.print("DB: ");
                 e.printStackTrace();
@@ -256,11 +256,11 @@ public class Prog4 {
 
         return;
     }
-    
-    private static void executionMenu(String actionState, String context){
+
+    private static void executionMenu(String actionState, String context) {
         // TO DO: add logic for ski pass, equipment, rentals, lessons
         // action logic
-        try{
+        try {
             switch (actionState) {
                 case "1":
                     // add
@@ -278,11 +278,11 @@ public class Prog4 {
                         System.out.print("Emergency Telephone #: ");
                         Long emergency = userin.nextLong();
                         userin.nextLine();
-    
+
                         // add member
                         long id = memberHandler.registerMember(name, telephoneNumber, email, dateOfBirth, emergency);
                         System.out.println("Added new member: " + id);
-                    } else if (context.equals("ski")){
+                    } else if (context.equals("ski")) {
                         // SKI PASS LOGIC //
                         System.out.print("Member ID: ");
                         long memid = userin.nextLong();
@@ -298,9 +298,10 @@ public class Prog4 {
                         userin.nextLine();
 
                         // add pass
-                        long id = passHandler.createSkiPass(memid, new Timestamp(System.currentTimeMillis()), uses, type, price);
+                        long id = passHandler.createSkiPass(memid, new Timestamp(System.currentTimeMillis()), uses,
+                                type, price);
                         System.out.println("Added new ski pass: ");
-                    } else if (context.equals("equipment")){
+                    } else if (context.equals("equipment")) {
                         // EQUIPMENT LOGIC //
                         System.out.print("Equipment type: ");
                         String type = userin.nextLine();
@@ -318,10 +319,10 @@ public class Prog4 {
                         System.out.print("Ski Pass ID: ");
                         long skiid = userin.nextLong();
                         userin.nextLine();
-                        
+
                         long id = rentalHandler.registerRental(skiid, equpid, 0);
                         System.out.println("Added new equipment rental: " + id);
-                    } else if (context.equals("lesson")){
+                    } else if (context.equals("lesson")) {
                         // LESSON LOGIC //
                         System.out.print("Member ID: ");
                         long memid = userin.nextLong();
@@ -332,7 +333,7 @@ public class Prog4 {
                         System.out.print("Sessions: ");
                         int sess = userin.nextInt();
                         userin.nextLine();
-                        
+
                         // add lesson
                         long id = lessonHandler.createLessonOrder(lesid, memid, sess);
                         System.out.println("Added new lesson order: " + id);
@@ -369,11 +370,11 @@ public class Prog4 {
                         System.out.print("Equipment ID: ");
                         long id = userin.nextLong();
                         userin.nextLine();
-                        
+
                         equipmentHandler.archiveEquipment(id);
-                
+
                         System.out.println("Archived equipment " + id);
-                    } else if (context.equals("rental")){
+                    } else if (context.equals("rental")) {
                         // RENTAL LOGIC //
                         System.out.print("Rental ID: ");
                         long id = userin.nextLong();
@@ -387,12 +388,12 @@ public class Prog4 {
 
                         rentalHandler.deleteRental(values.get());
                         System.out.println("Deleted rental record with id " + id);
-                    } else if (context.equals("lesson")){
+                    } else if (context.equals("lesson")) {
                         // LESSON LOGIC //
                         System.out.print("Order ID: ");
                         long id = userin.nextLong();
                         userin.nextLine();
-                        
+
                         Optional<LessonOrder> values = lessonHandler.findLessonOrderById(id);
                         if (!values.isPresent()) {
                             System.out.println("WARNING: Lesson order with id " + id + " does not exist. Try again.");
@@ -410,7 +411,7 @@ public class Prog4 {
                         System.out.print("Member ID: ");
                         long id = userin.nextLong();
                         userin.nextLine();
-                            
+
                         // grab the member in question
                         Optional<Member> values = memberHandler.findMemberById(id);
                         if (!values.isPresent()) {
@@ -431,18 +432,21 @@ public class Prog4 {
                             System.out.print("New email: ");
                             String value = userin.nextLine();
 
-                            toUpdate = new Member(id, values.get().name(), values.get().telephoneNumber(), value, values.get().dateOfBirth(), values.get().emergencyContact());
-                        } else if (field.equals("2")){
+                            toUpdate = new Member(id, values.get().name(), values.get().telephoneNumber(), value,
+                                    values.get().dateOfBirth(), values.get().emergencyContact());
+                        } else if (field.equals("2")) {
                             // update phone number
                             System.out.print("New telephone #: ");
                             String value = userin.nextLine();
-                            toUpdate = new Member(id, values.get().name(), value, values.get().email(), values.get().dateOfBirth(), values.get().emergencyContact());
+                            toUpdate = new Member(id, values.get().name(), value, values.get().email(),
+                                    values.get().dateOfBirth(), values.get().emergencyContact());
                         } else if (field.equals("3")) {
                             // update emergency phone number
                             System.out.print("New emergency telephone #: ");
                             Long value = userin.nextLong();
                             userin.nextLine();
-                            toUpdate = new Member(id, values.get().name(), values.get().telephoneNumber(), values.get().email(), values.get().dateOfBirth(), value);
+                            toUpdate = new Member(id, values.get().name(), values.get().telephoneNumber(),
+                                    values.get().email(), values.get().dateOfBirth(), value);
                         } else {
                             System.out.println("ERROR: Invalid option selected. Please try again.");
                             return;
@@ -463,11 +467,13 @@ public class Prog4 {
                             return;
                         }
 
-                        System.out.print("New remaining uses: " );
+                        System.out.print("New remaining uses: ");
                         int uses = userin.nextInt();
                         userin.nextLine();
-                        
-                        passHandler.updatePassDetails(new SkiPass(values.get().passId(), values.get().memberId(), values.get().purchaseDate(), values.get().totalUses(), uses, values.get().passType(), values.get().price(), values.get().archivedStatus()));
+
+                        passHandler.updatePassDetails(new SkiPass(values.get().passId(), values.get().memberId(),
+                                values.get().purchaseDate(), values.get().totalUses(), uses, values.get().passType(),
+                                values.get().price(), values.get().archivedStatus()));
                         System.out.print("Succesfully updated remaining number of uses on ski pass with id " + id);
                     } else if (context.equals("equipment")) {
                         // EQUIPMENT LOGIC //
@@ -495,33 +501,36 @@ public class Prog4 {
                             System.out.print("New type: ");
                             String value = userin.nextLine();
 
-                            toUpdate = new Equipment(values.get().equipment_id(), value, values.get().dimension(), values.get().archived_status());
-                        } else if (field.equals("2")){
+                            toUpdate = new Equipment(values.get().equipment_id(), value, values.get().dimension(),
+                                    values.get().archived_status());
+                        } else if (field.equals("2")) {
                             // update phone number
                             System.out.print("New size: ");
                             String value = userin.nextLine();
 
-                            toUpdate = new Equipment(values.get().equipment_id(), values.get().type(), value, values.get().archived_status());
+                            toUpdate = new Equipment(values.get().equipment_id(), values.get().type(), value,
+                                    values.get().archived_status());
                         } else if (field.equals("3")) {
                             // update emergency phone number
                             System.out.print("New status ");
                             int value = userin.nextInt();
                             userin.nextLine();
-                            
+
                             if (value != 1 && value != 0) {
                                 System.out.println("ERROR: Archival status must be 1 or 0. Try again.");
                                 return;
                             }
 
-                            toUpdate = new Equipment(values.get().equipment_id(), values.get().type(), values.get().dimension(), value);
+                            toUpdate = new Equipment(values.get().equipment_id(), values.get().type(),
+                                    values.get().dimension(), value);
                         } else {
                             System.out.println("ERROR: Invalid option selected. Please try again.");
                             return;
                         }
-                    
+
                         equipmentHandler.updateEquipment(toUpdate);
                         System.out.println("Update on equipment " + id + " succesful.");
-                    } else if (context.equals("rental")){
+                    } else if (context.equals("rental")) {
                         // RENTAL LOGIC //
                         System.out.print("Rental ID: ");
                         long id = userin.nextLong();
@@ -529,36 +538,41 @@ public class Prog4 {
 
                         Optional<Rental> values = rentalHandler.findActiveRental(id);
                         if (!values.isPresent()) {
-                            System.out.println("Rental status cannot be updated because it either does not exist or is not active.");
+                            System.out.println(
+                                    "Rental status cannot be updated because it either does not exist or is not active.");
                             return;
                         }
 
-                        rentalHandler.updateRental(new Rental(values.get().rental_id(), values.get().ski_pass_id(), values.get().equipment_id(), values.get().dateTimeFrom(), 1));
-                    } else if (context.equals("lesson")){
+                        rentalHandler.updateRental(new Rental(values.get().rental_id(), values.get().ski_pass_id(),
+                                values.get().equipment_id(), values.get().dateTimeFrom(), 1));
+                    } else if (context.equals("lesson")) {
                         // LESSON LOGIC //
                         System.out.print("Order ID: ");
                         long id = userin.nextLong();
                         userin.nextLine();
-                        
+
                         Optional<LessonOrder> values = lessonHandler.findLessonOrderById(id);
                         if (!values.isPresent()) {
                             System.out.println("WARNING: Lesson order with id " + id + " does not exist. Try again.");
                             return;
                         }
-                        
+
                         System.out.println("New remaining sessions: ");
                         int sessions = userin.nextInt();
                         userin.nextLine();
 
-                        lessonHandler.updateLessonOrder(new LessonOrder(values.get().order_id(), values.get().lesson_id(), values.get().member_id(), values.get().total_sessions(), sessions));
+                        lessonHandler
+                                .updateLessonOrder(new LessonOrder(values.get().order_id(), values.get().lesson_id(),
+                                        values.get().member_id(), values.get().total_sessions(), sessions));
                         System.out.println("Succesfully updated remaining session on lesson order with id " + id);
                     }
                     break;
                 default:
                     break;
             }
-        } catch (Exception e){
-            System.err.println("ERROR: An error ocurred while attempting to execute the desired action. Please try again.");
+        } catch (Exception e) {
+            System.err.println(
+                    "ERROR: An error ocurred while attempting to execute the desired action. Please try again.");
             System.out.print("DB: ");
             e.printStackTrace();
             System.out.println();
@@ -566,13 +580,13 @@ public class Prog4 {
         }
     }
 
-    public static void main(String[] args){
+    public static void main(String[] args) {
         // initialize database connection
         if (args.length != 2) {
             System.err.println("USAGE: Prog4.java <username> <password>");
             System.exit(1);
-        } 
-        
+        }
+
         conn = new DatabaseConnection(args[0], args[1]);
 
         // initialize DB services
@@ -581,7 +595,7 @@ public class Prog4 {
         equipmentHandler = new EquipmentService(conn);
         rentalHandler = new RentalService(conn);
         lessonHandler = new LessonOrderService(conn);
-        passHandler  = new SkiPassService(conn);
+        passHandler = new SkiPassService(conn);
 
         userin = new Scanner(System.in);
         String input = "";
@@ -599,9 +613,9 @@ public class Prog4 {
         while (userin.hasNextLine() && !(input = userin.nextLine().toLowerCase()).equals("exit")) {
             String actionState = "";
             String context = "";
-            
+
             // main logic
-            try{
+            try {
                 switch (input) {
                     case "1":
                         // member
@@ -628,10 +642,10 @@ public class Prog4 {
                         // rental
                         actionState = actionMenu("rental record");
                         context = "rental";
-    
+
                         executionMenu(actionState, context);
                         break;
-                    case "5":  
+                    case "5":
                         // lesson
                         actionState = actionMenu("lesson purchase record");
                         context = "lesson";
@@ -646,11 +660,11 @@ public class Prog4 {
                     default:
                         break;
                 }
-                
+
             } catch (InputMismatchException e) {
                 System.out.println("ERROR: Invalid argument provided. Try again.");
             }
-             
+
             System.out.println();
 
             input = "";
