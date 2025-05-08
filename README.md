@@ -107,7 +107,6 @@ Type 'back' to return to the main menu.
     *  create_tables.java 
     *  delete_tables.java
     *  populate_tables.java
-    *  Prog4.java
     *  data(all csv files)
     *  Rental.java
     *  RentalDatabaseAccess.java
@@ -122,7 +121,6 @@ Type 'back' to return to the main menu.
     * DatabaseConnection.java
     * LessonService.java
     * Member.java
-    * Prog4.java
     * MemberService.java
     * MemberDatabaseAccess.java
     * Property.java
@@ -139,7 +137,6 @@ Type 'back' to return to the main menu.
     * LessonOrderDatabaseAccess.java
     * LessonOrderService.java
     * LessonService.java
-    * Prog4.java
     * PropertyService.java
     * Rental.java
     * RentalDatabaseAccess.java
