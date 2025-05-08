@@ -28,7 +28,7 @@ public record SkiPass(
         if (totalUses == null || totalUses < 0) {
             throw new IllegalArgumentException("Total uses cannot be negative.");
         }
-        if (remainingUses == null || remainingUses < 0 || remainingUses > totalUses) {
+        if (remainingUses == null || remainingUses < 0) {
             throw new IllegalArgumentException("Remaining uses must be between 0 and total uses.");
         }
         if (InputValidation.checkStringBlank(passType)) {
