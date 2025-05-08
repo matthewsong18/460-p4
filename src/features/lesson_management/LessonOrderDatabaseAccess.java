@@ -36,7 +36,7 @@ public class LessonOrderDatabaseAccess extends DatabaseAccess {
             return id;
 
         } catch (SQLException e) {
-            throw new RuntimeException(e);
+            throw new RuntimeException("Failed to insert. Check that Lesson ID and Member ID are valid.");
         }
     }
 
