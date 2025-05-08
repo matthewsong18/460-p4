@@ -1,3 +1,13 @@
+/*
+ * File: SkiPassService.java
+ * 
+ * Author: Matthew Song
+ *         Ethan Huang
+ * 
+ * Description: Client-facing API responsible for database services on Ski Pass table.
+ * 
+ */
+
 package features.ski_pass;
 
 import common.DatabaseConnection;

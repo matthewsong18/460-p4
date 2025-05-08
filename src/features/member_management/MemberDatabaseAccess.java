@@ -1,3 +1,12 @@
+/*
+ * File: MemberDatabaseAccess
+ * 
+ * Author: Matthew Song
+ * 
+ * Description: Backend for member services.
+ * 
+ */
+
 package features.member_management;
 
 import common.DatabaseAccess;

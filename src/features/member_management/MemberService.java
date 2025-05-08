@@ -1,3 +1,12 @@
+/*
+ * File: MemberService
+ * 
+ * Author: Matthew Song
+ * 
+ * Description: Client-facing API for database interactions involving the member table.
+ * 
+ */
+
 package features.member_management;
 
 import common.DatabaseConnection;

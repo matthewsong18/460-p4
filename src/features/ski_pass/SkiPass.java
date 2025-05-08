@@ -1,3 +1,13 @@
+/*
+ * File: SkiPass.java
+ * 
+ * Author: Matthew Song
+ *         Ethan Huang
+ * 
+ * Description: Local representation of a ski pass tuple in the database.
+ * 
+ */
+
 package features.ski_pass;
 
 import common.InputValidation;

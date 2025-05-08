@@ -1,3 +1,12 @@
+/*
+ * File: Property.java
+ * 
+ * Author: Matthew Song
+ * 
+ * Description: Local representation of a property tuple in the database.
+ * 
+ */
+
 package features.property_management;
 
 import common.InputValidation;

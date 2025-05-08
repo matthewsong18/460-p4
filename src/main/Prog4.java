@@ -1,12 +1,16 @@
-/*
- * Prog4.java
- * 
- * Main class for ski resort database user interface.
- * 
- * Authors: Elias Zheng, Ethan Huang, Matthew Song, Stephin Tomson
- * 
- * Usage: Prog4.java <username> <password>
- */
+/*+----------------------------------------------------------------------
+ ||
+ ||  Class Prog4.java
+ ||
+ ||        Author:  Elias Zheng
+ ||
+ ||     Purpose:  Primary client access to database; handles all UI, UI logic,
+ ||               and service requests.
+ ||
+ ||     Usage:  java Prog4.java <username> <password>
+ ||
+ ++-----------------------------------------------------------------------*/
+
 package main;
 import java.sql.*;
 import java.sql.Date;
@@ -24,6 +28,7 @@ import features.queries.*;
 public class Prog4 {
     private static DatabaseConnection conn;
     private static Scanner userin;
+
     private static MemberService memberHandler;
     private static EquipmentService equipmentHandler;
     private static RentalService rentalHandler;
@@ -33,6 +38,15 @@ public class Prog4 {
     private static ArrayList<String> tracker = new ArrayList<String>();
 
     private static void printResults(ResultSet results) {
+        /*
+         * Helper method.
+         * Print database column names and column values for each tuple.
+         * 
+         * Parameters:
+         *  - results: table results to print
+         * 
+         */
+
         try {
             if (results == null) {
                 System.out.println("| NO RESULTS |");
@@ -65,11 +79,24 @@ public class Prog4 {
                 System.out.println(String.format("|| %-25s || ", "NO RESULTS"));
             }
         } catch (SQLException e) {
-            throw new RuntimeException("ERROR: ", e);
+            throw new RuntimeException("ERROR: " + e.getMessage());
         }
     }
 
     private static void printResults(ResultSet results, boolean track) {
+        /*
+         * Helper method.
+         * Print database column names and column values for each tuple.
+         * Tracks the primary keys of all tuples it prints to use for other queries.
+         * 
+         * Parameters:
+         *  - results: table results to print
+         *  - track: kwarg indicating it should print with tracking
+         */
+
+        // reset tracker
+        tracker = new ArrayList<String>();
+
         try {
             if (results == null) {
                 System.out.println("| NO RESULTS |");
@@ -103,14 +130,19 @@ public class Prog4 {
                 System.out.println(String.format("|| %-25s ||b ", "NO RESULTS"));
             }
         } catch (SQLException e) {
-            throw new RuntimeException("ERROR: ", e);
+            throw new RuntimeException("ERROR: " + e.getMessage());
         }
     }
 
     private static String actionMenu(String context) {
         /*
+         * Helper method.
          * Handles logic for the action state menu
          * 
+         * Parameters:
+         *  - context: description of what the action is being performed on.
+         * 
+         * Return: String corresponding to select action, empty string if otherwise.
          */
 
         System.out.println();
@@ -137,8 +169,8 @@ public class Prog4 {
 
     private static void queryMenu() {
         /*
+         * Helper method.
          * Handles logic for the query submenu.
-         * 
          * 
          */
 
@@ -201,6 +233,7 @@ public class Prog4 {
                         ResultSet results4 = QueryService.queryWageExpense(arg1);
                         printResults(results4);
                         break;
+                    // SIMPLE QUERIES //
                     case "5":
                         ResultSet results5 = QueryService.queryMembers();
                         printResults(results5);
@@ -240,6 +273,7 @@ public class Prog4 {
                 e.printStackTrace();
             }
 
+            // reset to initial state
             arg1 = "";
             input = "";
 
@@ -261,7 +295,15 @@ public class Prog4 {
     }
 
     private static void executionMenu(String actionState, String context) {
-        // TO DO: add logic for ski pass, equipment, rentals, lessons
+        /*
+         * Helper method.
+         * Handles argument gathering and execution for database actions
+         * 
+         * Parameters:
+         *  - actionState: which action (1 = add, 2 = delete, 3 = update)
+         *  - context: what table the action is for.
+         */
+
         // action logic
         try {
             switch (actionState) {
@@ -300,6 +342,7 @@ public class Prog4 {
                         int uses = userin.nextInt();
                         userin.nextLine();
 
+                        // add pass
                         long id = passHandler.createSkiPass(memid, uses,
                                 type, price);
 
@@ -324,6 +367,7 @@ public class Prog4 {
                         long skiid = userin.nextLong();
                         userin.nextLine();
 
+                        // add rental
                         long id = rentalHandler.registerRental(skiid, equpid);
                         System.out.println("Added new equipment rental: " + id);
                     } else if (context.equals("lesson")) {
@@ -366,8 +410,8 @@ public class Prog4 {
                         long id = userin.nextLong();
                         userin.nextLine();
 
+                        // archive the pass
                         passHandler.archivePass(id, false);
-
                         System.out.println("Archived pass " + id);
                     } else if (context.equals("equipment")) {
                         // EQUIPMENT LOGIC //
@@ -375,8 +419,8 @@ public class Prog4 {
                         long id = userin.nextLong();
                         userin.nextLine();
 
+                        // archive equipment
                         equipmentHandler.archiveEquipment(id);
-
                         System.out.println("Archived equipment " + id);
                     } else if (context.equals("rental")) {
                         // RENTAL LOGIC //
@@ -384,6 +428,7 @@ public class Prog4 {
                         long id = userin.nextLong();
                         userin.nextLine();
 
+                        // delete rental if it exists
                         Optional<Rental> values = rentalHandler.findRental(id);
                         if (!values.isPresent()) {
                             System.out.println("WARNING: Rental with id " + id + " does not exist. Try again.");
@@ -398,6 +443,7 @@ public class Prog4 {
                         long id = userin.nextLong();
                         userin.nextLine();
 
+                        // delete lesson order if it exists
                         Optional<LessonOrder> values = lessonHandler.findLessonOrderById(id);
                         if (!values.isPresent()) {
                             System.out.println("WARNING: Lesson order with id " + id + " does not exist. Try again.");
@@ -465,6 +511,7 @@ public class Prog4 {
                         long id = userin.nextLong();
                         userin.nextLine();
 
+                        // update remaining uses
                         Optional<SkiPass> values = passHandler.findSkiPassById(id);
                         if (!values.isPresent()) {
                             System.out.println("WARNING: Ski pass with id " + id + " does not exist. Try again.");
@@ -501,21 +548,21 @@ public class Prog4 {
                         Equipment toUpdate;
 
                         if (field.equals("1")) {
-                            // update email
+                            // update type
                             System.out.print("New type: ");
                             String value = userin.nextLine();
 
                             toUpdate = new Equipment(values.get().equipment_id(), value, values.get().dimension(),
                                     values.get().archived_status());
                         } else if (field.equals("2")) {
-                            // update phone number
+                            // update size
                             System.out.print("New size: ");
                             String value = userin.nextLine();
 
                             toUpdate = new Equipment(values.get().equipment_id(), values.get().type(), value,
                                     values.get().archived_status());
                         } else if (field.equals("3")) {
-                            // update emergency phone number
+                            // update archival status
                             System.out.print("New status ");
                             int value = userin.nextInt();
                             userin.nextLine();
@@ -540,6 +587,7 @@ public class Prog4 {
                         long id = userin.nextLong();
                         userin.nextLine();
 
+                        // update the return status of the rental to returned
                         Optional<Rental> values = rentalHandler.findActiveRental(id);
                         Date today = Date.valueOf(LocalDate.now());
                         if (values.isPresent()) {
@@ -550,13 +598,13 @@ public class Prog4 {
                                     "Rental status cannot be updated because it either does not exist or is not active.");
                             return;
                         }
-
                     } else if (context.equals("lesson")) {
                         // LESSON LOGIC //
                         System.out.print("Order ID: ");
                         long id = userin.nextLong();
                         userin.nextLine();
 
+                        // update remaining sessions
                         Optional<LessonOrder> values = lessonHandler.findLessonOrderById(id);
                         if (!values.isPresent()) {
                             System.out.println("WARNING: Lesson order with id " + id + " does not exist. Try again.");
@@ -684,8 +732,10 @@ public class Prog4 {
             System.out.println("Type 'query' to access the queries submenu.");
             System.out.println("Type 'exit' to close the application.");
         }
-
+        
+        // clean up and exit without error
         userin.close();
+        QueryService.close();
         conn.close();
 
         System.exit(0);

@@ -1,3 +1,12 @@
+/*
+ * File: Member
+ * 
+ * Author: Matthew Song
+ * 
+ * Description: Local representation of a member tuple in the database
+ * 
+ */
+
 package features.member_management;
 
 import common.InputValidation;

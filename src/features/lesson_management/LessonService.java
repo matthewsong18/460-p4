@@ -1,3 +1,13 @@
+/*
+ * File: LessonService.java
+ * 
+ * Author: Matthew Song
+ *         Ethan Huang
+ * 
+ * Description: Client-facing API for database services on the lesson table.
+ * 
+ */
+
 package features.lesson_management;
 
 import common.DatabaseConnection;

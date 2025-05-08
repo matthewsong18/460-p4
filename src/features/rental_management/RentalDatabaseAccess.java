@@ -1,3 +1,14 @@
+/*
+ * File: RentalDatabaseAccess.java
+ * 
+ * Author: Matthew Song
+ *         Ethan Huang
+ * 
+ * Description: Backend for database services on rental table
+ * 
+ */
+
+
 package features.rental_management;
 
 import common.DatabaseAccess;

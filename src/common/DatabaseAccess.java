@@ -1,6 +1,26 @@
-/**
- * @author Ethan Huang
- */
+/*+----------------------------------------------------------------------
+ ||
+ ||  Class DatabaseAccess
+ ||
+ ||        Author:  Ethan Huang
+ ||                 Matthew Song
+ ||
+ ||     Purpose:    Common service for entity service classes to obtain the
+ ||                 next integer to use as a primary key id.
+ ||
+ ||  Inherits From:  None
+ ||
+ ||     Interfaces:  None
+ ||
+ |+-----------------------------------------------------------------------
+ ||
+ ||   Constructors:  DatabaseAccess(DatabaseConnection databaseConnection);
+ ||
+ ||  Class Methods:  N/A
+ ||
+ ||  Inst. Methods:  getNextID(String databaseName, String id_name) --> long
+ ||
+ ++-----------------------------------------------------------------------*/
 
 package common;
 

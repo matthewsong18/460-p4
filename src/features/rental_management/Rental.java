@@ -1,3 +1,13 @@
+/*
+ * File: Rental.java
+ * 
+ * Author: Ethan Huang
+ * 
+ * Description: Local representation of a tuple in the rental table.
+ * 
+ */
+
+
 package features.rental_management;
 
 import java.sql.Date;
