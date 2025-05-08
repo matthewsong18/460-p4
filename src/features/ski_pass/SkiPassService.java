@@ -4,7 +4,6 @@ import common.DatabaseConnection;
 import features.member_management.MemberService;
 
 import java.sql.SQLException;
-import java.sql.Date;
 import java.util.Optional;
 
 public class SkiPassService {
