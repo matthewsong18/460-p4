@@ -15,7 +15,7 @@ public class SkiPassDatabaseAccess extends DatabaseAccess {
     }
 
     public Long createSkiPass(SkiPass skiPass) throws SQLException {
-        String insertSql = "INSERT INTO SkiPass VALUES (?, ?, SYSTIMESTAMP, ?, ?, ?, ?, ?)";
+        String insertSql = "INSERT INTO stephintomson.SkiPass VALUES (?, ?, SYSTIMESTAMP, ?, ?, ?, ?, ?)";
 
         try (PreparedStatement preparedStatement = connection.prepareStatement(insertSql)) {
             Long newPassId = getNextId("SkiPass", "pass_id"); // Helper to get a new ID
@@ -38,7 +38,8 @@ public class SkiPassDatabaseAccess extends DatabaseAccess {
     }
 
     public Optional<SkiPass> findSkiPassById(long passId) throws SQLException {
-        String sql = "SELECT pass_id, member_id, purchase_date, total_uses, remaining_uses, pass_type, price, archived_status FROM stephintomson.SkiPass WHERE pass_id = ?";
+        String sql = "SELECT pass_id, member_id, purchase_date, total_uses, remaining_uses, " +
+                        "pass_type, price, archived_status FROM stephintomson.SkiPass WHERE pass_id = ?";
 
         try (PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
             preparedStatement.setLong(1, passId);

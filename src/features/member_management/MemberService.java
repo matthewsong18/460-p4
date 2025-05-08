@@ -3,6 +3,7 @@ package features.member_management;
 import common.DatabaseConnection;
 
 import java.util.Optional;
+import java.sql.Date;
 
 public class MemberService {
     private final MemberDatabaseAccess memberDatabaseAccess;
@@ -11,8 +12,8 @@ public class MemberService {
         memberDatabaseAccess = new MemberDatabaseAccess(databaseConnection);
     }
 
-    public long registerMember(String name, String telephoneNumber, String email, String dateOfBirth,
-                               String emergencyContact) {
+    public long registerMember(String name, String telephoneNumber, String email, Date dateOfBirth,
+                               Long emergencyContact) {
         Member newMember = new Member(name, telephoneNumber, email, dateOfBirth, emergencyContact);
 
         checkEmailDuplicate(email);

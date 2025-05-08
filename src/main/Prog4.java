@@ -12,10 +12,10 @@ package main;
 import java.io.*;
 import java.sql.*;
 import java.util.*;
+import java.lang.*;
 
 import javax.management.Query;
 
-import java.lang.*;
 import common.*;
 import features.member_management.*;
 import features.equipment_management.*;
@@ -272,10 +272,12 @@ public class Prog4 {
                         String telephoneNumber = userin.nextLine();
                         System.out.print("Email: ");
                         String email = userin.nextLine();
-                        System.out.print("Date of Birth: ");
-                        String dateOfBirth = userin.nextLine();
+                        System.out.print("Date of Birth (yyyy-[m]m-[d]d): ");
+                        String dateOfBirthString = userin.nextLine();
+                        java.sql.Date dateOfBirth = java.sql.Date.valueOf(dateOfBirthString);
                         System.out.print("Emergency Telephone #: ");
-                        String emergency = userin.nextLine();
+                        Long emergency = userin.nextLong();
+                        userin.nextLine();
     
                         // add member
                         long id = memberHandler.registerMember(name, telephoneNumber, email, dateOfBirth, emergency);
@@ -284,12 +286,16 @@ public class Prog4 {
                         // SKI PASS LOGIC //
                         System.out.print("Member ID: ");
                         long memid = userin.nextLong();
+                        userin.nextLine();
                         System.out.print("Pass type: ");
                         String type = userin.next();
+                        userin.nextLine();
                         System.out.print("Price: ");
                         int price = userin.nextInt();
+                        userin.nextLine();
                         System.out.print("Uses: ");
                         int uses = userin.nextInt();
+                        userin.nextLine();
 
                         // add pass
                         long id = passHandler.createSkiPass(memid, new Timestamp(System.currentTimeMillis()), uses, type, price);
@@ -308,8 +314,10 @@ public class Prog4 {
                         // RENTAL LOGIC //
                         System.out.print("Equipment ID: ");
                         long equpid = userin.nextLong();
+                        userin.nextLine();
                         System.out.print("Ski Pass ID: ");
                         long skiid = userin.nextLong();
+                        userin.nextLine();
                         
                         long id = rentalHandler.registerRental(skiid, equpid, 0);
                         System.out.println("Added new equipment rental: " + id);
@@ -317,10 +325,13 @@ public class Prog4 {
                         // LESSON LOGIC //
                         System.out.print("Member ID: ");
                         long memid = userin.nextLong();
+                        userin.nextLine();
                         System.out.print("Lesson ID: ");
                         long lesid = userin.nextLong();
+                        userin.nextLine();
                         System.out.print("Sessions: ");
                         int sess = userin.nextInt();
+                        userin.nextLine();
                         
                         // add lesson
                         long id = lessonHandler.createLessonOrder(lesid, memid, sess);
@@ -333,6 +344,7 @@ public class Prog4 {
                         // MEMBER LOGIC //
                         System.out.print("Member ID: ");
                         long id = userin.nextLong();
+                        userin.nextLine();
 
                         Optional<Member> values = memberHandler.findMemberById(id);
                         if (!values.isPresent()) {
@@ -347,6 +359,7 @@ public class Prog4 {
                         // SKI PASS LOGIC //
                         System.out.print("Pass ID: ");
                         long id = userin.nextLong();
+                        userin.nextLine();
 
                         passHandler.archivePass(id, false);
 
@@ -355,6 +368,7 @@ public class Prog4 {
                         // EQUIPMENT LOGIC //
                         System.out.print("Equipment ID: ");
                         long id = userin.nextLong();
+                        userin.nextLine();
                         
                         equipmentHandler.archiveEquipment(id);
                 
@@ -363,6 +377,7 @@ public class Prog4 {
                         // RENTAL LOGIC //
                         System.out.print("Rental ID: ");
                         long id = userin.nextLong();
+                        userin.nextLine();
 
                         Optional<Rental> values = rentalHandler.findRental(id);
                         if (!values.isPresent()) {
@@ -376,6 +391,7 @@ public class Prog4 {
                         // LESSON LOGIC //
                         System.out.print("Order ID: ");
                         long id = userin.nextLong();
+                        userin.nextLine();
                         
                         Optional<LessonOrder> values = lessonHandler.findLessonOrderById(id);
                         if (!values.isPresent()) {
@@ -393,18 +409,19 @@ public class Prog4 {
                         // MEMBER LOGIC //
                         System.out.print("Member ID: ");
                         long id = userin.nextLong();
-    
-                        System.out.println("What would you like to update?");
-                        System.out.println("1 | Email");
-                        System.out.println("2 | Telephone #");
-                        System.out.println("3 | Emergency Telephone #");
-                        
+                        userin.nextLine();
+                            
                         // grab the member in question
-                        Optional<Member> values = memberHandler.findMemberById((long)id);
+                        Optional<Member> values = memberHandler.findMemberById(id);
                         if (!values.isPresent()) {
                             System.out.println("WARNING: Member with id " + id + " does not exist. Try again.");
                             return;
                         }
+
+                        System.out.println("What would you like to update?");
+                        System.out.println("1 | Email");
+                        System.out.println("2 | Telephone #");
+                        System.out.println("3 | Emergency Telephone #");
 
                         String field = userin.nextLine();
                         Member toUpdate;
@@ -423,7 +440,8 @@ public class Prog4 {
                         } else if (field.equals("3")) {
                             // update emergency phone number
                             System.out.print("New emergency telephone #: ");
-                            String value = userin.nextLine();
+                            Long value = userin.nextLong();
+                            userin.nextLine();
                             toUpdate = new Member(id, values.get().name(), values.get().telephoneNumber(), values.get().email(), values.get().dateOfBirth(), value);
                         } else {
                             System.out.println("ERROR: Invalid option selected. Please try again.");
@@ -437,6 +455,7 @@ public class Prog4 {
                         // SKI PASS LOGIC //
                         System.out.print("Pass ID: ");
                         long id = userin.nextLong();
+                        userin.nextLine();
 
                         Optional<SkiPass> values = passHandler.findSkiPassById(id);
                         if (!values.isPresent()) {
@@ -446,6 +465,7 @@ public class Prog4 {
 
                         System.out.print("New remaining uses: " );
                         int uses = userin.nextInt();
+                        userin.nextLine();
                         
                         passHandler.updatePassDetails(new SkiPass(values.get().passId(), values.get().memberId(), values.get().purchaseDate(), values.get().totalUses(), uses, values.get().passType(), values.get().price(), values.get().archivedStatus()));
                         System.out.print("Succesfully updated remaining number of uses on ski pass with id " + id);
@@ -453,6 +473,7 @@ public class Prog4 {
                         // EQUIPMENT LOGIC //
                         System.out.print("Equipment ID: ");
                         long id = userin.nextLong();
+                        userin.nextLine();
 
                         System.out.println("What would you like to update?");
                         System.out.println("1 | Type");
@@ -485,6 +506,7 @@ public class Prog4 {
                             // update emergency phone number
                             System.out.print("New status ");
                             int value = userin.nextInt();
+                            userin.nextLine();
                             
                             if (value != 1 && value != 0) {
                                 System.out.println("ERROR: Archival status must be 1 or 0. Try again.");
@@ -503,6 +525,7 @@ public class Prog4 {
                         // RENTAL LOGIC //
                         System.out.print("Rental ID: ");
                         long id = userin.nextLong();
+                        userin.nextLine();
 
                         Optional<Rental> values = rentalHandler.findActiveRental(id);
                         if (!values.isPresent()) {
@@ -515,6 +538,7 @@ public class Prog4 {
                         // LESSON LOGIC //
                         System.out.print("Order ID: ");
                         long id = userin.nextLong();
+                        userin.nextLine();
                         
                         Optional<LessonOrder> values = lessonHandler.findLessonOrderById(id);
                         if (!values.isPresent()) {
@@ -524,6 +548,7 @@ public class Prog4 {
                         
                         System.out.println("New remaining sessions: ");
                         int sessions = userin.nextInt();
+                        userin.nextLine();
 
                         lessonHandler.updateLessonOrder(new LessonOrder(values.get().order_id(), values.get().lesson_id(), values.get().member_id(), values.get().total_sessions(), sessions));
                         System.out.println("Succesfully updated remaining session on lesson order with id " + id);

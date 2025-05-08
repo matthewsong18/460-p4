@@ -61,7 +61,7 @@ public class QueryService {
 
         String query = String.format("""
                         select *
-                        from LessonOrder
+                        from stephintomson.LessonOrder
                         join Lesson using (lesson_id)
                         where member_id = '%s'
                        """, memberid);
@@ -81,7 +81,7 @@ public class QueryService {
 
         String query = String.format("""
                        select rental_id, equipment_id, datetime_to, datetime_from, returned
-                       from Rental
+                       from stephintomson.Rental
                        where pass_id = %s and archived_status != 0
                 """, passid);
         
@@ -100,8 +100,8 @@ public class QueryService {
 
         String query = String.format("""
                        select datetime, lift_name, difficulty_level
-                       from EntryLog
-                       join Lift using (lift_id)
+                       from stephintomson.EntryLog
+                       join stephintomson.Lift using (lift_id)
                        where pass_id = %s
                 """, passid);
         
@@ -118,7 +118,7 @@ public class QueryService {
 
         String query = String.format("""
                         select *
-                        from Trail
+                        from stephintomson.Trail
                         where difficulty = 2       
                     """);
 
@@ -137,8 +137,8 @@ public class QueryService {
 
         String query = String.format("""
                         select lift_name, open_time, close_time, difficulty_level, location
-                        from LiftTrail
-                        join Lift using (lift_id)
+                        from stephintomson.LiftTrail
+                        join stephintomson.Lift using (lift_id)
                         where trail_id = %s  
                     """, trailid);
 
@@ -157,8 +157,8 @@ public class QueryService {
 
         String query = String.format("""
                         select property_id, sum(salary) as "Wage Expense"
-                        from Employee
-                        join Property using (property_id)
+                        from stephintomson.Employee
+                        join stephintomson.Property using (property_id)
                         where property_id = %s
                         group by property_id
                 """, propertyid);
@@ -167,31 +167,31 @@ public class QueryService {
     }
 
     public static ResultSet queryMembers(){
-        String query = "select * from Member";
+        String query = "select * from stephintomson.Member";
         
         return executeQuery(query);
     }
 
     public static ResultSet queryPasses(){
-        String query = "select * from SkiPass";
+        String query = "select * from stephintomson.SkiPass";
 
         return executeQuery(query);
     }
 
     public static ResultSet queryEquipment(){
-        String query = "select * from Equipment";
+        String query = "select * from stephintomson.Equipment";
 
         return executeQuery(query);    
     }
 
     public static ResultSet queryRental(){
-        String query = "select * from Rental";
+        String query = "select * from stephintomson.Rental";
 
         return executeQuery(query);
     }
 
     public static ResultSet queryLesson(){
-        String query = "select * from Lesson";
+        String query = "select * from stephintomson.Lesson";
 
         return executeQuery(query);
     }

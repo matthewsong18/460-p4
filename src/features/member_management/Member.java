@@ -1,18 +1,19 @@
 package features.member_management;
 
 import common.InputValidation;
+import java.sql.Date;
 
 public record Member(
         Long id,
         String name,
         String telephoneNumber,
         String email,
-        String dateOfBirth,
-        String emergencyContact
+        Date dateOfBirth,
+        Long emergencyContact
 ) {
 
     // Service Constructor for creating a new member without an ID before database insertion
-    public Member(String name, String telephoneNumber, String email, String dateOfBirth, String emergencyContact) {
+    public Member(String name, String telephoneNumber, String email, Date dateOfBirth, Long emergencyContact) {
         this(null, name, telephoneNumber, email, dateOfBirth, emergencyContact);
     }
 
@@ -21,8 +22,8 @@ public record Member(
         validateInputs(name, telephoneNumber, email, dateOfBirth, emergencyContact);
     }
 
-    private static void validateInputs(String name, String telephone, String email, String dateOfBirth,
-                                       String emergencyContact) {
+    private static void validateInputs(String name, String telephone, String email, Date dateOfBirth,
+                                       Long emergencyContact) {
         checkName(name);
         checkTelephone(telephone);
         checkEmail(email);
@@ -40,6 +41,9 @@ public record Member(
         if (InputValidation.checkStringBlank(telephone)) {
             throw new IllegalArgumentException("Telephone number cannot be blank");
         }
+        if (telephone.length() != 10) {
+            throw new IllegalArgumentException("Telephone number must have 10 digits");
+        }
     }
 
     private static void checkEmail(String email) {
@@ -48,15 +52,18 @@ public record Member(
         }
     }
 
-    private static void checkDateOfBirth(String dateOfBirth) {
-        if (InputValidation.checkStringBlank(dateOfBirth)) {
+    private static void checkDateOfBirth(Date dateOfBirth) {
+        if (dateOfBirth == null) {
             throw new IllegalArgumentException("Date of birth cannot be blank");
         }
     }
 
-    private static void checkEmergencyContact(String emergencyContact) {
-        if (InputValidation.checkStringBlank(emergencyContact)) {
+    private static void checkEmergencyContact(Long emergencyContact) {
+        if (emergencyContact == null) {
             throw new IllegalArgumentException("Emergency contact cannot be blank");
+        }
+        if (emergencyContact < 1000000000L || emergencyContact > 9999999999L) {
+            throw new IllegalArgumentException("Emergency contact must have 10 digits");
         }
     }
 

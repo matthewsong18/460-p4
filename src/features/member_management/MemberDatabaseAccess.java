@@ -6,6 +6,7 @@ import common.DatabaseConnection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Date;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -17,7 +18,7 @@ class MemberDatabaseAccess extends DatabaseAccess {
     }
 
     public Long createMember(Member member) {
-        String sql = "INSERT INTO Member VALUES (?, ?, ?, ?, ?, ?)";
+        String sql = "INSERT INTO stephintomson.Member VALUES (?, ?, ?, ?, ?, ?)";
         try (PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
             Long newMemberId = getNextId("Member", "member_id");
 
@@ -25,8 +26,8 @@ class MemberDatabaseAccess extends DatabaseAccess {
             preparedStatement.setString(2, member.name());
             preparedStatement.setString(3, member.telephoneNumber());
             preparedStatement.setString(4, member.email());
-            preparedStatement.setString(5, member.dateOfBirth());
-            preparedStatement.setString(6, member.emergencyContact());
+            preparedStatement.setDate(5, member.dateOfBirth());
+            preparedStatement.setLong(6, member.emergencyContact());
 
             int affectedRows = preparedStatement.executeUpdate();
 
@@ -65,8 +66,8 @@ class MemberDatabaseAccess extends DatabaseAccess {
         String name = resultSet.getString("member_name");
         String telephone = resultSet.getString("telephone");
         String email = resultSet.getString("email");
-        String dateOfBirth = resultSet.getString("date_of_birth");
-        String emergencyContact = resultSet.getString("emergency_contact");
+        Date dateOfBirth = resultSet.getDate("date_of_birth");
+        Long emergencyContact = resultSet.getLong("emergency_contact");
 
         return new Member(id, name, telephone, email, dateOfBirth, emergencyContact);
     }
@@ -118,8 +119,8 @@ class MemberDatabaseAccess extends DatabaseAccess {
             preparedStatement.setString(1, member.name());
             preparedStatement.setString(2, member.telephoneNumber());
             preparedStatement.setString(3, member.email());
-            preparedStatement.setString(4, member.dateOfBirth());
-            preparedStatement.setString(5, member.emergencyContact());
+            preparedStatement.setDate(4, member.dateOfBirth());
+            preparedStatement.setLong(5, member.emergencyContact());
             preparedStatement.setLong(6, member.id()); // WHERE
 
             int affectedRows = preparedStatement.executeUpdate();
