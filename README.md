@@ -134,7 +134,6 @@ Type 'back' to return to the main menu.
 ### Ethan Huang
     * DatabaseAccess.java  
     * DatabaseConnection.java
-    * DatabaseConnection.java
     * InstructorService.java
     * LessonOrder.java
     * LessonOrderDatabaseAccess.java
