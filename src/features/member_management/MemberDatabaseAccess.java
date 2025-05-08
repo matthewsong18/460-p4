@@ -92,7 +92,7 @@ class MemberDatabaseAccess extends DatabaseAccess {
 
     public List<Member> getAllMembers() {
         List<Member> members = new ArrayList<>();
-        String sql = "SELECT * FROM stephintomson.Member ORDER BY name";
+        String sql = "SELECT * FROM stephintomson.Member ORDER BY member_name";
 
         try (PreparedStatement preparedStatement = connection.prepareStatement(
                 sql); ResultSet rs = preparedStatement.executeQuery()) {
