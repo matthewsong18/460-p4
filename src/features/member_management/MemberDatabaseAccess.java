@@ -2,6 +2,9 @@ package features.member_management;
 
 import common.DatabaseAccess;
 import common.DatabaseConnection;
+import features.rental_management.RentalDatabaseAccess;
+import features.ski_pass.SkiPassDatabaseAccess;
+import features.lesson_management.LessonDatabaseAccess;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -107,7 +110,6 @@ class MemberDatabaseAccess extends DatabaseAccess {
         return members;
     }
 
-
     public boolean updateMember(Member member) {
         if (member.id() == null) {
             throw new RuntimeException("Cannot update member without an ID.");
@@ -129,6 +131,32 @@ class MemberDatabaseAccess extends DatabaseAccess {
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
+    }
+
+    // This method checks if the member is associated with any ski pass data, lift
+    // usage logs, rental history,
+    // or lesson transactions. If any associations are found, it returns 1;
+    // otherwise, it returns 0.
+    // This method checks if the member is associated with any ski pass data.
+    // If any associations are found, it returns 1; otherwise, it returns 0.
+    private int memberPreCheck(Member member) {
+        try {
+            if (SkiPassDatabaseAccess.activeSkiPassbyMemberId(member.id()) == 1
+                    || RentalDatabaseAccess.hasRentalByMember(member.id()) // e.g., returns 1 if any rental
+                    || LessonDatabaseAccess.hasLessonForMember(member.id())) {
+                return 1;
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return 0;
+    }
+
+    // This method remove all related records, including ski pass data, lift usage
+    // logs, rental history, and
+    // lesson transactions associated with the member.
+    private void memberPostCheck(Member member) {
+
     }
 
     public void deleteMember(Member member) {

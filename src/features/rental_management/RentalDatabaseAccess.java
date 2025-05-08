@@ -25,7 +25,6 @@ public class RentalDatabaseAccess extends DatabaseAccess {
             preparedStatement.setLong(1, newRentalId);
             preparedStatement.setLong(2, rental.pass_id());
             preparedStatement.setLong(3, rental.equipment_id());
-          
 
             int affectedRows = preparedStatement.executeUpdate();
             if (affectedRows == 0) {
@@ -122,6 +121,29 @@ public class RentalDatabaseAccess extends DatabaseAccess {
         }
 
         return Optional.empty();
+    }
+
+    /*
+     * Finds an active rental by ski pass ID. An active rental is one that has not
+     * been returned yet
+     */
+    public boolean hasRentalByMember(Long memberId) {
+        String sql = """
+                SELECT 1
+                  FROM stephintomson.Rental r
+                  JOIN stephintomson.SkiPass s ON r.pass_id = s.pass_id
+                 WHERE s.member_id = ?
+                   AND ROWNUM = 1
+                """;
+
+        try (PreparedStatement ps = connection.prepareStatement(sql)) {
+            ps.setLong(1, memberId);
+            try (ResultSet rs = ps.executeQuery()) {
+                return rs.next(); // true if at least one matching row exists
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException("Error checking rental for member: " + memberId, e);
+        }
     }
 
 }
