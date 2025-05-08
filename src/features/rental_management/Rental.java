@@ -8,7 +8,6 @@
  * 
  */
 
-
 package features.rental_management;
 
 import java.sql.Date;
@@ -41,6 +40,6 @@ public record Rental(Long rental_id,
     }
 
     public boolean isActive() {
-        return return_status() == 0;
+        return return_status() == 1;
     }
 }
