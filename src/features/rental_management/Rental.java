@@ -5,7 +5,7 @@ import java.sql.Date;
 /*+---------------------------------------------------------------------- 
  ||  Class Rental
  ||
- ||         Author:  Ethan Huang, Stephin Tomson
+ ||         Author:  Matthew Song, Ethan Huang, Stephin Tomson
  ||
  ||        Purpose:  Models a single rental record from the Rental table
  ||                  in the Ski Resort database. This immutable record
