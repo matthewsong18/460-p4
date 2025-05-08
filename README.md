@@ -103,6 +103,9 @@ Type 'back' to return to the main menu.
     *  Equipment.java
     *  EquipmentDatabaseAccess.java
     *  EquipmentService.java
+    *  Employee.java
+    *  EmployeeService.java
+    *  EmployeeDatabaseAccess.java
 ### Stephin Tomson
     *  create_tables.java 
     *  delete_tables.java
