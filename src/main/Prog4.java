@@ -1,15 +1,42 @@
-/*+----------------------------------------------------------------------
- ||
- ||  Class Prog4.java
- ||
- ||        Author:  Elias Zheng
- ||
- ||     Purpose:  Primary client access to database; handles all UI, UI logic,
- ||               and service requests.
- ||
- ||     Usage:  java Prog4.java <username> <password>
- ||
- ++-----------------------------------------------------------------------*/
+ /*=============================================================================
+ |   Assignment:  Program #4
+ |       Author:  Stephin Tomson (stephintomson@arizona.edu)
+ |                Ethan Huang
+ |                Matthew Song
+ |                
+ | 
+ |       Course:  CS460 Database Design Spring 2025
+ |   Instructor:  L. McCann
+ | Sect. Leader:  [Your Section Leader's name]
+ |     Due Date:  05/06/2025, at the beginning of class
+ |
+ |     Language:  Java 11
+ |
+ +-----------------------------------------------------------------------------
+ |
+ |  Description:  This program implements a complete Java-based client interface
+ |                for interacting with the Ski Resort database system. It allows
+ |                users to perform standard CRUD (Create, Read, Update, Delete)
+ |                operations on the core entities of the system such as Members,
+ |                Ski Passes, Equipment, Rentals, and Lesson Orders. It also
+ |                includes a query menu to generate analytical or summary reports
+ |                such as total wages by property, rental history by ski pass,
+ |                or intermediate trails with lift mappings.
+ |
+ |        Input:  - Oracle database username and password as command-line arguments.
+ |                - User input through a command-line menu system.
+ |
+ |       Output:  - Console output of user-friendly prompts, confirmation messages,
+ |                  and formatted query results using ResultSet metadata.
+ |                - Warning and error messages for failed operations or invalid input.
+ |
+ |   Techniques:  - JDBC (Java Database Connectivity) for database access and updates.
+ |                - Encapsulation using service and domain classes for modular logic.
+ |                - SQL operations for inserting, selecting, updating, and deleting
+ |                  rows from related tables, including complex joins and triggers.
+ |
+ *===========================================================================*/
+
 
 package main;
 
@@ -37,18 +64,25 @@ public class Prog4 {
     private static SkiPassService passHandler;
 
     private static ArrayList<String> tracker = new ArrayList<String>();
-
+/*--------------------------------------------------------------------- 
+    |  Method printResults
+    |
+    |  Purpose:  To format and display the results from a SQL query stored
+    |            in a ResultSet. It prints column headers and each row in a 
+    |            user-readable format.
+    |
+    |  Pre-condition:  The ResultSet should not be null and should contain valid
+    |                  metadata and rows from a SQL SELECT operation.
+    |
+    |  Post-condition: The formatted result is printed to the console.
+    |
+    |  Parameters:
+    |      results -- The ResultSet containing query output from the database.
+    |
+    |  Returns:  None.
+    *-------------------------------------------------------------------*/
     private static void printResults(ResultSet results) {
-        /*
-         * Helper method.
-         * Print database column names and column values for each tuple.
-         * 
-         * Parameters:
-         *  - results: table results to print
-         * 
-         */
-
-        try {
+               try {
             if (results == null) {
                 System.out.println("| NO RESULTS |");
                 return;
@@ -83,19 +117,24 @@ public class Prog4 {
             throw new RuntimeException("ERROR: " + e.getMessage());
         }
     }
-
+ /*--------------------------------------------------------------------- 
+    |  Method printResults (with tracking)
+    |
+    |  Purpose:  Same as the regular printResults method, but also tracks the 
+    |            first column of each result row into the global tracker list.
+    |
+    |  Pre-condition:  Valid ResultSet object; first column expected to be a unique ID.
+    |
+    |  Post-condition: Results printed and tracker list populated with identifiers.
+    |
+    |  Parameters:
+    |      results -- The ResultSet containing the query output.
+    |      track   -- A boolean flag that, when true, enables ID tracking.
+    |
+    |  Returns:  None.
+    *-------------------------------------------------------------------*/
     private static void printResults(ResultSet results, boolean track) {
-        /*
-         * Helper method.
-         * Print database column names and column values for each tuple.
-         * Tracks the primary keys of all tuples it prints to use for other queries.
-         * 
-         * Parameters:
-         *  - results: table results to print
-         *  - track: kwarg indicating it should print with tracking
-         */
-
-        // reset tracker
+     
         tracker = new ArrayList<String>();
 
         try {
@@ -134,17 +173,28 @@ public class Prog4 {
             throw new RuntimeException("ERROR: " + e.getMessage());
         }
     }
+    /*--------------------------------------------------------------------- 
+    |  Method actionMenu
+    |
+    |  Purpose:  Displays a menu prompting the user to select a CRUD action 
+    |            (Add, Delete, Update) for a given entity context and returns 
+    |            the corresponding choice.
+    |
+    |  Pre-condition:  The input parameter `context` must be a valid non-null 
+    |                  string representing the entity name (e.g., "member", "ski pass").
+    |
+    |  Post-condition: A string representing the user's valid action choice is returned.
+    |                  If the user types 'back' or an invalid entry, an empty string is returned.
+    |
+    |  Parameters:
+    |      context -- The entity type for which the action menu is being generated.
+    |
+    |  Returns:  A string ("1", "2", or "3") indicating Add, Delete, or Update,
+    |            or an empty string if the user typed "back" or gave invalid input.
+    *-------------------------------------------------------------------*/
 
     private static String actionMenu(String context) {
-        /*
-         * Helper method.
-         * Handles logic for the action state menu
-         * 
-         * Parameters:
-         *  - context: description of what the action is being performed on.
-         * 
-         * Return: String corresponding to select action, empty string if otherwise.
-         */
+
 
         System.out.println();
         System.out.println("What would you like to do?");
@@ -167,14 +217,25 @@ public class Prog4 {
         return "";
 
     }
+    /*--------------------------------------------------------------------- 
+    |  Method queryMenu
+    |
+    |  Purpose:  Displays a submenu of predefined queries for the Ski Resort database
+    |            and handles execution of the selected query. Handles both parameterized
+    |            and simple queries and prints results using printResults().
+    |
+    |  Pre-condition:  The user must be authenticated and the database connection
+    |                  must be valid. QueryService must be properly initialized.
+    |
+    |  Post-condition: The selected query is executed and results are displayed.
+    |                  If the query is parameterized, input is taken from the user.
+    |
+    |  Parameters:  None.
+    |
+    |  Returns:  None.
+    *-------------------------------------------------------------------*/
 
     private static void queryMenu() {
-        /*
-         * Helper method.
-         * Handles logic for the query submenu.
-         * 
-         */
-
         String input = "";
         String arg1 = "";
 
@@ -294,18 +355,32 @@ public class Prog4 {
 
         return;
     }
+    /*--------------------------------------------------------------------- 
+    |  Method executionMenu
+    |
+    |  Purpose:  Executes the specific operation (Add, Delete, Update) based on user 
+    |            input for a given entity (e.g., member, ski pass, rental). Handles
+    |            input collection, validation, and calls the appropriate service class.
+    |
+    |  Pre-condition:  
+    |      - actionState must be one of {"1", "2", "3"}.
+    |      - context must be a valid entity keyword (e.g., "member", "ski", "equipment").
+    |      - Scanner input and DB services must be initialized.
+    |
+    |  Post-condition:  
+    |      - The selected action is applied to the database via the appropriate handler.
+    |      - Success or error messages are printed to the console.
+    |
+    |  Parameters:
+    |      actionState -- A string indicating the action to perform:
+    |                     "1" for Add, "2" for Delete, "3" for Update.
+    |      context     -- The entity type being operated on.
+    |
+    |  Returns:  None.
+    *-------------------------------------------------------------------*/
 
     private static void executionMenu(String actionState, String context) {
-        /*
-         * Helper method.
-         * Handles argument gathering and execution for database actions
-         * 
-         * Parameters:
-         *  - actionState: which action (1 = add, 2 = delete, 3 = update)
-         *  - context: what table the action is for.
-         */
 
-        // action logic
         try {
             switch (actionState) {
                 case "1":

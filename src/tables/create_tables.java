@@ -1,30 +1,34 @@
-/*
- * Author: Stephin Tomson
- */
-package tables;
 /*+----------------------------------------------------------------------
  ||
- ||  Class create_tables
+ ||  Class create_tables 
  ||
- ||        Author:  Stephin Tomson
+ ||         Author:  Stephin Tomson
  ||
- ||     Purpose:  Drops any existing Ski‑Resort tables and rebuilds the full
- ||               schema.  Relies on the {@code DatabaseConnection} helper to
- ||               establish a JDBC connection to Oracle.
+ ||        Purpose:  Drops all existing Ski-Resort tables, creates a new schema with
+ ||                  necessary tables, grants privileges, and defines auditing and
+ ||                  triggers for automatic logic enforcement and logging.
  ||
- ||     Compile on lectura:
- ||         export CLASSPATH=/usr/lib/oracle/19.8/client64/lib/ojdbc8.jar:$CLASSPATH
- ||         javac create_tables.java DatabaseConnection.java
+ ||  Inherits From:  None.
  ||
- ||     Execute:
- ||         java create_tables
+ ||     Interfaces:  None.
  ||
- ||     Notes:  • Idempotent – safe to run multiple times.
- ||             • Uses child→parent drop order to avoid FK violations.
- ||             • Equipment table is audited for INSERT, UPDATE, DELETE. To see log use:
- ||               SELECT * FROM USER_AUDIT_TRAIL WHERE OBJ_NAME = 'EQUIPMENT';
+ |+-----------------------------------------------------------------------
  ||
- ++----------------------------------------------------------------------*/
+ ||      Constants:  None.
+ ||
+ |+-----------------------------------------------------------------------
+ ||
+ ||   Constructors:  None. (All methods are static; no instantiation required.)
+ ||
+ ||  Class Methods:  
+ ||      - main(String[] args): void
+ ||          Entry point of the program; connects to Oracle DB, creates schema, triggers, audits.
+ ||
+ ||  Inst. Methods:  None.
+ ||
+ ++-----------------------------------------------------------------------*/
+
+package tables;
 
 import java.sql.Connection;
 import java.sql.SQLException;
@@ -33,17 +37,23 @@ import java.util.Scanner;
 import common.DatabaseConnection;
 
 public class create_tables {
-
-    /*------------------------------------------------------------------
+    /*---------------------------------------------------------------------
      |  Method dropTables
      |
-     |  Purpose:  Removes existing tables so that the build is repeatable
-     |            without manual cleanup.  Tables are dropped in strict
-     |            child‑to‑parent order to satisfy foreign‑key constraints.
+     |  Purpose: Drops all existing tables in the database in child-to-parent
+     |           order to avoid foreign key constraint issues. Ignores any
+     |           errors from non-existent tables.
      |
-     |  Pre‑condition:  Caller holds an active {@code Statement} object.
-     |  Post‑condition:  Any listed tables that exist are gone.
-     *-----------------------------------------------------------------*/
+     |  Pre-condition: Connection to the database must be established and valid.
+     |
+     |  Post-condition: All named tables will be dropped if they exist.
+     |
+     |  Parameters:
+     |      stmt -- Statement object used to execute SQL commands.
+     |
+     |  Returns: None.
+     *-------------------------------------------------------------------*/
+
     private static void dropTables(Statement stmt) throws SQLException {
         String[] tables = {
                 "LessonOrder", "Lesson", "Instructor", "Employee", "EntryLog",
@@ -62,7 +72,23 @@ public class create_tables {
         System.out.println("Drop phase complete.\n");
     }
 
-    // Granting privileges to PUBLIC for all tables
+    /*---------------------------------------------------------------------
+     |  Method grantAllTablePrivilegesToPublic
+     |
+     |  Purpose: Grants SELECT, INSERT, UPDATE, and DELETE privileges to PUBLIC
+     |           on all defined tables, so any user can access them for testing
+     |           or development purposes.
+     |
+     |  Pre-condition: Tables must exist in the current schema.
+     |
+     |  Post-condition: The PUBLIC user group will have full access to all tables.
+     |
+     |  Parameters:
+     |      stmt -- Statement object used to execute SQL commands.
+     |
+     |  Returns: None.
+     *-------------------------------------------------------------------*/
+
     private static void grantAllTablePrivilegesToPublic(Statement stmt) {
         String[] tables = {
                 "Property", "ParkingLot", "Trail", "Lift", "LiftTrail", "EntryLog",
@@ -80,13 +106,21 @@ public class create_tables {
         }
     }
 
-    /*------------------------------------------------------------------
+    /*---------------------------------------------------------------------
      |  Method main
      |
-     |  Purpose:  Entry‑point.  Prompts for Oracle credentials, obtains a
-     |            connection, drops any existing schema, and rebuilds all
-     |            tables with the correct foreign‑key relationships.
-     *-----------------------------------------------------------------*/
+     |  Purpose: Main method to drop, create, and configure all tables,
+     |           including privileges, auditing, and triggers.
+     |
+     |  Pre-condition: The user must input correct Oracle credentials.
+     |
+     |  Post-condition: A complete schema is created in the Oracle database.
+     |
+     |  Parameters:
+     |      args -- Command-line arguments (unused; must be empty).
+     |
+     |  Returns: None.
+     *-------------------------------------------------------------------*/
     public static void main(String[] args) {
         if (args.length != 0) {
             System.out.println("Usage: java create_tables");
