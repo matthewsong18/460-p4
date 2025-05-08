@@ -320,23 +320,6 @@ public class create_tables {
                 System.out.println("Error creating trigger trg_dec_uses_rental: " + e.getMessage());
             }
 
-            // Trigger 4: Archive SkiPass when it becomes empty
-            try {
-
-                stmt.executeUpdate(
-                        "CREATE OR REPLACE TRIGGER trg_archive_skipass " +
-                                "AFTER UPDATE ON SkiPass " +
-                                "FOR EACH ROW " +
-                                "WHEN (NEW.remaining_uses = 0 AND OLD.remaining_uses != 0) " +
-                                "BEGIN " +
-                                "  UPDATE SkiPass " +
-                                "  SET archived_status = 1 " +
-                                "  WHERE pass_id = :NEW.pass_id; " +
-                                "END;");
-            } catch (SQLException e) {
-                System.out.println("Error creating trigger trg_archive_skipass: " + e.getMessage());
-            }
-
         } catch (SQLException e) {
             System.err.println("Database error: " + e.getMessage());
         }

@@ -303,7 +303,6 @@ public class Prog4 {
                         LocalDate todayLocal = LocalDate.now(); // 2025‑05‑07
                         java.sql.Date today = java.sql.Date.valueOf(todayLocal);
 
-                       
                         long id = passHandler.createSkiPass(memid, today, uses,
                                 type, price, 0);
                         System.out.println("Added new ski pass: " + id);
@@ -327,7 +326,7 @@ public class Prog4 {
                         long skiid = userin.nextLong();
                         userin.nextLine();
 
-                        long id = rentalHandler.registerRental(skiid, equpid, 0);
+                        long id = rentalHandler.registerRental(skiid, equpid);
                         System.out.println("Added new equipment rental: " + id);
                     } else if (context.equals("lesson")) {
                         // LESSON LOGIC //
@@ -544,14 +543,16 @@ public class Prog4 {
                         userin.nextLine();
 
                         Optional<Rental> values = rentalHandler.findActiveRental(id);
-                        if (!values.isPresent()) {
+                        Date today = Date.valueOf(LocalDate.now());
+                        if (values.isPresent()) {
+                            rentalHandler.updateRental(new Rental(values.get().rental_id(), values.get().pass_id(),
+                                    values.get().equipment_id(), values.get().dateTime_From(), today));
+                        } else {
                             System.out.println(
                                     "Rental status cannot be updated because it either does not exist or is not active.");
                             return;
                         }
 
-                        rentalHandler.updateRental(new Rental(values.get().rental_id(), values.get().ski_pass_id(),
-                                values.get().equipment_id(), values.get().dateTimeFrom(), 1));
                     } else if (context.equals("lesson")) {
                         // LESSON LOGIC //
                         System.out.print("Order ID: ");
